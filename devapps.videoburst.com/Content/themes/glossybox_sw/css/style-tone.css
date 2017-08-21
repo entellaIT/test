@@ -1,0 +1,12 @@
+/* Background and splash style */
+.m-home {
+    background: -moz-linear-gradient(241deg, #F8D928 0%, #D67428 100%); /* ff3.6+ */
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #D67428), color-stop(100%, #F8D928)); /* safari4+,chrome */
+    background: -webkit-linear-gradient(241deg, #F8D928 0%, #D67428 100%); /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(241deg, #F8D928 0%, #D67428 100%); /* opera 11.10+ */
+    background: -ms-linear-gradient(241deg, #F8D928 0%, #D67428 100%); /* ie10+ */
+    background: linear-gradient(209deg, #F8D928 0%, #D67428 100%); /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F8D928', endColorstr='#D67428',GradientType=0 ); /* ie6-9 */
+
+}
+.m-home > .container-fluid {background-image:url(../img/id_outside_sun_text.png); background-position: center 100%;  background-repeat:no-repeat;position:absolute; top:0; bottom:0; width:100%; }

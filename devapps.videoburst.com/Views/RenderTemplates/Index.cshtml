@@ -1,0 +1,74 @@
+﻿@model IEnumerable<VideoBurstAPI.Entities.RenderTemplates>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Add")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.guid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+         
+        <th>
+            @Html.DisplayNameFor(model => model.duration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.link)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.created)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.package)
+        </th>
+        <th></th>
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+<tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.guid)
+            </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+            </td>
+     
+        <td>
+            @Html.DisplayFor(modelItem => item.duration)
+            </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.link)
+            </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.created)
+            </td>
+        
+        <td>
+            @*@Html.ActionLink("Download", item.package)*@
+            @*@Html.DisplayFor(modelItem => item.package)*@
+            <a href="@item.package" target="_blank">Download</a>
+            </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.id })
+        </td>
+    </tr>
+        }
+    }
+
+</table>

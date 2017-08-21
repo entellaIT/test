@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{margin:0; padding:0;}
+.wrapper{width:100%; float:left; display:block;}
+.row-1{float:left; display:block; width:100%; margin:auto;}
+.shadow-bottom{box-shadow:0 0 5px #999999;}
+.col-L{float:left; display:inline-block; width:23%; min-width:300px; box-sizing:border-box;}
+.col-R{float:right; display:inline-block; width:75%; min-width:300px; box-sizing:border-box;}
+.logobg{background:#00aaff !important; float:left; text-align:center; padding:35px 47px;}
+.logobg img{width:100%;}
+.topHeading{padding-top:7px;}
+.leftNavbar{background:#2a3033; top:120px !important;}
+.btn-red{padding:10px 55px;}
+.marginLess{margin-left:0px; margin-right:0px;}
+.tabing-top{padding-left:0;}
+.paddingTop{padding:20px 0px !important;}
+.fixedDiv{position:fixed; top:0; z-index:1000;}
+.righttopMargin{margin-top:120px !important;}
+.bodyContent{background:#ebf0f2 !important;}
+
+
+
+
+
+
+@media screen and (max-width:1024px) {
+	.col-R{width:70%;}
+	.minWidth{width:30%;}
+	.topHeading{font-size:28px;}
+	.headerText{display:none;}
+	.fullWidth{width:30% !important;}
+}

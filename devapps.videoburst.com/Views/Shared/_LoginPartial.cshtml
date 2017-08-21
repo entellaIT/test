@@ -1,0 +1,61 @@
+﻿@model VideoBurstWeb.Models.VBUserProfile
+@if (!@Model.haslogin)
+{
+    Response.Redirect("~/Dashboard/ChangePassword/");
+}
+@if (@Model.suspended)
+{
+    Response.Redirect("~/Dashboard/Suspended/");
+}
+@if (Request.IsAuthenticated)
+{
+    <div class="col-sm-8 padding-topbottom headerR textalignRight">
+
+        <span class="headerText">
+            <span class="leftText"></span>
+            @if (Model.CompanyLevel > 20)
+            {
+                // Hide Upgrade Button
+            }
+            else
+            {
+                @Html.ActionLink("Upgrade", "UpgradeAccount", "Payment", null, new { @class = "btn btn-default btn-outerRed roundCorner leftMargin" })
+            }
+            &nbsp; &nbsp;
+        </span>
+        <span class="dropdown">
+            <span class="profilePic">
+                <img src="@Model.profilePicUrl" alt="" style="object-fit: cover;" />
+            </span>
+            <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdownLink">
+                @if (!String.IsNullOrEmpty(Convert.ToString(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.name).Trim()))
+                {
+                    @(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.name)
+                }
+                else
+                {
+                    @(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.email)
+                }
+                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="top: 3px; left: 3px;"></span>
+            </a>
+            <ul class="dropdown-menu fittowindow multilevelDD" aria-labelledby="dLabel">
+                <div class="arrow-uifo mobmenuhome"></div>
+                <li>
+                    @Html.ActionLink("Settings", "Settings", "Account", routeValues: null, htmlAttributes: null)
+                    @*<ul class="dropdown-menu multilevelDD">
+                            <li>@Html.ActionLink("Change Password", "ChangePassword", "Account", routeValues: null, htmlAttributes: null)</li>
+                        </ul>*@
+                </li>
+
+                <li>@Html.ActionLink(@Resources.ApplicationTranslations.Log_Off_Text, "LogOff", "Home")</li>
+            </ul>
+        </span>
+    </div>
+}
+else
+{
+    <ul>
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

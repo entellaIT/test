@@ -1,0 +1,215 @@
+﻿@model VideoBurstAPI.Entities.UpgradeUserModel
+
+@{
+    ViewBag.Title = "Upgrade";
+ ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+     <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../favicon.ico">
+
+<title>Videoburst-Templates</title>
+
+<!-- Bootstrap core CSS -->
+@*<link href="css/bootstrap.css" rel="stylesheet">*@
+
+<!-- Custom styles for this template -->
+@*<link href="css/dashboard.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">*@
+
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+@*<script src="js/ie-emulation-modes-warning.js"></script>*@
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie-emulation-modes-warning.js"))
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<style>
+    .ui-front {
+        z-index: 105 !important;
+    }
+
+    .thumbcheckbox {
+        /*z-index: 10;*/
+    }
+
+    .ui-datepicker-div {
+        z-index: 120 !important;
+    }
+
+    .thumbRow .thumb {
+        height: auto !important;
+        max-height: 250px !important;
+    }
+
+    .croppopup {
+        z-index: 5001 !important;
+    }
+
+    .dropZone {
+        border: 2px dotted #0B85A1;
+        color: #92AAB0;
+        text-align: center;
+        vertical-align: middle;
+        /*padding: 10px 10px 10px 10px;
+            margin-bottom: 10px;*/
+        font-size: 200%;
+        background-repeat: no-repeat;
+    }
+
+    .progressBar {
+        width: 85%;
+        height: 100%;
+        text-align: center;
+        border-radius: 4px;
+        overflow: hidden;
+        display: inline-block;
+        margin: 0px;
+        vertical-align: top;
+        background: #e5e5f0;
+    }
+
+        .progressBar div {
+            height: 100%;
+            color: #fff;
+            text-align: center;
+            line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+            width: 0;
+            background-color: #0ba1b5 !important;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+    .statusbar {
+        height: 20px;
+        width: 70%;
+        padding: 0px;
+        vertical-align: top;
+        font-size: 12px;
+        color: #fff;
+        overflow: hidden;
+        display: inline-block;
+        background: none;
+        position: absolute;
+        left: 15%;
+        top: 45%;
+        z-index: 101;
+    }
+
+    .filename {
+        display: inline-block;
+        vertical-align: top;
+        width: 250px;
+    }
+
+    .filesize {
+        display: inline-block;
+        vertical-align: top;
+        color: #30693D;
+        width: 100px;
+        margin-left: 10px;
+        margin-right: 5px;
+    }
+
+    .abort {
+        /*background-color: #A8352F;*/
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        display: inline-block;
+        color: #f00;
+        cursor: pointer;
+        vertical-align: top;
+        /*float:right;*/
+        line-height: 22px;
+        margin-left: 2px;
+        width: 10%;
+    }
+
+    img.ColorPicker_Caller {
+        padding: 6.9px !important;
+    }
+
+    .editThumb {
+        left: 26px;
+    }
+</style>
+
+}
+
+ <div class="col-sm-9 rightBar">
+     <div class="row padding-topbottom leftMargin mobMargin">
+
+         <div class="summaryDiv thanksdiv">
+             <h2 class="summaryHeading">@Resources.ApplicationTranslations.ThankYou_Text_1 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></h2>
+             <p class="paddingall lead">@Resources.ApplicationTranslations.ThankYou_Text_2</p>
+         </div>
+
+     </div>
+
+ </div>
+
+
+<footer class="footer">
+    <div class="container footerBar padding-topbottom leftnavPadding">
+        <p class="text-muted">&copy; 2015 Videoburst.com</p>
+        <p class="text-muted">@Resources.ApplicationTranslations.TOS_Text<a href="#"></a> | <a href="#"></a>@Resources.ApplicationTranslations.PP_Text</p>
+    </div>
+</footer>
+}
+<script>
+    $(document).ready(function () {
+
+        $("#owl-demo").owlCarousel({
+            autoPlay: false,
+            items: 4,
+            itemsDesktop: [1199, 3],
+            itemsDesktopSmall: [979, 3]
+        });
+
+    });
+
+
+    $(document).ready(function () {
+
+        var owl = $("#owl-demo");
+
+        owl.owlCarousel();
+
+        // Custom Navigation Events
+        $(".next").click(function () {
+            owl.trigger('owl.next');
+        })
+        $(".prev").click(function () {
+            owl.trigger('owl.prev');
+        })
+
+        $("#searchmob").click(function () {
+
+            //$('.mobSearch').slideToggle('fast');
+
+            if ($(".mobSearch").is(":hidden")) {
+                $('.mobSearch').show();
+            }
+            else {
+                $('.mobSearch').hide();
+            }
+
+        });
+
+    });
+</script>
+
+
+<!-- Optional FlexSlider Additions -->
+@*<script src="js/jquery.easing.js"></script>*@
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.easing.js"))

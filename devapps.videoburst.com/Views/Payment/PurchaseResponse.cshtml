@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Purchase Response";
+    ViewBag.heading = "Purchase Response";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+
+    <div class="row">
+        @*<h2>Purchase Response</h2>*@
+        @if (@Model != null)
+        {
+            if (@Model.id != null && @Model.number != null)
+            {
+                <h3>Thank You! invoice has been created and sent successfully.</h3>
+                <p>&nbsp;</p>
+                <h4>Your product purchase has been processed.</h4>
+                <p>&nbsp;</p>
+                <p><strong>Please find the below invoice details for your future reference:</strong></p>
+                <p>Invoice No: @Model.number</p>
+                <p>Invoice Id: @Model.id</p>
+                if (@Model.merchant_info != null)
+                {
+                    <p>&nbsp;</p>
+                    <p><u>Merchant Info</u></p>
+                    <p>First Name: @Model.merchant_info.first_name</p>
+                    <p>Last Name: @Model.merchant_info.last_name</p>
+                    <p>Business Name: @Model.merchant_info.business_name</p>
+                }
+            }
+            else
+            {
+                <h3>Sorry! we are unable to create invoice for now, please try later.</h3>
+            }
+        }
+        else
+        {
+            <h3>Sorry! we are unable to create invoice for now, please try later.</h3>
+        }
+    </div>
+</div>

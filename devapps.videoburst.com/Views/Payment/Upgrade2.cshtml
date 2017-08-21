@@ -1,0 +1,211 @@
+﻿@model  VideoBurstAPI.Entities.Product
+
+@{
+    ViewBag.Title = "Compare Plans";
+    ViewBag.heading = "Compare Plans";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--=============Right Side HTML Start here============== -->
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+
+    <div class="row">
+        <!--============Upgrade Content start here==========-->
+        <div class="col-sm-9  mobmarginTopBottom">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>
+                        @if (ViewBag.companyLevel == 0)
+                        {
+                            <a href="@ViewBag.DomainUrl/payment/upgrade1" class="btn btn-black" type="button">
+                                <span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span>
+                                Back
+                            </a>
+                        }
+                        else
+                        {
+                            if (HttpContext.Current.Request.UrlReferrer != null)
+                            {
+                                <a href="@HttpContext.Current.Request.UrlReferrer.ToString()" class="btn btn-black" type="button"><span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span> Back</a>
+                            }
+                        }
+                    </p>
+                    <div class="row">
+                        <input type="hidden" value="@ViewBag.companyLevel" id="_hiddenC" />
+                        @if (ViewBag.companyLevel == 0)
+                        {
+                            <div class="col-sm-@ViewBag.cols">
+                                <div class="whitebg planbox" id="_0">
+                                    <h6 class="blue-bg headingpadding"></h6>
+                                    <div class="paddingboth">
+                                        <h1 class="planHeading blueText">Pro</h1>
+                                        <h3 class="blueText">
+                                            <strong>
+                                               @ViewBag.Symbol@Model.ProdPrice.Price
+                                            </strong> / month
+                                        </h3>
+
+                                        <hr>
+                                        <ul class="list-unstyled planlist">
+                                            <li><strong class="blueText text-bold">✓</strong> Monthly fee: <span class="pull-right">@ViewBag.Symbol@Model.ProdPrice.Price</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Users: <span class="pull-right">@Model.Users </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Videos: <span class="pull-right">@Model.Videos </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Custom templates: <span class="pull-right">No </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Your own logo: <span class="pull-right">Yes </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Choose your own colors: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Choose your own music: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Video Quality:<span class="pull-right">Full HD 1080p</span> </li>
+                                            <li><strong class="blueText text-bold">✓</strong> Licensed music: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Download video: <span class="pull-right">Yes</li>
+                                            <li><strong class="blueText text-bold">✓</strong> Clickable links in video: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="text-bold">✓</strong> Cloud based streaming: <span class="pull-right">5000 Views</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Custom thumbnail: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Support for integration: <span class="pull-right">No</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> End user can create<br>&nbsp;&nbsp;&nbsp;&nbsp;templates and campaigns<br>&nbsp;&nbsp;&nbsp;&nbsp;(Fan Engagement):<span class="pull-right">No</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Support: <span class="pull-right">Email</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Number of templates: <span class="pull-right">All</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Extra users: <span class="pull-right">99 KR/Month</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> VideoBurst Player app: <span class="pull-right">No</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Boost Campaign (Ads): <span class="pull-right">Yes</span></li>
+                                            @*<li><strong class="blueText text-bold">✓</strong> Image bank (MostPhotos): <span class="pull-right">Yes </span></li>*@
+                                        </ul>
+                                        <p>@Html.ActionLink("Go Plus", "Upgrade3", "Payment", new { level = ViewBag.Plus }, new { @class = "btn btn-Blue letter-space text-uppercase planbuttontext", onclick = "StartProcessing(true,'Please wait...')" })</p>
+                                        <p>&nbsp;</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                        @if (ViewBag.companyLevel < 20)
+                        {
+                            <div class="col-sm-@ViewBag.cols">
+                                <div class="whitebg planbox" id="_20">
+                                    <h4 class="blue-bgdark headingpadding"></h4>
+                                    <div class="paddingboth">
+                                        <h1 class="planHeading bluedark-text">Enterprise</h1>
+                                        <h3 class="bluedark-text">
+                                            <strong>Offer</strong>
+                                        </h3>
+                                        <hr>
+                                        <ul class="list-unstyled planlist">
+                                            <li><strong class="blueText text-bold">✓</strong> Monthly fee: <span class="pull-right">Offer</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Users: <span class="pull-right">Choosable </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Videos: <span class="pull-right">Choosable </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Custom templates: <span class="pull-right">Yes </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Your own logo: <span class="pull-right">Yes </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Choose your own colors: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Choose your own music:  <span class="pull-right">Tracks</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Video quality Full HD 1080p: <span class="pull-right">Full HD</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Licensed music: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Download video: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Clickable links in video,<br /> &nbsp;&nbsp; 1 link per template: <span class="pull-right">Yes, on product level</span></li>
+                                            <li><strong class="text-bold">✓</strong> Cloud based streaming: <span class="pull-right">Choosable</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Custom thumbnail: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Support for integration: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong>End user can create templates and <br /> &nbsp;&nbsp; campaigns (Fan Engagement): <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Support: <span class="pull-right">Premium</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Number of templates: <span class="pull-right">All</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Extra users (no support) : - <span class="pull-right"> </span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> VideoBurst Player app: <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Boost Campaign (Ads): <span class="pull-right">Yes</span></li>
+                                            <li><strong class="blueText text-bold">✓</strong> Image bank (MostPhotos): <span class="pull-right">Yes </span></li>
+                                        </ul>
+                                        <p><button type="button" class="btn btn-bluedark letter-space text-uppercase"><strong>Contact us</strong></button></p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-sm-4" style="display:none">
+                            <div class="whitebg planbox" id="_4">
+                                <h4 class="pink-bg headingpadding"></h4>
+                                <div class="paddingboth">
+                                    <h1 class="planHeading redText">On Demand</h1>
+                                    <h3 class="redText"><strong>290 USD</strong> / video</h3>
+                                    <hr>
+                                    <ul class="list-unstyled planlist">
+                                        <li><strong class="redText">✓</strong> Users: 1</li>
+                                        <li><strong class="redText">✓</strong> 290 USD / video</li>
+                                        <li><strong class="redText">✓</strong> Full HD 1080p</li>
+                                        <li><strong class="redText">✓</strong> Company logo</li>
+                                        <li><strike><strong class="">✓</strong> Licensed music</strike></li>
+                                        <li><strike><strong class="">✓</strong> Cloud storage</strike></li>
+                                        <li><strong class="redText">✓</strong> Streaming: –</li>
+                                        <li><strong class="redText">✓</strong> Download to computer</li>
+                                        <li><strong class="redText">✓</strong> Support: mail</li>
+                                        <li><strike><strong class="">✓</strong> Enable Custom templates</strike></li>
+                                        <li><strike><strong class="">✓</strong> Call to action</strike></li>
+                                    </ul>
+                                    <p>&nbsp;</p>
+
+                                    <p><button type="button" class="btn btnred letter-space text-uppercase planbuttontext"><strong>Go on demand</strong></button></p>
+                                    <p>&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============Upgrade content end here==========-->
+        <!--============video detail right bar start here==========-->
+        <div class="col-sm-3 textrightBar mobtextrightBar" style="display:none">
+            <div class="blog-sidebar rightsideBar">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">Quick tips</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============video detail right bar start here==========-->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var cl = $("#_hiddenC").val();
+        console.log(cl);
+        if (cl == 0)
+            $('#_0').addClass('active').siblings().removeClass('active');
+        else if (cl == 10)
+            $('#_10').addClass('active').siblings().removeClass('active');
+        else if (cl == 20)
+            $('#_20').addClass('active').siblings().removeClass('active');
+
+        $('.planbox').click(function () {
+            $('#_0').removeClass('active');
+            $('#_10').removeClass('active');
+            $('#_20').removeClass('active');
+            $(this).addClass('active').siblings().removeClass('active')
+        })
+    });
+</script>
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

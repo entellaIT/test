@@ -1,0 +1,1231 @@
+﻿@{
+    ViewBag.Title = "Video Detail";
+    ViewBag.Heading = "Video Detail";
+}
+
+@section styles {
+    @*<link href='@Url.Content("~/Scripts/Crop/cropper.css")' rel="stylesheet" />*@
+    @Html.IncludeVersionedCss(@Url.Content("~/Scripts/Crop/cropper.css"))
+
+    <style>
+        .ui-front {
+            z-index: 105 !important;
+        }
+
+        .thumbcheckbox {
+            /*z-index: 10;*/
+        }
+
+        .ui-datepicker-div {
+            z-index: 120 !important;
+        }
+
+        .thumbRow .thumb {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        .croppopup {
+            z-index: 5001 !important;
+        }
+
+        .dropZone {
+            border: 2px dotted #0B85A1;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            /*padding: 10px 10px 10px 10px;
+            margin-bottom: 10px;*/
+            /*font-size: 200%;*/
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .progressBar {
+            width: 85%;
+            height: 100%;
+            text-align: center;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+            background: #e5e5f0;
+        }
+
+            .progressBar div {
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+                width: 0;
+                background-color: #0ba1b5 !important;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+
+        .statusbar {
+            height: 20px;
+            width: 70%;
+            padding: 0px;
+            vertical-align: top;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: inline-block;
+            background: none;
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            z-index: 101;
+        }
+
+        .filename {
+            display: inline-block;
+            vertical-align: top;
+            width: 250px;
+        }
+
+        .filesize {
+            display: inline-block;
+            vertical-align: top;
+            color: #30693D;
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .abort {
+            /*background-color: #A8352F;*/
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            display: inline-block;
+            color: #f00;
+            cursor: pointer;
+            vertical-align: top;
+            /*float:right;*/
+            line-height: 22px;
+            margin-left: 2px;
+            width: 10%;
+        }
+
+        img.ColorPicker_Caller {
+            padding: 6.9px !important;
+        }
+
+        .editThumb {
+            left: 26px;
+        }
+    </style>
+
+}
+
+<div class="col-sm-9 rightbarInner">
+    @{if (@ViewBag.JobStatus == "processing" || @ViewBag.JobStatus == "noaccess")
+        {
+            <div class="row topMargin  borderBottom">
+                <ul class="nav nav-tabs tabingNav" role="tablist">
+
+                    <li role="presentation" class="visited"><span class="badge">1</span><span class="textLink">@Resources.ApplicationTranslations.Pick_Template_Text</span></li>
+                    <li role="presentation" class="active"><span class="badge">2</span><span class="textLink">@Resources.ApplicationTranslations.CreateVideo_Text</span></li>
+                    <li role="presentation" class="visited"><span class="badge">3</span><span class="textLink">@Resources.ApplicationTranslations.Publish_Text</span></li>
+
+                    @*
+                        <li role="presentation"><a href="create-video-step1.html" aria-controls="home" role="tab" data-toggle="tab"><span class="badge">1</span><span class="textLink">Pick a template</span></a></li>
+                        <li role="presentation"><a href="create-video-step2.html" aria-controls="profile" role="tab" data-toggle="tab"><span class="badge">2</span><span class="textLink">Create a video</span></a></li>
+                        <li role="presentation" class="active"><a href="#home" aria-controls="messages" role="tab" data-toggle="tab"><span class="badge">3</span><span class="textLink">Publish</span></a></li>
+                    *@
+                </ul>
+            </div>
+        }}
+    <div class="row">
+        <!--============video detail content start here==========-->
+        <div class="col-sm-9 blog-main">
+            @{if (@ViewBag.JobStatus == "processing")
+            {
+                    <div class="borderBottom">
+                        @*https://trello.com/c/9PFGihOh/212-remove-the-progress-bar-during-rendering*@
+                        <div>
+                            <p>@Html.Raw(Resources.ApplicationTranslations.Processing_Video_Text1) </p>
+                        </div>
+                        @*<h4>@Resources.ApplicationTranslations.Processing_Video_Text <span id="processingSpan" class="blueText"></span></h4>
+                            <div id="outerProgressDiv" class="progress videoProgress">
+                                <div id="innerProgressDiv" class="progress-bar vp-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                </div>
+                            </div>*@
+                    </div>
+                }}
+            @{if (@ViewBag.JobStatus == "noaccess")
+            {
+                    <div class="borderBottom">
+                        <h4>This video can only be seen by the owner. To be able to view this video, it must be published and shared.<span id="processingSpan" class="blueText"></span></h4>
+                    </div>
+                }}
+            @{if (@ViewBag.JobStatus == "published" || @ViewBag.JobStatus == "completed")
+            {
+                    <div class="row topMargin">
+                        <div class="col-sm-12 mobpaddingLR">
+                            <p>
+                                <button id="btnVDBack" type="button" class="btn btn-black"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> @Resources.ApplicationTranslations.Back_Text</button>
+                            </p>
+                        </div>
+                        <div class="col-sm-12 mobpaddingLR">
+                            <div class="placeholder" style="position: relative;">
+                                <div id="vplayer" class="img-responsive"></div>
+                                @*<a href="javascript:void(0)">
+                                        <img src='@Url.Content("~/Content/themes/fastout/images/btn-play.png")' class="img-responsive playButton btnPlay" alt="">
+                                    </a>*@
+                                <span class="timeDiv">@ViewBag.duration</span>
+                            </div>
+                        </div>
+                    </div>
+                }}
+            <div class="row">
+                <div class="col-sm-12 mobpaddingLR">
+                    @{if (@ViewBag.JobStatus == "published" || @ViewBag.JobStatus == "completed")
+                        {<h1 class="redText videoHeading lesstopMargin borderBottom">
+                        <span id="spanTitle" class="editvideoTitle">@ViewBag.videoTitle </span><span class="editvideoIcon"><img id="spanImage" class="redText videoHeading img-responsive" src='@Url.Content("~/Images/Edit_button.png")'></span>
+                        <input type="text" class="form-control input-lg" placeholder="Enter the video title here" name="txtTitle" id="txtTitle" style="display:none; width:50%;" />
+                        @if(ViewBag.JobStatus == "published" )
+                        { 
+                         <span class="alignRight" style="display:inline-block">@ViewBag.VViews</span>
+                        }
+                    </h1>
+                        }
+                        else if (@ViewBag.JobStatus == "processing")
+                        {
+                            <h1 class="redText videoHeading">@ViewBag.videoTitle</h1>
+                        }
+                        if (@ViewBag.JobStatus == "published")
+                        {
+
+                            @*<h1 class="redText videoHeading lesstopMargin borderBottom">
+                                    <span id="spanTitle" title="Click here to change the video title.">@Resources.ApplicationTranslations.Video_Title_Text</span>
+                                    <input type="text" class="form-control input-lg" placeholder="Enter the video title here" name="txtTitle" id="txtTitle" style="display:none;" />
+                                </h1>*@
+
+                            @*<h1 class="redText videoHeading "><span id="spanTitle">@ViewBag.videoTitle </span><span class="alignRight">@ViewBag.VViews</span></h1>*@
+                            <div class="col-sm-6 lessPaddingL videobtnGroup">
+                                <span class="profilePic">
+                                    <img src="@ViewBag.PByPicUrl" alt="" style="object-fit: cover;" />
+                                </span>
+                                <span class="videodetailText">
+                                    @Resources.ApplicationTranslations.Published_By_Text <strong>@ViewBag.UpdatedBy</strong><br>
+                                    @Resources.ApplicationTranslations.Template_Text <strong>@ViewBag.templatetitle</strong><br>
+                                    <strong>@ViewBag.UpdatedDate</strong>
+                                </span>
+                            </div>
+
+                            <div class="col-sm-6 textalignRight lessPaddingL actionBtn">
+                                @*@if (@ViewBag.ADOptions != "")
+                                    {
+                                        <div class="btn-group" role="group" aria-label="Large button group">
+                                            <button type="button" class="btn btn-default btn-lg btn-black" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cloud-download iconSpaceright" aria-hidden="true"></span>@Resources.ApplicationTranslations.Download_Text AD <span class="glyphicon glyphicon-menu-down iconSpaceleft" aria-hidden="true"></span></button>
+                                            <ul class="generalDD dropdown-menu fittowindow" aria-labelledby="dLabel">
+                                                @Html.Raw(ViewBag.ADOptions)
+                                            </ul>
+                                        </div>
+                                    }*@
+                                <div class="btn-group" role="group" aria-label="Large button group">
+                                    <button type="button" class="btn btn-default btn-lg btn-black" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cloud-download iconSpaceright" aria-hidden="true"></span>@Resources.ApplicationTranslations.Download_Text <span class="glyphicon glyphicon-menu-down iconSpaceleft" aria-hidden="true"></span></button>
+                                    <ul class="dropdown-menu fittowindow generalDD" aria-labelledby="dLabel">
+                                        @Html.Raw(ViewBag.VDOptions)
+                                    </ul>
+                                    @*
+                                        <button id="btnVEdit" type="button" class="btn btn-default btn-lg btn-black"><span id="spnVEdit" class="glyphicon glyphicon-wrench iconSpaceright" aria-hidden="false"></span>Edit</button>*@
+                                    <button id="btnVDelete" type="button" class="btn btn-default btn-lg btn-black"><span class="glyphicon glyphicon-trash iconSpaceright" aria-hidden="true"></span>@Resources.ApplicationTranslations.Delete_Text</button>
+                                </div>
+                            </div>
+                        }
+                        else if (@ViewBag.JobStatus == "completed" || @ViewBag.JobStatus == "processing")
+                        {
+
+                            <div class="col-sm-12 lessPaddingL videobtnGroup">
+                                <span class="profilePic">
+                                    <img src="@ViewBag.CByPicUrl" alt="" style="object-fit: cover;" />
+                                </span>
+                                <span class="videodetailText">
+                                    @Resources.ApplicationTranslations.Created_By_Text <strong>@ViewBag.createdBy</strong><br>
+                                    @Resources.ApplicationTranslations.Template_Text <strong>@ViewBag.templatetitle</strong><br>
+                                    @*<strong>@ViewBag.CreatedDate</strong>*@
+                                    <strong>@ViewBag.UpdatedDate</strong>
+                                </span>
+
+                                <div>&nbsp;</div>
+                                <div>&nbsp;</div>
+                                <div>&nbsp;</div>
+
+                                @{if (@ViewBag.JobStatus == "processing")
+                                    {
+                                        <div style="text-align: center;" class="rightHeading">
+                                            <h4>
+                                                @*@Resources.ApplicationTranslations.Video_ProcessingText1
+                                                    @Resources.ApplicationTranslations.Video_ProcessingText2*@
+                                            </h4>
+                                        </div>
+                                    }}
+                            </div>
+
+                                    }}
+                </div>
+            </div>
+
+            @{if (@ViewBag.JobStatus == "published" || @ViewBag.JobStatus == "completed")
+            {
+                    <div class="row">
+                        <div class="col-sm-12 mobpaddingLR">
+                            <div class="borderTop"></div>
+                        </div>
+                        <div class="col-sm-12 mobpaddingLR">
+                            <div class="row">
+                                <div class="col-sm-9 fullwidthDiv">
+                                    <div>
+                                        <h5 class="sliderHeading">@Resources.ApplicationTranslations.Choose_ThumbNail_Text</h5>
+                                        <div id="owl-demo" class="owl-carousel owl-theme">
+                                            @if (ViewBag.thumbnails != null)
+                                            {
+                                                foreach (var thumbnail in ViewBag.thumbnails)
+                                                {
+                                                    <div class="item">
+                                                        <label class="thumbcheckbox">
+                                                            <input type="radio" name="optionsRadios" id="optionsRadios" value="@thumbnail.id" onclick="setDefaultThumbId(@thumbnail.id,this)">
+                                                        </label>
+                                                        <img class="img-responsive" src="@Url.Content(thumbnail.url.dsignedurl)" onclick="setDefaultThumbId(@thumbnail.id,this)" alt="">
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="customNavigation">
+                                            <a class="btn prev"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
+                                            <a class="btn next"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+                                        </div>
+                                        <p style="height: 8px;"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+
+                                    <div>
+                                        <h5 class="sliderHeading">@Resources.ApplicationTranslations.ThumbNail_Size_Text</h5>
+
+                                        @{
+                                            if (TempData["VideoGUId"] != null)
+                                            {
+                                                var VGUID = TempData["VideoGUId"].ToString();
+                                                @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(true, "image", VGUID, 1280, 720, 178, 110, @ViewBag.defaultThumbUrl, "hiddenThumbUrl"))
+
+                                            }
+                                        }
+                                        @*
+                                            <p class="text-left">
+                                                <br />
+                                                <button type="button" id="btnUpdateThumbNail" class="btn btn-md btn-outerRed"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>@Resources.ApplicationTranslations.Save_Thumbnail_Text</button>
+                                            </p>
+                                        *@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                            }}
+            @{if (@ViewBag.JobStatus == "published")
+                {
+                    <div class="row">
+                        <div class="col-sm-12 mobpaddingLR borderTop">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h5 class="sliderHeading">Video URL</h5>
+                                    <div class="input-group">
+                                        <input id="txtDVUrl" type="text" class="form-control" readonly="readonly" value="@ViewBag.EmbedUrl" title="Direct link to your video" />
+                                        <span class="input-group-btn">
+                                            <button id="btnCopyDVUrl" class="btn btn-default btn-black" type="button">@Resources.ApplicationTranslations.Copy_Text</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h5 class="sliderHeading">Player URL</h5>
+                                    <div class="input-group">
+                                        <input id="txtDPUrl" type="text" class="form-control" readonly="readonly" value="@ViewBag.PlayerUrl" title="Video player page with sharing options">
+                                        <span class="input-group-btn">
+                                            <button id="btnCopyDPUrl" class="btn btn-default btn-black" type="button">@Resources.ApplicationTranslations.Copy_Text</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 mobpaddingLR">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h5 class="sliderHeading">@Resources.ApplicationTranslations.Share_Text</h5>
+                                    <p>
+                                        <a href="javascript:void(0)" class="socialMediaPlayer" title="Share on Facebook" onclick="fnSocialMediaShare('fb','@ViewBag.PlayerUrl','@ViewBag.videoTitle');">
+                                            <img src='@Url.Content("~/Content/themes/fastout/images/fbIcon.png")' class="img-responsive">
+                                        </a>
+                                        <a href="javascript:void(0)" class="socialMediaPlayer" title="Share on Twitter" onclick="fnSocialMediaShare('tw','@ViewBag.PlayerUrl','@ViewBag.videoTitle');">
+                                            <img src='@Url.Content("~/Content/themes/fastout/images/twitterIcon.png")' class="img-responsive">
+                                        </a>
+                                        <a href="javascript:void(0)" class="socialMediaPlayer" title="Share on Google" onclick="fnSocialMediaShare('go','@ViewBag.PlayerUrl','@ViewBag.videoTitle');">
+                                            <img src='@Url.Content("~/Content/themes/fastout/images/googleIcon.png")' class="img-responsive">
+                                        </a>
+
+                                        <a href="javascript:void(0)" class="socialMediaPlayer" data-toggle="modal" data-target="#myModal1">
+                                            <img src='@Url.Content("~/Content/themes/fastout/images/mailIcon.png")' class="img-responsive">
+                                        </a>
+                                        <button id="btnVEmbedCode" class="btn btn-default btn-lg btn-black" type="button"><span><</span><span> /></span> @Resources.ApplicationTranslations.Embed_Code_Text</button>
+
+                                        @*<a href="javascript:void(0)" title="QR Code" class="qrcode" style="display: none;">
+                                                <img src='@Url.Content(@ViewBag.QRSource)' alt="" onclick="fnDownloadQRCode('@ViewBag.JobGUId');" />
+                                            </a>
+                                            <input id="hdQrCodeUrl" value='@Url.Content(@ViewBag.QRSource)' type="hidden" />*@
+                                    </p>
+                                    <p>
+                                        <textarea id="txtVEmbedCode" readonly="readonly" class="form-control" rows="4" placeholder="< />Embed Code" style="display: none;">@ViewBag.VECode</textarea>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (@ViewBag.JobStatus == "completed")
+                {
+
+                    <div class="row">
+                        <div class="col-sm-12 mobpaddingLR borderTop">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <button id="btnVEdit" type="button" class="btn btn-md btn-Blue">@Resources.ApplicationTranslations.Edit_Video_Text</button>
+                                            <button type="button" class="btn btn-md btnRed" id="btnPublish">@Resources.ApplicationTranslations.Publish_Video_Text</button>
+                                            <button type="button" class="btn btn-md btnRed" id="btnGenerateLink" style="display:none;">@Resources.ApplicationTranslations.Generate_Draft_Link_Text</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div id="divgeneratelink" style="display:none;">
+                                                <div class="form-inline">
+                                                    <label class="sliderHeading control-label"><strong>Temporary Link:</strong></label>
+                                                    <div class="input-group">
+                                                        <input id="txtGenerateLinkUrl" type="text" class="form-control" value="@ViewBag.GeneratedTempLinkUrl" readonly="readonly" title="Video player page with sharing options">
+                                                        <span class="input-group-btn">
+                                                            <button id="btnCopyGenerateLinkUrl" class="btn btn-black btn-borderbtn" onclick="CopyToClipboard();" type="button">@Resources.ApplicationTranslations.Copy_Text</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div id="divexpirelink" style="display:none;">
+                                                <div class="form-inline">
+                                                    <label class="sliderHeading control-label" id="lblFirstTime">Link will expire in <strong> @ViewBag.expiredate </strong></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }}
+        </div>
+
+        <!--============video detail content end here==========-->
+        <!-- Popup Start -->
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog popup-dialog" role="document">
+                <div class="modal-content popupContent">
+                    <div class="modal-header popupHeader">
+                        <h4 class="whiteText">@Resources.ApplicationTranslations.Share_Via_Email_Text</h4>
+                    </div>
+                    <div class="modal-body popupBody">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">@Resources.ApplicationTranslations.To_Text</label>
+                                <input id="txtVToEmail" type="text" class="form-control" placeholder="Enter an email address" />
+                            </div>
+                            <div class="form-group" style="display: none;">
+                                <label for="exampleInputEmail1">@Resources.ApplicationTranslations.From_Text</label>
+                                <input id="txtVFromEmail" type="text" class="form-control" placeholder="Enter your email address" value="@ViewBag.FromEmail" readonly="readonly" />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">@Resources.ApplicationTranslations.Subject_Text</label>
+                                <input id="txtVEmailSubject" type="text" class="form-control" placeholder="Enter a subject" value="@ViewBag.videoTitle" />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">@Resources.ApplicationTranslations.Message_Text</label>
+                                <textarea id="txtVEmailMessage" class="form-control" title="Use [VIDEOURL] to put the URL in a specific section wherever you want." alt="Use [VIDEOURL] to put the URL in a specific section wherever you want.">Hi! Check out this cool video I made using VideoBurst!</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">@Resources.ApplicationTranslations.URL_Text</label>
+                                <input id="txtVShareUrl" type="text" class="form-control" placeholder="Video url to share" value="@ViewBag.PlayerUrl" readonly="readonly" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer popupFooter">
+                        <button id="btnVEmailShare" type="submit" class="btn btn-md btnRed">@Resources.ApplicationTranslations.Send_Text</button>
+                        <button id="btnVEShareCancel" type="submit" class="btn btn-md btn-outerRed" data-dismiss="modal">@Resources.ApplicationTranslations.Cancel_Text</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Popup End -->
+        <!--============video detail right bar start here==========-->
+
+        <div class="col-sm-3 textrightBar mobtextrightBar">
+            @{if (@ViewBag.JobStatus == "processing" || @ViewBag.JobStatus == "noaccess")
+            {
+                    <div class="blog-sidebar sidebarEdit">
+                        <div class="sidebar-module sidebar-module-inset">
+                            <h4 class="rightHeading">@Resources.ApplicationTranslations.Quick_Tips_Title</h4>
+                            <div class="row detailrightText">
+                                <span class="badge badgeNumber">1</span> <span class="groupText">
+                                    <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_1</strong><br>
+                                    @Resources.ApplicationTranslations.Quick_Tips_Text_2
+                                </span>
+                            </div>
+
+                            <div class="row detailrightText">
+                                <span class="badge badgeNumber">2</span> <span class="groupText">
+                                    <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_3</strong><br>
+                                    @Resources.ApplicationTranslations.Quick_Tips_Text_4
+                                </span>
+                            </div>
+
+                            <div class="row detailrightText">
+                                <span class="badge badgeNumber">3</span> <span class="groupText">
+                                    <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_5</strong><br>
+                                    @Resources.ApplicationTranslations.Quick_Tips_Text_6
+                                </span>
+                            </div>
+
+                            <div class="row detailrightText">
+                                <span class="badge badgeNumber">4</span> <span class="groupText">
+                                    <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_7</strong><br>
+                                    @Resources.ApplicationTranslations.Quick_Tips_Text_8
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }               @{if (@ViewBag.JobStatus == "published" || @ViewBag.JobStatus == "completed")
+            {
+                    <div class="blog-sidebar">
+                        <div class="timelineright">
+                            <div class="timelineText" style="border-top: 0;">
+                                <h4>@Resources.ApplicationTranslations.Timeline_Text</h4>
+                            </div>
+
+                            @{if (@ViewBag.JobStatus == "published" || @ViewBag.JobStatus == "completed")
+                                {
+                                    <div id="ulCreatedEditedByList"></div>
+                                }}
+
+                            @{if (@ViewBag.JobStatus == "published")
+                                {
+                                    <div class="timelineText green">
+                                        <span class="badge"></span>
+                                        <h4>@Resources.ApplicationTranslations.Published_Text</h4>
+                                        <p>
+                                            @Resources.ApplicationTranslations.By_Text <strong>@ViewBag.UpdatedBy</strong><br>
+                                            <strong>@ViewBag.UpdatedDate</strong>
+                                        </p>
+                                    </div>
+                                }}
+
+                            @{if (@ViewBag.JobStatus == "published")
+                                {
+                                    <div class="timelineText pink">
+                                        <span class="badge"></span>
+                                        <h4>@ViewBag.VViews Views</h4>
+                                        <p>on <strong>@DateTime.Now.ToLongDateString()</strong></p>
+                                    </div>
+                                }}
+                        </div>
+                    </div>
+                                }}
+        </div>
+        <!--============video detail right bar start here==========-->
+    </div>
+</div>
+
+<div id="fb-root"></div>
+
+@section scriptstopbody{
+
+    <script type="text/javascript">
+        //Edit video title
+
+        $(document).on('click', '#btnGenerateLink', function (event) {
+            event.preventDefault();
+
+            var vJobGUId = '@ViewBag.JobGUId';
+            var vcreatedby = '@ViewBag.createdby';
+            var tempurl = '@ViewBag.TemparoryUrl';
+
+
+            var LinkElements = { JobGUId: vJobGUId, createdby: vcreatedby };
+            var url = WebsiteRootPath + "Videos/GenerateTemparoryLink";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(LinkElements),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.message == "Success")
+                        alertBox('@Resources.ApplicationTranslations.Generate_Link');
+                    document.getElementById("divgeneratelink").style.display = 'inline-block';
+                    $('#txtGenerateLinkUrl').val(data.tempurl);
+                    $('#lblFirstTime').html("Link will expire in <strong> 23 hours and 59 minutes </strong>");
+                    $("#btnGenerateLink").hide();
+                    $("#divexpirelink").show();
+                    $("#divgeneratelink").show();
+                },
+                error: function () {
+                    alertBox('@Resources.ApplicationTranslations.Error_Message');
+                }
+
+            });
+        });
+
+        $(document).ready(function () {
+               if ('@ViewBag.Visibility' === 'True') {
+                         if ('@ViewBag.GeneratedTempLinkUrl' != '') {
+                             $("#divexpirelink").show();
+                             $("#divgeneratelink").show();
+                             $("#btnGenerateLink").hide();
+                         } else {
+                             $("#divexpirelink").hide();
+                             $("#divgeneratelink").hide();
+                             $("#btnGenerateLink").show();
+                         }
+                     } else {
+                         $("#divexpirelink").hide();
+                         $("#divgeneratelink").hide();
+                         $("#btnGenerateLink").hide();
+             }
+
+            $('#spanImage').on('click', function () {
+                $(this).hide();
+                $('#txtTitle').show();
+                $('#spanTitle').hide();
+                $('#txtTitle').focus();
+                $('#txtTitle').val($('#spanTitle').text());
+                $('#txtTitle').css('display', 'inline-block');
+                //  if ($(this).text() != $(this).attr('title'))
+                //   $('#txtTitle').val($(this).text());
+                //
+            });
+            $('#txtTitle').on('blur, focusout', function () {
+                $(this).hide();
+                $('#spanImage').show();
+                if ($(this).val().trim() != '')
+                    $('#spanTitle').text($(this).val());
+                else
+                    $('#spanTitle').text($('#spanTitle').attr('title'));
+                $('#spanTitle').show();
+                var vtitle = $(this).val();
+
+                if (vtitle == "") {
+                    //alertBox("Please enter the Video Title");
+                    return false;
+                }
+
+                var vJobGUId = '@ViewBag.JobGUId';
+                var title = { JobGUId: vJobGUId, Title: vtitle };
+                var url = WebsiteRootPath + "Videos/UpdateVideoTitle";
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(title),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.message == "Success")
+                            alertBox('@Resources.ApplicationTranslations.Title_Updation_Success_Message');
+                    },
+                    error: function () {
+                        alertBox('@Resources.ApplicationTranslations.Error_Message');
+                    }
+
+                });
+            });
+
+            GetCreatedEditedByList();
+
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function CopyToClipboard() {
+            var label = document.getElementById("lblOutput");
+            // var textToClipboard = $('#txtGenerateLinkUrl').attr('value');
+            var textToClipboard = $('#txtGenerateLinkUrl').val();
+
+            //var textToClipboard = document.getElementById('<%= txtGenerateLinkUrl.ClientID %>').value;
+            // var textToClipboard = input.value;
+
+            var success = true;
+            if (window.clipboardData) { // Internet Explorer
+                window.clipboardData.setData("Text", textToClipboard);
+            }
+            else {
+                // create a temporary element for the execCommand method
+                var forExecElement = CreateElementForExecCommand(textToClipboard);
+
+                /* Select the contents of the element
+                    (the execCommand for 'copy' method works on the selection) */
+                SelectContent(forExecElement);
+
+                var supported = true;
+
+                // UniversalXPConnect privilege is required for clipboard access in Firefox
+                try {
+                    if (window.netscape && netscape.security) {
+                        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                    }
+
+                    // Copy the selected content to the clipboard
+                    // Works in Firefox and in Safari before version 5
+                    success = document.execCommand("copy", false, null);
+                }
+                catch (e) {
+                    success = false;
+                }
+
+                // remove the temporary element
+                document.body.removeChild(forExecElement);
+            }
+
+            if (success) {
+                alert("The text is on the clipboard, try to paste it!");
+            }
+            else {
+                window.prompt("Copy to clipboard: Ctrl+C, Enter", textToClipboard);
+
+                //alert("Your browser doesn't allow clipboard access!");
+            }
+        }
+
+        function CreateElementForExecCommand(textToClipboard) {
+            var forExecElement = document.createElement("div");
+            // place outside the visible area
+            forExecElement.style.position = "absolute";
+            forExecElement.style.left = "-10000px";
+            forExecElement.style.top = "-10000px";
+            // write the necessary text into the element and append to the document
+            forExecElement.textContent = textToClipboard;
+            document.body.appendChild(forExecElement);
+            // the contentEditable mode is necessary for the  execCommand method in Firefox
+            forExecElement.contentEditable = true;
+
+            return forExecElement;
+        }
+
+        function SelectContent(element) {
+            // first create a range
+            var rangeToSelect = document.createRange();
+            rangeToSelect.selectNodeContents(element);
+
+            // select the contents
+            var selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(rangeToSelect);
+        }
+    </script>
+    <script type="text/javascript">
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            //js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=@ViewBag.FacebookAppId&version=v2.3";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <script type="text/javascript">
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@ViewBag.FacebookAppId',
+                status: true,
+                xfbml: true,
+                version: 'v2.0'
+            });
+            $(document).trigger('FBSDKLoaded');
+        }
+    </script>
+
+    <script type="text/javascript">
+        !function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s); js.id = id;
+                js.src = p + '://platform.twitter.com/widgets.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, 'script', 'twitter-wjs');
+    </script>
+
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/platform.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+}
+@Html.Partial("_CropPopupPartial")
+
+@section scriptsbottombody{
+
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/ZeroClipboard.js"))
+    <script>
+        // Specify where the Flash movie can be found if not in root folder for web site
+        ZeroClipboard.config({ moviePath: '@Url.Content("~/Content/themes/fastout/js/ZeroClipboard.swf")' });
+
+        var client = new ZeroClipboard($("#btnCopyDVUrl"));
+
+        client.on('load', function (client) {
+
+            client.on('datarequested', function (client) {
+                var text = $('#txtDVUrl').attr('value');
+                client.setText(text);
+                $("#btnCopyDVUrl").html('Copied!')
+            });
+
+            // callback triggered on successful copying
+            client.on('complete', function (client, args) {
+                $("#btnCopyDVUrl").html('Copied!')
+                console.log("Text copied to clipboard: \n" + args.text);
+            });
+        });
+
+        // In case of error - such as Flash not being available
+        client.on('wrongflash noflash', function () {
+            ZeroClipboard.destroy();
+        });
+
+        var vDPUrlClient = new ZeroClipboard($("#btnCopyDPUrl"));
+
+        vDPUrlClient.on('load', function (dpClient) {
+
+            dpClient.on('datarequested', function (dpClient) {
+                var text = $('#txtDPUrl').attr('value');
+                client.setText(text);
+                $("#btnCopyDPUrl").html('Copied!')
+            });
+
+            // callback triggered on successful copying
+            dpClient.on('complete', function (dpClient, args) {
+                $("#btnCopyDPUrl").html('Copied!')
+                console.log("Text copied to clipboard: \n" + args.text);
+            });
+        });
+
+        // In case of error - such as Flash not being available
+        vDPUrlClient.on('wrongflash noflash', function () {
+            ZeroClipboard.destroy();
+        });
+    </script>
+
+    @if (System.Web.Configuration.WebConfigurationManager.AppSettings["jwplayerurl"] != null)
+    {
+        <script type="text/javascript" src='@System.Web.Configuration.WebConfigurationManager.AppSettings["jwplayerurl"]'></script>
+    }
+    else
+    {
+        <script type="text/javascript" src="https://jwpsrv.com/library/TrFk4vXxEeODYiIACtqXBA.js"></script>
+    }
+
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/UploadControl.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/Crop/cropper.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.swfobject.1-1-1.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/owl.carousel.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/templates.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/Thumbnail.js"))
+
+    <script type="text/javascript">
+        $(document).on('click', '#btnVEdit', function (event) {
+            event.preventDefault();
+            var vJobGUId = '@ViewBag.JobGUId';
+            window.location.href = '@Url.Content("~/Videos/Edit/")' + vJobGUId;
+        });
+
+        $(document).on('click', '#btnVDelete', function (event) {
+            event.preventDefault();
+
+            confirmBox('Are you sure you want to delete this video?', function () {
+
+                var vJobGUId = '@ViewBag.JobGUId';
+                var vPgScrollToLoc = '@ViewBag.vPgScrollTo';
+                $.ajax({
+                    url: WebsiteRootPath + "api/VideoBurstAPI/DeleteJob/" + vJobGUId,
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (deleteResp) {
+                        if (deleteResp == "success") {
+                            var vJobStatusId = "";
+                            var vJobStatus = '@ViewBag.JobStatus';
+
+                            if (vJobStatus == "published")
+                                vJobStatusId = "Published";
+                            else
+                                vJobStatusId = "Drafts";
+
+                            //var vSortColumn = ('@ViewBag.SortColumn' == '') ? 1 : '@ViewBag.SortColumn';
+                            //var vSortOrder = ('@ViewBag.SortOrder' == '') ? 2 : '@ViewBag.SortOrder';
+
+                            var vSortColumn = '@ViewBag.SortColumn';
+                            var vSortOrder = '@ViewBag.SortOrder';
+                            var vPgNumber = parseInt('@ViewBag.vPgNumber');
+
+                            window.location.href = '@Url.Content("~/Videos/Index/")' + vJobStatusId + "~" + vSortColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollToLoc;
+                            alertBox('@Resources.ApplicationTranslations.Video_Deletion_Success_Message');
+                        }
+                        else {
+                            alertBox('@Resources.ApplicationTranslations.Video_Deletion_Failure_Message');
+                        }
+                    }, cache: false, async: false, crossDomain: true
+                });
+            }, function () { return false; });
+        });
+
+        $(document).on('click', '#btnVEmbedCode', function (event) {
+            event.preventDefault();
+            $("#txtVEmbedCode").show("slow");
+        });
+
+        $(document).on('click', '#btnVDBack', function (event) {
+
+            event.preventDefault();
+            var vJobStatusId = "";
+
+            var vJobStatus = '@ViewBag.JobStatus'; // Completed
+            var vJobGUId = '@ViewBag.JobGUId';  // different everytime like '11081a62-ae3c-4143-978c-b164ae364544'
+            var vPgNumber = '@ViewBag.vPgNumber';//0
+            var vSortColumn = '@ViewBag.SortColumn'; //1
+            var vSortOrder = '@ViewBag.SortOrder'; //2
+            var vPgScrollTo = '@ViewBag.vPgScrollTo';// according to the scroll value like 621
+
+            if (vJobStatus == "published") {
+
+                vJobStatusId = "Published";
+                window.location.href = '@Url.Content("~/Videos/Index/")' + vJobStatusId + "~" + vSortColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollTo;
+            }
+            else {
+                vJobStatusId = "Drafts";
+                window.location.href = '@Url.Content("~/Videos/Index/")' + vJobStatusId + "~" + vSortColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollTo;
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        var Id;
+        var size = 0;
+        //var videoProgress= localStorage.getItem("percentageStorage").toString();
+        //var extractedValue=videoProgress.split(":");
+        //if(parseInt(extractedValue[0])!=0)
+        //{
+        //    size= parseInt(extractedValue[0]);
+        //}
+
+        if (localStorage.getItem("percentageStorage") != null) {
+            var videoProgress = localStorage.getItem("percentageStorage").toString();
+            var extractedValue = videoProgress.split(":");
+            if (parseInt(extractedValue[0]) != 0) {
+                size = parseInt(extractedValue[0]);
+            }
+        }
+
+        $(function () {
+            var status = '@ViewBag.JobStatus';
+            if (status == "processing") {
+
+                Id = setInterval(GetJobStatus, 10000);
+            }
+
+            $('#owl-demo').find('input[type=radio]').each(function (i, e) {
+                if ($(e).val() == '@ViewBag.defaultThumbId') {
+                    $(e).prop('checked', true);
+                    $(e).parent().closest('div.item').css({
+                        "border-color": "green",
+                        "border-width": "2px",
+                        "border-style": "solid"
+                    });
+                }
+            });
+
+            // Pass parameter vSortColumn and vSortOrder in querystring to set list ordering.
+            // 17 Sep,2015
+            $(document).on("click", "#btnPublish", function (event) {
+                console.log('btnPublish clicked');
+                event.preventDefault();
+                var vSortColumn = '@ViewBag.SortColumn';
+                var vSortOrder = '@ViewBag.SortOrder';
+                var remainingVideoCount = parseInt(localStorage.getItem("videoCount"));
+                console.log('remainingVideoCount before publish:' + remainingVideoCount);
+                if (remainingVideoCount == 0) {
+                    confirmBox('@Resources.ApplicationTranslations.No_Videos_Publish_Message', function () {
+                        StartProcessing(true, "Please wait...");
+                        var url = '@Url.Content("~/Dashboard/Upgrade")';
+                        window.location.href = url;
+
+                    }, function () { return false; });
+                }
+                if (remainingVideoCount > 0) {
+                    var vJobGUId = '@TempData["VideoGUId"]';
+                    console.log('vJobGUId' + vJobGUId);
+                    confirmBox('@Resources.ApplicationTranslations.Confirmation_Video_Publish_Message', function () {
+                        StartProcessing(true, "Please wait...");
+                        var url = WebsiteRootPath + "Videos/Publish";
+                        $.post(url, function (data) {
+                            if (data != '') {
+                                alertBox(data);
+                                var url = '@Url.Content("~/Videos/Detail/")' + vJobGUId  //+ "~" + vSortColumn + "~" + vSortOrder;
+                                window.location.href = url;
+                            }
+
+                        });
+                    }, function () { return false; });
+
+                }
+
+            });
+            if (status == "completed" || status == "published") {
+
+                var playerInstance = jwplayer("vplayer");
+                console.log('playerInstance:' + playerInstance);
+                if (playerInstance != null && playerInstance != undefined)
+                    playerInstance.setup(@Html.Raw(@ViewBag.jwPlayerSetup));
+            }
+            $("#owl-demo").owlCarousel({
+                autoPlay: 3000,
+                items: 4,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [979, 3]
+            });
+
+            var owl = $("#owl-demo");
+
+            owl.owlCarousel();
+
+            // Custom Navigation Events
+            $(".next").click(function () {
+                owl.trigger('owl.next');
+            })
+            $(".prev").click(function () {
+                owl.trigger('owl.prev');
+            })
+        });
+
+        function setDefaultThumbId(thumbId, obj) {
+            $('#owl-demo').find('input[type=radio]').each(function (i, e) {
+                var element = $(e).parent().closest('div.item');
+
+                if ($(element).css('border-top-style') != 'none' && $(element).css('border-right-style') != 'none' && $(element).css('border-bottom-style') != 'none' && $(element).css('border-left-style') != 'none') {
+
+                    $(e).parent().closest('div.item').css('border', 'none');
+                }
+            });
+            $(obj).parent().closest('div.item').css({
+                "border-color": "green",
+                "border-width": "2px",
+                "border-style": "solid"
+            });
+            StartProcessing(true, "Please wait...");
+            var url = WebsiteRootPath + "Videos/SetDefaultThumb";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify({ 'thumbId': thumbId }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.message == "Success")
+                        alertBox('@Resources.ApplicationTranslations.Default_Thumbnail_Updation_Success_Message');
+
+                    var url = '@Url.Content("~/Videos/Detail/")' + data.id;
+                    window.location.href = url;
+                },
+                error: function () {
+                    StopProcessing();
+                    alertBox('@Resources.ApplicationTranslations.Error_Message');
+                }
+
+            });
+        }
+        function GetJobStatus() {
+            var vJobGUId = '@TempData["VideoGUId"]';
+            var url = WebsiteRootPath + "api/VideoBurstAPI/GetJobStatus/" + vJobGUId;
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != 'undefined') {
+                        if (data <= 100000) {
+                            progress(data, vJobGUId);
+                            localStorage.setItem("percentageStorage", size);
+                        }
+                        if (data == 120000) {
+                            var vSortColumn = '@ViewBag.SortColumn';
+                            var vSortOrder = '@ViewBag.SortOrder';
+                            clearInterval(Id);
+                            size = 0;
+                            localStorage.setItem("percentageStorage", size);
+                            alertBox('@Resources.ApplicationTranslations.Video_Creation_Failed_Message');
+                            // window.location.href = '@Url.Content("~/Videos/Index/drafts")';
+                        }
+
+                    }
+
+                },
+                error: function () {
+                    alertBox('@Resources.ApplicationTranslations.Error_Message');
+                }
+
+            });
+
+        }
+        function progress(status, jobGuid) {
+
+            var videoProgress = (localStorage.getItem("percentageStorage") != null) ? localStorage.getItem("percentageStorage").toString() : "";
+            var extractedValue = videoProgress.split(":");
+            var extractedGuid = (extractedValue.length > 1) ? ((extractedValue[1] != null) ? extractedValue[1] : "") : "";
+            //var percentageCompleted =parseInt(extractedValue[0]);
+
+            if (jobGuid == extractedGuid && (status >= 3000 && status <= 100000)) {
+                size = ((extractedValue[0] != null) ? parseInt(extractedValue[0]) : 0);
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+            }
+
+            if (jobGuid != extractedGuid && status <= 3000 && size < 5) {
+                size = 5;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status > 3000 && status < 6000) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 6000) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 7000 && size <= 20) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 7000 && (size > 20 && size < 50)) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 7000 && (size >= 50 && size <= 60)) {
+                size = 60;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 7010 && size < 70) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 8010 && size < 80) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 9010) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 100000) {
+                var vJobGUId = '@TempData["VideoGUId"]';
+                size = 100;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width= size + "%";
+                $('#processingSpan').text("100%");
+                clearInterval(Id);
+                window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId;
+
+            }
+            if (size == 100) {
+                size = 0;
+
+            }
+            var videoProgress = size + ":" + jobGuid;
+            localStorage.setItem("percentageStorage", videoProgress);
+
+        }
+
+        function GetCreatedEditedByList() {
+            var vJobGUId = '@ViewBag.JobGUId';
+            var first = 0;
+            var MethodUrl = WebsiteRootPath + "api/VideoBurstAPI/GetCreatedEditedByList?jGuid=" + vJobGUId;
+            $.getJSON(MethodUrl).done(function (data) {
+                var varCreatedEditedByList = "";
+                var createText = "Created";
+                var classText = "pink";
+                if (Object.keys(data).length > 0) {
+                    // On success, 'data'
+                    $.each(data, function (key, Result) {
+                        if (first == 0) {
+                            createText = "Created";
+                            classText = "pink";
+                        }
+                        else {
+                            createText = "Edited";
+                            classText = "blue";
+                        }
+                        varCreatedEditedByList += "<div class=\"timelineText " + classText + "\"><span class=\"badge\"></span><h4>" + createText + " </h4> <p> by: <strong>" + Result.createdbyUserName + "</strong><br><strong>" + Result.createdTime + "</strong> </p> </div>";
+                        first = first + 1;
+                    });
+
+                    if (varCreatedEditedByList != "") {
+                        $("#ulCreatedEditedByList").html(varCreatedEditedByList);
+                    }
+                }
+            });
+        }
+    </script>
+}

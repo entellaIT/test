@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Response";
+    ViewBag.heading = "Response";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .pinkButton {
+        background: #ff007d;
+        color: #fff;
+        font-size: 14px;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+    }
+</style>
+
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+    <div class="row">
+
+        <p>
+            @if (@ViewBag.AType != "error")
+            {  <h3>@ViewBag.PType @ViewBag.AType </h3>}
+        </p>
+        <p>@Html.Raw(@ViewBag.Message)</p>
+
+        <br />
+        @if (@ViewBag.AType != "error" && @ViewBag.AType != "cancel")
+        {
+            <p>
+                @Html.ActionLink(@Resources.ApplicationTranslations.GetStarted_Text, "Pick-Template", "Templates", routeValues: null, htmlAttributes: new { @class = "btn pinkButton" })
+                &nbsp;
+                @Html.ActionLink("History", "History", "Payment", routeValues: null, htmlAttributes: new { @class = "btn pinkButton" })
+            </p>
+        }
+    </div>
+</div>

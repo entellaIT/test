@@ -1,0 +1,75 @@
+﻿@model VideoBurstWeb.Models.LoginSignupModel
+
+@{
+    ViewBag.Title = "Videoburst - Login";
+    Layout = "~/Views/Shared/_AnonymousLayout.cshtml";
+}
+@*@using (Html.BeginForm("SignUp", "Home", new { ReturnUrl = ViewBag.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6 signupForm formHeight">
+        <h4 class="signupsubHead">@Resources.AuthenticationTranslations.Register_CreateAccountTitle</h4>
+        <div class="form-group">
+            <p>
+                @Html.TextBoxFor(m => m.name, new { id = "txtRegisterName", placeholder = @Resources.ApplicationTranslations.Register_Your_Name, @class = "form-control input-lg" })
+            </p>
+            <p>
+                @Html.TextBoxFor(m => m.email, new { id = "txtRegisterEmail", placeholder = @Resources.AuthenticationTranslations.EmailAddressLabel, @class = "form-control input-lg", data_validate_url = @Url.Action("IsUserRegistered") })
+            </p>
+            <p>
+                @Html.PasswordFor(m => m.pwd, new { id = "txtRegisterPwd", placeholder = @Resources.AuthenticationTranslations.Register_PasswordLabel, @class = "form-control input-lg" })
+            </p>
+            <div class="row">
+                <div class="col-sm-9 signupText">
+                    @Resources.ApplicationTranslations.Joining_Agree_Text<br>
+                    <a href="~/termsofservices.html" target="_blank">@Resources.ApplicationTranslations.TOS_Text</a> and <a href="~/privacy-policy.html" target="_blank">@Resources.ApplicationTranslations.PP_Text</a>
+                </div>                
+                <div class="col-sm-3 rightFloat rightButton">
+                    <button type="submit" class="btn btn-lg btnRed" id="btnCreateAcc">@Resources.AuthenticationTranslations.Register_CreateAccountText</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}*@
+@using (Html.BeginForm("Login", "Home", new { ReturnUrl = ViewBag.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6 signupForm  single">
+        <h4 class="signupsubHead">@Resources.AuthenticationTranslations.Login_UserSignIn</h4>
+        <div class="form-group">
+
+            @*<p style="text-align:left; display:none;">
+                    <div class="row">
+                        <div class="col-sm-6 signupButton paddingRight">
+                            @Html.ActionLink(@Resources.AuthenticationTranslations.Login_SignInFacebookText, "Facebook", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, new { @class = "btn btn-primary btn-fb" })
+                        </div>
+                        <div class="col-sm-6 signupButton rightText">
+                            @Html.ActionLink(@Resources.AuthenticationTranslations.Login_SignInGmailText, "Google", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, new { @class = "btn btn-primary btn-google" })
+                        </div>
+                    </div>
+                </p>*@
+            <p>
+                @Html.TextBoxFor(m => m.email, new { id = "txtEmail", placeholder = @Resources.AuthenticationTranslations.EmailAddressText, @class = "form-control input-lg" })
+            </p>
+            <p>
+                @Html.PasswordFor(m => m.pwd, new { id = "txtPwd", placeholder = @Resources.AuthenticationTranslations.Login_PasswordLabel, @class = "form-control input-lg" })
+            </p>
+            <div class="row">
+                <div class="col-sm-9 signupText">
+                    <p style="padding-top:10px;">
+                        @Html.ActionLink(@Resources.AuthenticationTranslations.Login_ForgotPasswordText, "Forgot", "Home", null, new { title = @Resources.AuthenticationTranslations.Login_ForgotPasswordText })
+                    </p>
+                </div>
+                <div class="col-sm-3 rightFloat rightButton">
+                    <button type="submit" class="btn btn-lg btn-Blue" id="btnLogin">@Resources.AuthenticationTranslations.Login_SignInText</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="border-bottom">&nbsp;</p>
+                    <p class="text-left text-underline"> New user? Sign up @Html.ActionLink("here", "SignUp", "Home", null, new { title = "Click here" })</p>
+</div>
+            </div>
+        </div>
+    </div>
+}

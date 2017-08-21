@@ -1,0 +1,764 @@
+﻿@model VideoBurstWeb.Models.BindVideoModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_LayoutGlossyBox.cshtml";
+}
+@section styles {
+
+@if (ViewBag.CampaignCountryISO == "no")
+{
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/bootstrap.min.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-narrow.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-theme-inner.css"))
+
+    @*<link href='@Html.Raw("/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/bootstrap.min.css")'>
+        <link href='@Html.Raw("/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style.css")'>
+        <link href='@Html.Raw("/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style-narrow.css")'>
+        <link href='@Html.Raw("/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style-planet.css")'>*@
+}
+else
+{
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/bootstrap.min.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-narrow.css"))
+    @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-theme-inner.css"))
+}
+    @Html.IncludeVersionedCss(@Url.Content("~/Scripts/Crop/cropper.css"))
+    <style>
+        /*.jwplayer {
+                position:absolute;
+            }*/
+        .ui-front {
+            z-index: 105 !important;
+        }
+
+        .thumbcheckbox {
+            /*z-index: 10;*/
+        }
+
+        .ui-datepicker-div {
+            z-index: 120 !important;
+        }
+
+        .thumbRow .thumb {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        .croppopup {
+            z-index: 5001 !important;
+        }
+
+        .dropZone {
+            border: 2px dotted #0B85A1;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            /*padding: 10px 10px 10px 10px;
+                margin-bottom: 10px;*/
+            /*font-size: 200%;*/
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .progressBar {
+            width: 85%;
+            height: 100%;
+            text-align: center;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+            background: #e5e5f0;
+        }
+
+            .progressBar div {
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+                width: 0;
+                background-color: #0ba1b5 !important;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+
+        .statusbar {
+            height: 20px;
+            width: 70%;
+            padding: 0px;
+            vertical-align: top;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: inline-block;
+            background: none;
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            z-index: 101;
+        }
+
+        .filename {
+            display: inline-block;
+            vertical-align: top;
+            width: 250px;
+        }
+
+        .filesize {
+            display: inline-block;
+            vertical-align: top;
+            color: #30693D;
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .abort {
+            /*background-color: #A8352F;*/
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            display: inline-block;
+            color: #f00;
+            cursor: pointer;
+            vertical-align: top;
+            /*float:right;*/
+            line-height: 22px;
+            margin-left: 2px;
+            width: 10%;
+        }
+
+        img.ColorPicker_Caller {
+            padding: 6.9px !important;
+        }
+
+        .editThumb {
+            left: 26px;
+        }
+
+
+        textarea {
+            resize: none;
+        }
+
+
+        .processingpopup {
+            height: 50px;
+            left: 42%;
+            margin-left: -25px;
+            margin-top: -25px;
+            position: fixed;
+            top: 40%;
+            vertical-align: middle;
+            width: 50px;
+        }
+
+        .btn-transparent {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+            color: #fff !important;
+            cursor: default !important;
+            font-size: 20px;
+            font-weight: normal;
+        }
+         
+    </style>
+
+}
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="hdnCampaignId" name="hdnCampaignId" value='2' />
+<div class="create-section text-center">
+    @if (Model != null)
+    {
+        int i = 0;
+
+
+        if (Model != null && Model.elements != null && Model.elements.Count > 0)
+        {
+
+            foreach (VideoBurstWeb.Models.RepeaterTemplateElements element in Model.elements)
+            {
+                <nav id='@Html.Raw("Nav" + element.index)' style='@if (element.index == 0) { @Html.Raw("display: block;")} else {@Html.Raw("display:none;")} '>
+                    <ul class="pager m-pager">
+                        <li class="previous">
+                            @if (element.index == 0)
+                            {
+                               @Html.Raw("&nbsp;");
+                                @*<a href="javascript:void(0)">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-chevron-left">
+                                    </span>
+                                </a>*@
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0)"
+                                   id='@Html.Raw("aPrevious_" + element.index)'
+                                   onclick="PreviousPart(this)">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-chevron-left">
+                                    </span>
+                                </a>
+                            }
+                        </li>
+                        <li>@Html.Raw( "Del " + (@element.index + 1) + " av " + Model.elements.Count)</li>
+                        <li class="next">
+                            @*@if (element.index < Model.elements.Count - 1)
+                            {
+                                <a href="javascript:void(0)" id='@Html.Raw("aNext_" + element.index)' onclick="NextPart(this)">NÄSTA</a>
+                            }
+                            else
+                            {
+                                @Html.ActionLink("NÄSTA", "CreateNextStep", "Campaign")
+                            }*@
+                            <a href="javascript:void(0)" id='@Html.Raw("aNext_" + element.index)' data-toggle="tooltip" data-placement="top" title="image required" onclick="NextPart(this)">
+                                @if (ViewBag.CampaignCountryISO == "no")
+                                { @Html.Raw("Neste") }
+                                else
+                                { @Html.Raw("NÄSTA")  }
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div id='@Html.Raw("liBox" + element.index)' class="create-content" style='@if (element.index == 0) { @Html.Raw("display: block;")} else {@Html.Raw("display:none;")} '>
+
+                    @if (element.liTemplateElements != null && element.liTemplateElements.Count > 0)
+                    {
+                        <div>
+                            @foreach (VideoBurstAPI.Entities.TemplateElements telement in element.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == true))
+                            {
+
+                                <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@telement.guid' />
+                                @Html.Partial("_CampaignUploadControlPartial", new VideoBurstWeb.Models.CampaignUploadControlModel(i, "", Model.oPU, telement, null))
+                                @*<div class="create-img-holder">
+                                        <img src='@Url.Content("~/Content/themes/glossybox/img/video_img.jpg")' class="create-video-img box-shadow" alt="">
+                                        <span class="trash-icon-holder "><span class="glyphicon glyphicon-trash"></span></span>
+                                    </div>
+                                    <div class="form-group custom-form">
+                                        <input type="text" class="form-control" placeholder="Redo för grekland!">
+                                    </div>*@
+
+                                i = i + 1;
+                            }
+
+                            <div class="form-group custom-form">
+                                @foreach (VideoBurstAPI.Entities.TemplateElements telement in element.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == false))
+                                {
+                                    <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@telement.guid' />
+                                    <div class="form-group">
+
+
+                                        @if (!Model.oPU.IsPickerType(telement.guid.ToString()))
+                                        {
+                                            @*if (telement.rendertemplateelement.maxlength > 35)
+                                            {
+                                                <textarea class='form-control @if(telement.mode==1){@Html.Raw("required")}'
+                                                          placeholder="@telement.title"
+                                                          maxlength='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                          minlength='@if(telement.rendertemplateelement.minlength!=null && telement.rendertemplateelement.minlength>0){@Html.Raw(telement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                          data-max='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                          title='@telement.defaultvalue'
+                                                          data-teguid='@telement.guid'
+                                                          id="items[@i].txtValue"
+                                                          onkeypress="if(event.keyCode==13){return false;}"
+                                                          name="items[@i].txtValue">@if (!String.IsNullOrEmpty(@telement.defaultvalue)){@Html.Raw(@telement.defaultvalue.Trim())}</textarea>
+                                            }
+                                            else
+                                            {
+                                                <input type="text"
+                                                       class='form-control @if(telement.mode==1){@Html.Raw("required")}'
+                                                       placeholder="@telement.title"
+                                                       maxlength='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                       minlength='@if(telement.rendertemplateelement.minlength!=null && telement.rendertemplateelement.minlength>0){@Html.Raw(telement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                       data-max='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                       title='@telement.defaultvalue'
+                                                       value='@telement.defaultvalue'
+                                                       data-teguid='@telement.guid'
+                                                       id="items[@i].txtValue"
+                                                       name="items[@i].txtValue" />
+                                            }*@
+
+                                        <input type="text"
+                                               class='form-control @if (telement.mode==1){@Html.Raw("required")}'
+                                               placeholder="@telement.title"
+                                               maxlength='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                               minlength='@if(telement.rendertemplateelement.minlength!=null && telement.rendertemplateelement.minlength>0){@Html.Raw(telement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                               data-max='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                               title='@telement.title'
+                                               value='@if(telement.defaultvalue !=null && telement.defaultvalue.Trim() !=""){@Html.Raw(telement.defaultvalue.Trim()) }else {@Html.Raw("")}'
+                                               data-teguid='@telement.guid'
+                                               id="items[@i].txtValue"
+                                               name="items[@i].txtValue" />
+                                        }
+                                        else
+                                        {
+
+                                            <input class="form-control @if (telement.mode==1){@Html.Raw("required")} color{hash:true}" id="items[@i].divColorPicker" type="text" data-teguid='@telement.guid' name="items[@i].divColorPicker" title="Click to change color" value="@telement.defaultvalue" onchange='OnColorPicked(this)' />
+
+                                        }
+
+                                    </div>
+                                        i = i + 1;
+                                }
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+
+            }
+
+            <div class="create-content" id='@Html.Raw("liBox" + (Model.elements.Count))' style="display:none;">
+                <p class="lead"> @if (ViewBag.CampaignCountryISO == "no")
+                        { @Html.Raw("Vi er nesten ferdig. Skriv inn din e-postadresse og vi vil sende deg en kopi av filmen så snart som mulig!") }
+                        else
+                        { @Html.Raw("Vi är nästan klara. Skriv in din emailadress så skickar vi dig en kopia av din video snarast!")  } </p>
+                <form class="form-validate">
+                    <div class="custom-form">
+                        <div class="input-group">
+                            <label class="sr-only" for="">Email</label>
+                            <div class="input-group-addon"> <span class="glyphicon glyphicon-envelope"></span> </div>
+                            <input type="email" class="form-control" placeholder="dinemail@mail.com" required name="txtUserEmail" id="txtUserEmail" data-validate-url='@Url.Action("IsCampaignEmailRegistered")' />
+                        </div>
+                        <p class="extra-gap">
+                            <button type="button" class="btn btn-lg btn-primary" id="btnCreateVideo">@if (ViewBag.CampaignCountryISO == "no")
+                                { @Html.Raw("Lag video") }
+                                else
+                                { @Html.Raw("Skapa video")  }</button> 
+                            @*<button type="button" class="btn btn-lg btnRed" id="btnCreateCampaign">@Resources.ApplicationTranslations.Continue_Text</button>*@
+                        </p>
+                    </div>
+                </form>
+            </div>
+        }
+         
+ 
+    }
+</div>
+}
+ 
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" id="imgRequiredAlert" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content custom-modal-content text-center">
+
+            <div class="modal-body"> <h4>
+                 
+                                         <p class="messageText" id="imgAlertModalText"></p>
+                </h4>
+               
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">OK</button>
+
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_CropPopupPartial")
+
+@section scriptsbottombody {
+
+    
+
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/CampaignUploadControl.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/Crop/cropper.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/campaign.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-ui.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.swfobject.1-1-1.min.js"))
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-ui.min.js"))
+
+
+<script type="text/javascript">
+    var campaignid = 2;
+    if ('@ViewBag.CampaignCountryISO' == "no") {
+        campaignid = 3;
+        $('#hdnCampaignId').val(campaignid);
+    }
+    var pagename = 'CreateStep';
+    var cue = false;
+    var cce = '';
+    $(document).ready(function () {
+        AddCampaignStats(campaignid, pagename + "1");
+
+
+        $('#btnCreateVideo').on('click', function (event) {
+
+            // console.log("result" + result);
+            result = ValidateCampaignJob(1);
+            console.log("result-" + result);
+
+            if (result) {
+                //campaign starts 
+                //debugger;
+                var msg = '';
+                if ($("#txtUserEmail").val().trim() != '' && $("#txtUserEmail").val().trim() != 'dinemail@mail.com' && validateUserEmail($("#txtUserEmail").val().trim())) {
+
+                    cce = $("#txtUserEmail").val().trim();
+                    var objData = new Object();
+                    objData.txtUserEmail = encodeURI($("#txtUserEmail").val().trim());
+                    objData.hdnCampaignId = $('#hdnCampaignId').val();
+                    $.ajax({
+                        url: $("#txtUserEmail").attr('data-validate-url'),
+                        type: 'POST',
+                        cache: false,
+                        data: objData,
+                        dataType: "json",
+                        success: function (data) {
+                            var response = filterresponse(data);
+                            if (response) {
+                                cue = true;
+                                msg = 'User_Exists';
+                                var emailExistsMsg = 'Du har redan deltagit i denna tävling.';
+                                if ('@ViewBag.CampaignCountryISO' == "no") {
+                                    emailExistsMsg = 'Du har allerede deltatt i denne konkurransen.';
+                                }
+
+                                alertimgRequired(emailExistsMsg);
+                                console.log(emailExistsMsg);
+                            }
+                            else if (!response) {
+                                cue = false;
+                                $('form').submit();
+                                StartProcessing(true, "Sending Campaign...");
+                            }
+                            else {
+                                cue = null;
+                                try {
+                                    msg = response;
+                                }
+                                catch (ex1) {
+                                    msg = response;
+                                }
+                            }
+                            if (msg != '') {
+                                $($("#txtUserEmail").attr('id')).focus();
+                                console.log(msg);
+                            }
+                        },
+                        error: function (data) {
+                            var response = filterresponse(data);
+                            cue = null;
+                            try {
+                                msg = response;
+                            }
+                            catch (ex1) {
+                                msg = response;
+                            }
+                            if (msg != '') {
+                                $($("#txtUserEmail").attr('id')).focus();
+                                console.log(msg);
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    var emailRequiredMsg = 'Skriv in din email adress';
+                    if ('@ViewBag.CampaignCountryISO' == "no") {
+                        emailRequiredMsg = 'Skriv inn din e-postadresse';
+                    }
+
+                    alertimgRequired(emailRequiredMsg);
+                    console.log(emailRequiredMsg);
+                }
+
+
+                //if ($('#chkTandC').prop('checked') == true) {
+                //    $('form').submit();
+                //StartProcessing(true, "Creating Video. Please wait..");
+                //}
+                //else {
+                //    alertBox('Please agree to terms and conditions to continue.')
+                //}
+            }
+        });
+        //campaign starts
+        //$("#txtUserEmail").blur(function (event) {
+        //    event.preventDefault();
+        //    var msg = '';
+        //    if ($(this).val().trim() != '' && $(this).val().trim() != 'dinemail@mail.com' && validateUserEmail($(this).val().trim())) {
+        //        if (cce == '' || cce != $(this).val().trim() || !cue) {
+        //            cce = $(this).val().trim();
+        //            var objData = new Object();
+        //            objData.txtUserEmail = encodeURI($(this).val().trim());
+        //            objData.hdnCampaignId = $('#hdnCampaignId').val();
+        //            $.ajax({
+        //                url: $(this).attr('data-validate-url'),
+        //                type: 'POST',
+        //                cache: false,
+        //                data: objData,
+        //                dataType: "json",
+        //                success: function (data) {
+        //                    var response = filterresponse(data);
+        //                    if (response) {
+        //                        cue = true;
+        //                        msg = 'User_Exists';
+        //                        console.log(msg);
+        //                    }
+        //                    else if (!response) {
+        //                        cue = false;
+        //                    }
+        //                    else {
+        //                        cue = null;
+        //                        try {
+        //                            msg = response;
+        //                        }
+        //                        catch (ex1) {
+        //                            msg = response;
+        //                        }
+        //                    }
+        //                    if (msg != '') {
+        //                        $($(this).attr('id')).focus();
+        //                        console.log(msg);
+        //                    }
+        //                },
+        //                error: function (data) {
+        //                    var response = filterresponse(data);
+        //                    cue = null;
+        //                    try {
+        //                        msg = response;
+        //                    }
+        //                    catch (ex1) {
+        //                        msg = response;
+        //                    }
+        //                    if (msg != '') {
+        //                        $($(this).attr('id')).focus();
+        //                        console.log(msg);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    }
+        //});
+    });
+
+     
+    function ValidateCampaignJob(showmessage) {
+        var result = true;
+        console.log('#txtUserEmail:' + validateUserEmail($('#txtUserEmail').val().trim()));
+        //return false;
+        //debugger;
+        if ($('#txtUserEmail').val().trim() != '' && validateUserEmail($('#txtUserEmail').val().trim())) {
+            $('#txtUserEmail').attr('data-valid', '1');
+            result = true;
+        } else {
+            $('#txtUserEmail').attr('data-valid', '0');
+            var emailRequiredMsg = 'Skriv in din email adress';
+            if ('@ViewBag.CampaignCountryISO' == "no") {
+                emailRequiredMsg = 'Skriv inn din e-postadresse';
+            }
+
+            alertimgRequired(emailRequiredMsg);
+            console.log(emailRequiredMsg);
+            result = false;
+            return result;
+        }
+
+        var reqdDropZones = $('div.dropZone.required');
+        var reqdInputs = $('input.required');
+        var reqdTextAreas = $('textarea.required');
+
+        for (i = 0; i < reqdDropZones.length; i++) {
+            if ($(reqdDropZones[i]).find('input[type=hidden]').val().trim() == '') {
+                //$(reqdDropZones[i]).css('border', '1px solid #a94442');
+                $(reqdDropZones[i]).attr('data-valid', '0');
+                result = false;
+            }
+            else {
+                //$(reqdDropZones[i]).css('border', '1px solid #3c763d');
+                $(reqdDropZones[i]).attr('data-valid', '1');
+            }
+        }
+        for (i = 0; i < reqdInputs.length; i++) {
+            if ($(reqdInputs[i]).val().trim() == '') {
+                if ($(reqdInputs[i]).attr('id').indexOf('divColorPicker') >= 0 && $(reqdInputs[i]).attr('title') != undefined && $(reqdInputs[i]).attr('title').trim() != '') {
+                    //$(reqdInputs[i]).css('border', '1px solid #3c763d');
+                    $(reqdInputs[i]).attr('data-valid', '1');
+
+                }
+                else {
+                    $(reqdInputs[i]).attr('data-valid', '0');
+                    //$(reqdInputs[i]).css('border', '1px solid #a94442');
+                    result = false;
+                }
+            } else {
+                $(reqdInputs[i]).attr('data-valid', '1');
+                //$(reqdInputs[i]).css('border', '1px solid #3c763d');
+            }
+        }
+        for (i = 0; i < reqdTextAreas.length; i++) {
+            if ($(reqdTextAreas[i]).val().trim() == '') {
+                $(reqdTextAreas[i]).attr('data-valid', '0');
+                //$(reqdTextAreas[i]).css('border', '1px solid #a94442');
+                result = false;
+
+            } else {
+                $(reqdTextAreas[i]).attr('data-valid', '1');
+                //$(reqdTextAreas[i]).css('border', '1px solid #3c763d');
+            }
+        }
+
+        RefreshValidations();
+
+        if (!result && showmessage == 1)
+            alertBox('Please enter information in sections marked red.');
+        else {
+            //StartProcessing()
+        }
+        updateTextModified();
+        if (
+            ((result && $('#hdRegenerate').attr('id') != undefined && $('#hdRegenerate').attr('id') != null && $('#hdRegenerate').val() == "1")
+            ||
+            ($('#hdCurrentProfileId').attr('id') != undefined && $('#hdCurrentProfileId').attr('id') != null && $('#hdCurrentProfileId').val() != $('#ddlCompanyUsers').find(":selected").val()))
+            && showmessage == 1) {
+
+            if ($('#hdnIsDraft').val() == "1") {
+                unsaved = false; Submit();
+            }
+            else {
+                confirmBox('This will need to regenerate the video. Are you sure you want to continue?', function () { unsaved = false; Submit(); }, function () { }, "Regeneration Warning");
+            }
+            //StopProcessing();
+            result = false;
+        }
+        try {
+            if (result && showmessage == 1) {
+                unsaved = false;
+            }
+
+        }
+        catch (ee)
+        { }
+        return result;
+    }
+
+    function filterresponse(resp) {
+        if (resp != null && resp.hasOwnProperty("d")) {
+            return resp.d;
+        }
+        else {
+            return resp;
+        }
+    }
+
+    function PreviousPart(obj) {
+
+        var counter = parseInt($(obj).attr('id').replace("aPrevious_", ""));
+        $('#Nav' + counter).hide();
+        $('#liBox' + counter).hide();
+
+        $('#Nav' + (counter - 1)).show();
+        $('#liBox' + (counter - 1)).show();
+        AddCampaignStats(campaignid, pagename + (counter - 2));
+    }
+
+    function NextPart(obj) {
+        var counter = parseInt($(obj).attr('id').replace("aNext_", ""));
+
+
+        //var box = $(obj).parent('div').find('div[role=tabpanel]');
+        //$('li#' + $(box).attr('data-remove')).removeClass('active');
+        //$('li#' + $(box).attr('data-remove')).removeClass('complete');
+        //$('li#' + $(box).attr('data-remove')).removeClass('error');
+
+        var campSubmit = false;
+        if ($('#liBox' + counter).find('.required[data-valid=1]').length == $('#liBox' + counter).find('.required').length) {
+            campSubmit = true;
+            //$('li#' + $(box).attr('data-remove')).addClass('error');
+        } else {
+            campSubmit = false;
+            //$('li#' + $(box).attr('data-remove')).addClass('complete');
+        }
+       console.log($('#liBox' + counter).find('.required[data-valid=1]').length + " || " + campSubmit);
+
+        //console.log('create-video-img:' + $(obj).find('.create-video-img').attr("src"));
+        //$(obj).parent('div').find('#preview').find('div').find('#delete').show();
+
+        //uploadDefaultValue
+        if (campSubmit) {
+            $('#Nav' + counter).hide();
+            $('#liBox' + counter).hide();
+
+            $('#Nav' + (counter + 1)).show();
+            $('#liBox' + (counter + 1)).show();
+            AddCampaignStats(campaignid, pagename + (counter + 2));
+        }
+        else {
+            console.log($('#liBox' + counter).find('.required').length);
+
+            
+            $("imgRequiredAlert").toggle();// .show(); 
+
+            var imgRequiredMsg = 'Ladda upp bild';
+            if ('@ViewBag.CampaignCountryISO' == "no") {
+                imgRequiredMsg = 'Last opp bilde';
+            }
+
+            alertimgRequired(imgRequiredMsg);
+        }
+    }
+
+    function alertimgRequired(text, OkButtonText, event) {
+       // console.log('alert');
+        if (event != undefined && event != null) {
+            try {
+                event.preventDefault();
+            }
+            catch (ex) { }
+        }
+        var c = $('#imgRequiredAlert');
+        c.find('#imgAlertModalText').html(text);
+
+
+        //if (OkButtonText != undefined && OkButtonText != null && OkButtonText != '') {
+        //    c.find('#btnAlertModalOk').text(OkButtonText);
+        //}
+        c.modal({
+            show: true,
+            keyboard: true,
+            backdrop: true
+        });
+        //$('#btnAlertModalOk').focus();
+    }
+
+    function StartProcessing(fixed, message) {
+        var c = $('#processingModal');
+        if (message != undefined && message != null && message != '') {
+            c.find('#lblProcessingPopMessage').html(message);
+        }
+        if (fixed != undefined && fixed != null) {
+            if (fixed != true || fixed != false) {
+                fixed = true;
+            }
+        }
+        else {
+            fixed = false;
+        }
+        if (fixed) {
+            $(document).keydown(function (e) {
+                if (e.keyCode == 27) return false;
+            });
+        }
+        c.modal({
+            show: true,
+            keyboard: !fixed,
+            backdrop: fixed ? 'static' : true,
+        });
+    }
+    function StopProcessing() {
+        var c = $('#processingModal');
+        c.modal('hide');
+    }
+     
+
+</script>
+
+}

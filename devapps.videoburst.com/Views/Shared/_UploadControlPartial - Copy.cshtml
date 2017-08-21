@@ -1,0 +1,287 @@
+﻿@model VideoBurstWeb.Models.UploadControlModel
+
+<div class="@Model.cssclass" data-teguid='@Model.data_teguid'
+    data-type='@Model.data_type' data-width='@Model.data_width'
+    data-height='@Model.data_height' style='min-width: @Model.min_width; min-height: @Model.min_height; height: @Model.height; @if(!String.IsNullOrEmpty(@Model.previewurl)){  @Html.Raw(" background-image: url(\"" + @Url.Content(@Model.previewurl + "\");"))} background-repeat: no-repeat; background-position: center center; background-size:100%;@if(!String.IsNullOrEmpty(@Model.height)){@Html.Raw("display:block")}'>
+    @if (@Model.data_type == "video")
+    {
+        <input class="@Model.cssnormalclass" type="file" accept='video/mp4'
+        style="display: block; position: absolute; left: 0px; top: 0px; width: 100% !important; height: 100% !important; font-size: 100pt; opacity: 0; z-index: 10; overflow: hidden;" />
+    }
+    else
+    {
+        <input class="@Model.cssnormalclass" type="file" accept='@Model.data_type/*'
+        style="display: block; position: absolute; left: 0px; top: 0px; width: 100% !important; height: 100% !important; font-size: 100pt; opacity: 0; z-index: 10; overflow: hidden;" />
+    }
+    
+    <input type="hidden" id="@Model.hiddeninputid" name="@Model.hiddeninputid" value='@Model.hiddeninputvalue' />
+
+    @if (@Model.data_type == "audio")
+    { 
+        <div title="Click here to play the audio" class="audioplayer" style='position: relative; z-index: 101; background-color: transparent; display: @if(@Model.data_type == "audio"){@Html.Raw("block")}else{@Html.Raw("none")}' id="audioplayer">
+            <canvas id="audiocanvas" width="248px" height="120px" style="background-color: #ebf0f2;"></canvas>
+            <div id="divforaudioplayer"></div>
+            <div class="btn-group mainWidth">
+                <button data-toggle="dropdown" class="form-control btn btn-sm btn-black btn-gray mainWidth border-flat dropdown-toggle text-left" type="button" aria-expanded="false">
+                    <lable id="lblAudioTitle"></lable>
+                    <span style="font-size: 11px;" aria-hidden="true" class="glyphicon glyphicon-menu-down blackBg"></span>
+                </button>
+                <ul id="ulAudiolist" role="menu" class="dropdown-menu generalDD generalDD-lg">
+                </ul>
+            </div>
+        </div>
+    <script type="text/javascript">
+
+    function updateJobAudioElement(teguid, eleValue) {
+
+        var hdnjguid = document.getElementById("hdnJobGuid").value;
+        var jobElement = { uJobGUId: hdnjguid, uTeGuid: teguid, uElementValue: eleValue };
+        var url = WebsiteRootPath + "Videos/UpdateJobElement";
+        $.ajax({
+            url: url,
+            type: "POST",
+            cache: false,
+            async: true,
+            data: JSON.stringify(jobElement),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data != null) {
+                    var response = filteraudioresponse(data);
+                    if (response.code == 1) {
+                        console.log('Updated value for teGuid:' + teguid);
+                        //$('#spanSavingText').text("All changes saved");
+                    }
+                }
+            },
+            error: function () {
+                console.log('Failed updating value for teGuid:' + teguid);
+            }
+        });
+    }
+
+    function fnChangeAudio(url, title, teguid) {
+        $("#lblAudioTitle").text(title);
+        loadSong(url, teguid);
+    }
+
+    var context;
+    if (typeof AudioContext !== 'undefined')
+        context = new AudioContext();
+    else if (typeof webkitAudioContext !== 'undefined')
+        context = new webkitAudioContext();
+    else
+        alert("This browser is does not support web audio api.");
+
+    var audioAnimation;
+    var audioBuffer;
+    var sourceNode;
+    var analyser;
+    var audio;
+
+    // get the context from the canvas to draw on
+    var canvas = document.getElementById('audiocanvas');
+    var ctx = canvas.getContext("2d");
+
+    var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(1, '#00ccff');
+    gradient.addColorStop(0.75, '#0066cc');
+    gradient.addColorStop(0.25, '#cccccc');
+    gradient.addColorStop(0, '#cc6600');
+
+    ctx.fillStyle = gradient;
+
+    ////////////////////////////////////////////////////////////////////////
+    function loadSong(url, teguid) {
+
+        $("#audioplayer").siblings('input[type=hidden]').val(url);
+        //console.log('teguid:' + teguid);
+        //console.log('txtValue:' + url);
+        updateJobAudioElement(teguid, url);
+
+        if (audio) {
+            //if (audio.src == url)
+            //    return;
+            audio.remove();
+        }
+
+        if (sourceNode) sourceNode.disconnect();
+        cancelAnimationFrame(audioAnimation);
+        window.audio = new Audio();
+        audio.src = url;
+        audio.clientWidth = 250;
+        audio.controls = true;
+        audio.addEventListener("canplay", function (e) {
+            setupAudioNodes();
+        }, false);
+    }
+
+    function setupAudioNodes() {
+        analyser = (analyser || context.createAnalyser());
+        analyser.minDecibels = -90;
+        analyser.maxDecibels = -10;
+        analyser.smoothingTimeConstant = 0.8;
+        analyser.fftSize = 256;
+
+        sourceNode = context.createMediaElementSource(audio);
+        sourceNode.connect(analyser);
+        sourceNode.connect(context.destination);
+        document.querySelector('#divforaudioplayer').appendChild(audio);
+        $(audio).css("width", "248");
+        $(audio).css("display", "block");
+        drawSpectrum();
+    }
+
+    function drawSpectrum() {
+        var WIDTH = canvas.width,
+            HEIGHT = canvas.height,
+            array = new Uint8Array(analyser.frequencyBinCount);
+
+        analyser.getByteFrequencyData(array);
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        audioAnimation = requestAnimationFrame(drawSpectrum);
+
+        var barWidth = 3;
+        var barHeight;
+        var x = 0;
+
+        for (var i = 0; i < (array.length) ; i++) {
+            barHeight = array[i];
+            ctx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
+
+            x += barWidth + 1;
+        }
+
+    }
+    function drawFrequencyDomain() {
+        var SPACING = 3;
+        var BAR_WIDTH = 2;
+        var numBars = Math.round(canvasWidth / SPACING);
+
+        clearCanvas();
+        var multiplier = frequencyArray.length / numBars;
+
+        // Draw rectangle for each frequency bin.
+        for (var i = 0; i < numBars; ++i) {
+            var magnitude = 0;
+            var offset = Math.floor(i * multiplier);
+            // gotta sum/average the block, or we miss narrow-bandwidth spikes
+            for (var j = 0; j < multiplier; j++)
+                magnitude += frequencyArray[offset + j];
+            magnitude = magnitude / multiplier;
+            var magnitude2 = frequencyArray[i * multiplier];
+            ctx.fillStyle = "hsl( " + Math.round((i * 360) / numBars) + ", 100%, 50%)";
+            ctx.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
+        }
+    }
+
+    console.log('hiddeninputvalue:' + decodeURIComponent('@Model.hiddeninputvalue'));
+    var teguid = '@Html.Raw(@Model.data_teguid)';
+    fnChangeAudio('@Model.hiddeninputvalue', "Background Music", teguid);
+    $('#ulAudiolist').append("<li  onclick=\"fnChangeAudio('" + '@Model.hiddeninputvalue' + "','Background Music','" + teguid + "');\"><a href=\"javascript:void(0)\">Background Music</a></li>");
+
+    var vApiUrl = WebsiteRootPath + "api/VideoBurstAPI/templateelementoptions/" + teguid + "/" + "audio";
+    var loadAudio = true;
+    var checkEditModeUrl = decodeURIComponent('@Model.hiddeninputvalue');
+        var path1 = '@System.Web.Configuration.WebConfigurationManager.AppSettings["imageurlprefixcomplete"]'; 
+
+        $.ajax({
+            url: vApiUrl,
+            type: 'POST',
+            contentType: "application/json",
+            cache: false, async: false,
+            success: function (data) {
+                if (data != null) {
+                    var response = null;
+
+                    response = JSON.parse(data);
+                    if (response.code == 1) {
+                        $("#ulAudiolist").html('');
+                        $(response.data).each(function (index, Result) {
+
+                            //var path = $(location).attr('href').substring(0, $(location).attr('href').indexOf($(location).attr('pathname'))); 
+
+                            var varAudioId = parseInt(Result.id);
+                            var varTitle = Result.title;
+                            //var audioUrl = path + Result.mbmedia.url.durl.trim();
+                            var aUrl = Result.mbmedia.url.durl.trim();
+                            if (aUrl.indexOf("urlhandle.ashx") > 0)
+                                aUrl = aUrl.substring(aUrl.indexOf("urlhandle.ashx") + 17).replace("..", ".");
+                            //console.log('path1:' + path1);
+                            //console.log('aUrl:' + aUrl);
+                            if (checkEditModeUrl.lastIndexOf("urlhandle.ashx") > 0)
+                                checkEditModeUrl = checkEditModeUrl.substring(checkEditModeUrl.lastIndexOf("urlhandle.ashx") + 17).replace("..", ".");
+
+
+                            var audioUrl = path1 + aUrl; //path + Result.mbmedia.url.durl.trim();
+                            console.log('checkEditModeUrl:' + checkEditModeUrl);
+                            console.log('aUrl:' + aUrl);
+
+                            if (varAudioId > 0) {
+                                //console.log('mbmedia:' + audioUrl);
+                                 if (loadAudio && (decodeURIComponent(checkEditModeUrl) == decodeURIComponent(aUrl))) {
+                                    //$("#ulAudiolist").html('');
+                                    fnChangeAudio(audioUrl, varTitle, teguid);
+                                    loadAudio = false;
+                                    console.log('fnChangeAudio changed');
+                                } 
+                                $('#ulAudiolist').append("<li id=\"" + varAudioId + "\" onclick=\"fnChangeAudio('" + audioUrl + "','" + varTitle + "','" + teguid + "');\"><a href=\"javascript:void(0)\">" + varTitle + "</a></li>");
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (msg) { }
+        });
+        //if (loadAudio) {
+        //    fnChangeAudio('@Model.hiddeninputvalue', "Background Music");
+    //    $('#ulAudiolist').append("<li  onclick=\"fnChangeAudio('" + '@Model.hiddeninputvalue' + "','Background Music');\"><a href=\"javascript:void(0)\">Background Music</a></li>");
+    //}
+
+
+    function filteraudioresponse(resp) {
+        if (resp != null && resp.hasOwnProperty("d")) {
+            return resp.d;
+        }
+        else {
+            return resp;
+        }
+    }
+
+    </script>
+    }
+    @if (@Model.data_type == "video" && !String.IsNullOrEmpty(@Model.hiddeninputvalue))
+    {
+        <div data-playerheight='@Model.player_height' data-playerwidth='@Model.player_width' title="Click here to play the video" class="videoplayer" 
+style='position: relative; top: 0px; left: 0px; background-color: transparent; z-index: 101; display: @if (@Model.data_type == "video")  {@Html.Raw("block")}else{@Html.Raw("none")}'
+            id="videoplayer">
+            <div class="playdiv" id='@Html.Raw("vplayer" + @Model.data_teguid)' style="text-align: center; vertical-align: middle;">
+            </div>
+            <script type="text/javascript">
+                var vidUrl = decodeURIComponent('@Html.Raw(@Model.hiddeninputvalue.Replace("&amp;","&"))');
+                if (vidUrl.indexOf("urlhandle.ashx") > 0)
+                    vidUrl = vidUrl.substring(vidUrl.indexOf("urlhandle.ashx") + 17);
+                //console.log('vidUrl:' + vidUrl);
+                jwplayer('@Html.Raw("vplayer" + @Model.data_teguid)').setup({
+                    file: vidUrl, 
+                    width: '@Model.player_width',
+                    height: '@Model.player_height'
+                });
+            </script>
+        </div>
+    }
+</div>
+<div class="actionIcon" style="min-width: @Model.min_width;" id="preview">
+    @if (@Model.data_type == "audio")
+    {
+    }
+    else
+    {
+    <div class="btn-group">
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Left Align" id="save" onclick="choosefile(this)"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Center Align" id="edit" onclick="editimage(this)" style="display: @Model.displayedit;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Right Align" id="delete" onclick="_delete(this)" style="display: @Model.displaydelete;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+    </div>
+    }
+</div>
+@Html.HiddenFor(m => m.data_teguid, new { id = @Model.data_teguid })

@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_LayoutGlossyBox.cshtml";
+}
+
+@section styles {
+
+    @if (ViewBag.CampaignCountryISO == "no")
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-theme-inner.css")) 
+    }
+    else
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-theme-inner.css"))
+    } 
+}
+<div class="create-section text-center"> 
+    <div class="create-content">
+        <span class="glyphicon glyphicon-ok-sign thanks-icon" aria-hidden="true"></span>
+        <h2 style="color:white">@if (ViewBag.CampaignCountryISO == "no")
+{ @Html.Raw("Tusen Takk") }
+else
+{ @Html.Raw("Tack!")  }</h2>
+            <p class="lead">@if (ViewBag.CampaignCountryISO == "no")
+{ @Html.Raw("Vi sender deg snart en kopi på din film.") }
+else
+{ @Html.Raw("Vi skickar din video till dig inom några minuter.")  } </p>
+
+
+        <p>
+            @if (ViewBag.CampaignCountryISO == "no")
+            { @Html.Raw("Ikke glem å bruk hashtaggen #MinGlossySommer på Instagram for å delta i konkurransen der årets beste sommerbilde vinner et gavekort på tickmaster.no til en verdi av 5000 kroner. Vinneren kåres den 18 juli.") }
+            else
+            { @Html.Raw("Sprid positivitet - posta din video på Instagram och hashtagga #KärleksfulltInternet för din chans att vinna en nöjesweekend för dig och dina vänner!")  }
+       </p>
+    </div>
+</div>
+ 
+@section scriptsbottombody {
+<script type="text/javascript">
+    var campaignid = 2;
+    if ('@ViewBag.CampaignCountryISO' == "no") {
+        campaignid = 3;
+    }
+    var pagename = 'Campaign Created';
+    $(document).ready(function () {
+
+        AddCampaignStats(campaignid, pagename );
+    });
+     
+</script>
+    }

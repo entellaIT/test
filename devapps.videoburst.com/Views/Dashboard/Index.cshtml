@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_DashboardPartial.cshtml";
+}
+
+ 
+ @if ((bool)TempData["FirstTime"] == false)
+ {
+    @Html.Partial("ShowHelp", new VideoBurstWeb.Models.VBUserProfile())
+ }
+ 
+
+<div class="jumbotron homejumbotron1">
+    <h1 class="mainHeading">
+        @Resources.ApplicationTranslations.Welcome_Text <span class="redText">
+        @if (!String.IsNullOrEmpty(Convert.ToString(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.name).Trim()))
+            {
+            @(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.name.Trim())
+        }
+        else
+        {
+            @(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.email.Trim())
+        }
+    </span>, @Resources.ApplicationTranslations.Create_Video_Text
+</h1>
+<h3 class="subHeading">@Resources.ApplicationTranslations.Follow_Steps_Text</h3>
+<p style="height: 15px"></p>
+<p>
+    @Html.ActionLink(@Resources.ApplicationTranslations.GetStarted_Text, "Pick-Template", "Templates", routeValues: null, htmlAttributes: new { @class = "btn btn-success btn-red roundCorner bigButton" })
+</p>
+</div>
+@section scriptsbottombody{
+    <script type="text/javascript">
+        $(function () {
+            var WebsiteRootPath = '@Url.Content("~/")';
+            var url;
+
+            var isOptimized = '@System.Web.Configuration.WebConfigurationManager.AppSettings["IsOptimized"]';
+
+            if (isOptimized == 'true') {
+                url = WebsiteRootPath + "api/VideoBurstAPI/GetRemainingPublishVideoCountNew/";
+            } else {
+                url = WebsiteRootPath + "api/VideoBurstAPI/GetRemainingPublishVideoCount/";
+            }
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data > 0) {
+                        var htmlString = data + ' @Resources.ApplicationTranslations.Videos_Remaining_Text';
+                        $('.leftText').html(htmlString);
+                    }
+                    if (data <= 0) {
+                        var htmlString = '@Resources.ApplicationTranslations.Zero_Video_Remaining_Text';
+                        $('.leftText').html(htmlString);
+
+                    }
+                    localStorage.setItem("videoCount", data);
+
+                },
+                error: function () {
+                    // alertBox("Some error has occured.");
+                }
+            });
+        });
+    </script>
+}

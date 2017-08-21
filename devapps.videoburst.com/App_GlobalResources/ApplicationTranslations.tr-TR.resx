@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Address_Text" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Apply_Button_Text" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="AutoGenerate_Error" xml:space="preserve">
+    <value>You cannot use this function because you do not have any autogenerate template.</value>
+  </data>
+  <data name="Back_Text" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Basic_Plan" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="By_Date_Text" xml:space="preserve">
+    <value>By Date</value>
+  </data>
+  <data name="By_Duration_Text" xml:space="preserve">
+    <value>By Duration</value>
+  </data>
+  <data name="By_Name_Text" xml:space="preserve">
+    <value>By Name</value>
+  </data>
+  <data name="By_Text" xml:space="preserve">
+    <value>by:</value>
+  </data>
+  <data name="By_Views_Text" xml:space="preserve">
+    <value>By Views</value>
+  </data>
+  <data name="Cancel_Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CellPhone_Error" xml:space="preserve">
+    <value>Cell number is required.</value>
+  </data>
+  <data name="CellPhone_Error1" xml:space="preserve">
+    <value>Cell number is invalid.</value>
+  </data>
+  <data name="Change_Password_Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="Choose_ThumbNail_Text" xml:space="preserve">
+    <value>Choose thumbnail</value>
+  </data>
+  <data name="City_Text" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Comments_Text" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Company_Text" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Confirmation_Video_Publish_Message" xml:space="preserve">
+    <value>Are you sure you want to Publish your video? By clicking yes you will not be able to Edit your video anymore. Any changes are final.</value>
+  </data>
+  <data name="Confirm_New_Password" xml:space="preserve">
+    <value>Confirm New Password</value>
+  </data>
+  <data name="Content_Text" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Continue_Text" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Copy_Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Country_Text" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Created_By_Text" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="Created_Text" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="CreateVideo_Text" xml:space="preserve">
+    <value>Create a video</value>
+  </data>
+  <data name="Create_For_User_Text" xml:space="preserve">
+    <value>Create for user</value>
+  </data>
+  <data name="Create_Video_Button_Text" xml:space="preserve">
+    <value>Create Video</value>
+  </data>
+  <data name="Create_Video_Text" xml:space="preserve">
+    <value>let’s create a new video</value>
+  </data>
+  <data name="CropImage_Text" xml:space="preserve">
+    <value>Crop Image</value>
+  </data>
+  <data name="Date_Filter" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Default_Thumbnail_Updation_Success_Message" xml:space="preserve">
+    <value>Default thumbnail has been updated successfully</value>
+  </data>
+  <data name="Delete_Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Done_Text" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Download_Text" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Drafts_Text" xml:space="preserve">
+    <value>Drafts</value>
+  </data>
+  <data name="Duration_Filter" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Edit_Video_Text" xml:space="preserve">
+    <value>Edit Video</value>
+  </data>
+  <data name="Email_Address" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="Embed_Code_Text" xml:space="preserve">
+    <value>Embed Code</value>
+  </data>
+  <data name="Error_Message" xml:space="preserve">
+    <value>Some error has occured.</value>
+  </data>
+  <data name="First_Name" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="Follow_Steps_Text" xml:space="preserve">
+    <value>Just follow three simple steps to choose template, create a video and publish. It’s that easy.</value>
+  </data>
+  <data name="From_Text" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="GetStarted_Text" xml:space="preserve">
+    <value>Get started</value>
+  </data>
+  <data name="Help_Text_1" xml:space="preserve">
+    <value>How do I contact support?</value>
+  </data>
+  <data name="Help_Text_10" xml:space="preserve">
+    <value>and we will assist you with your matter.</value>
+  </data>
+  <data name="Help_Text_11" xml:space="preserve">
+    <value>What is the difference between Video URL and Player URL?</value>
+  </data>
+  <data name="Help_Text_12" xml:space="preserve">
+    <value>Player URL is for general sharing of the video. It takes you to a page with a videoplayer. Video URL is for embedding the video into your own website.</value>
+  </data>
+  <data name="Help_Text_13" xml:space="preserve">
+    <value>Can you create a video template just for me?</value>
+  </data>
+  <data name="Help_Text_14" xml:space="preserve">
+    <value>Absolutely! Just throw us an email at</value>
+  </data>
+  <data name="Help_Text_15" xml:space="preserve">
+    <value>to get you started.</value>
+  </data>
+  <data name="Help_Text_16" xml:space="preserve">
+    <value>Is it possible to use music from one template in another template?</value>
+  </data>
+  <data name="Help_Text_17" xml:space="preserve">
+    <value>All music is fixed to the template, but if you want we can make a custom template for you. Just contact us at</value>
+  </data>
+  <data name="Help_Text_2" xml:space="preserve">
+    <value>If you need help, please do not hesitate to send an email to</value>
+  </data>
+  <data name="Help_Text_3" xml:space="preserve">
+    <value>I got a prompt telling me ‘You have no videos left’</value>
+  </data>
+  <data name="Help_Text_4" xml:space="preserve">
+    <value>Please contact</value>
+  </data>
+  <data name="Help_Text_5" xml:space="preserve">
+    <value>and we will assist you.</value>
+  </data>
+  <data name="Help_Text_6" xml:space="preserve">
+    <value>I want to choose my own colors in a video template</value>
+  </data>
+  <data name="Help_Text_7" xml:space="preserve">
+    <value>Please contact</value>
+  </data>
+  <data name="Help_Text_8" xml:space="preserve">
+    <value>I want to use my own music in a video</value>
+  </data>
+  <data name="Help_Text_9" xml:space="preserve">
+    <value>Due to licensing issues every case is different. Please contact us at</value>
+  </data>
+  <data name="India_Timezone_Text" xml:space="preserve">
+    <value>India</value>
+  </data>
+  <data name="Joining_Agree_Text" xml:space="preserve">
+    <value>By joining you agree to our</value>
+  </data>
+  <data name="Last_Name" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Link_In_Video_Url_Text" xml:space="preserve">
+    <value>Link in video url</value>
+  </data>
+  <data name="List_Company_Settings_Text" xml:space="preserve">
+    <value>Company Settings</value>
+  </data>
+  <data name="List_Country_Australia" xml:space="preserve">
+    <value>Australia</value>
+  </data>
+  <data name="List_Country_Brazil" xml:space="preserve">
+    <value>Brazil</value>
+  </data>
+  <data name="List_Country_Canada" xml:space="preserve">
+    <value>Canada</value>
+  </data>
+  <data name="List_Country_China" xml:space="preserve">
+    <value>China</value>
+  </data>
+  <data name="List_Country_Germany" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="List_Country_India" xml:space="preserve">
+    <value>India</value>
+  </data>
+  <data name="List_Country_Spain" xml:space="preserve">
+    <value>Spain</value>
+  </data>
+  <data name="List_Country_Sweden" xml:space="preserve">
+    <value>Sweden</value>
+  </data>
+  <data name="List_Country_USA" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="List_Password_Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="List_User_Settings_Text" xml:space="preserve">
+    <value>User Settings</value>
+  </data>
+  <data name="Log_Off_Text" xml:space="preserve">
+    <value>Sign Out</value>
+  </data>
+  <data name="Message_Text" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Name_Error" xml:space="preserve">
+    <value>Name is required.</value>
+  </data>
+  <data name="Name_Filter" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Name_Text" xml:space="preserve">
+    <value>NAME:</value>
+  </data>
+  <data name="New_Password" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="Next_Section_Text" xml:space="preserve">
+    <value>Next Part</value>
+  </data>
+  <data name="No_Videos_Publish_Message" xml:space="preserve">
+    <value>You don not have any more videos to publish. Would you like to upgrade?</value>
+  </data>
+  <data name="Old_Password" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="Phone_Number" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="Phone_Number_Text" xml:space="preserve">
+    <value>PHONE NUMBER:</value>
+  </data>
+  <data name="Pick_Template_Text" xml:space="preserve">
+    <value>Pick a template</value>
+  </data>
+  <data name="Postal_Code_Text" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="PostVideo_Text" xml:space="preserve">
+    <value>Post Video</value>
+  </data>
+  <data name="PP_Text" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PreVideo_Text" xml:space="preserve">
+    <value>Pre Video</value>
+  </data>
+  <data name="Processing_Video_Text" xml:space="preserve">
+    <value>Processing Video:</value>
+  </data>
+  <data name="Professional_Video_Text" xml:space="preserve">
+    <value>Professional video made easy.</value>
+  </data>
+  <data name="Profile_Picture_Text" xml:space="preserve">
+    <value>Profile Picture</value>
+  </data>
+  <data name="Pro_Plan" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="Published_By_Text" xml:space="preserve">
+    <value>Published by</value>
+  </data>
+  <data name="Published_Text" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Publish_Text" xml:space="preserve">
+    <value>Publish</value>
+  </data>
+  <data name="Publish_Video_Text" xml:space="preserve">
+    <value>Publish Video</value>
+  </data>
+  <data name="Quick_Tips_Text_1" xml:space="preserve">
+    <value>Choose thumbnail carefully</value>
+  </data>
+  <data name="Quick_Tips_Text_2" xml:space="preserve">
+    <value>The first thing people will see is your thumbnail. Make sure it is appealing and captures the essence of your video well.</value>
+  </data>
+  <data name="Quick_Tips_Text_3" xml:space="preserve">
+    <value>Share your video in all social media channels</value>
+  </data>
+  <data name="Quick_Tips_Text_4" xml:space="preserve">
+    <value>Take advantage of the power of social media by making sure that your video is shared on all your social media sites.</value>
+  </data>
+  <data name="Quick_Tips_Text_5" xml:space="preserve">
+    <value>Attach your video to sms and mail messages</value>
+  </data>
+  <data name="Quick_Tips_Text_6" xml:space="preserve">
+    <value>Video is a really powerful way to communicate new offers. Add it to your sms and mail messages to really showcase your products.</value>
+  </data>
+  <data name="Quick_Tips_Text_7" xml:space="preserve">
+    <value>Make your video a direct link to your website by adding a “Link in video url”</value>
+  </data>
+  <data name="Quick_Tips_Text_8" xml:space="preserve">
+    <value>Make it easy for your customers to reach your site. By adding a direct link right in the video, you guarantee easy access.</value>
+  </data>
+  <data name="Quick_Tips_Title" xml:space="preserve">
+    <value>Quick tips for publishing</value>
+  </data>
+  <data name="Register_Your_Name" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="Sales_Email" xml:space="preserve">
+    <value>sales@videoburst.com</value>
+  </data>
+  <data name="Save_Thumbnail_Text" xml:space="preserve">
+    <value>Save Thumbnail</value>
+  </data>
+  <data name="SelectTemplate_Text" xml:space="preserve">
+    <value>Select Template</value>
+  </data>
+  <data name="Select_Text" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Send_Text" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Settings_Menu_Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Update_Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Share_Text" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Share_Via_Email_Text" xml:space="preserve">
+    <value>Share via Email</value>
+  </data>
+  <data name="Sorting_By_Text" xml:space="preserve">
+    <value>Sorting by</value>
+  </data>
+  <data name="Sort_By_Filter" xml:space="preserve">
+    <value>Sort By</value>
+  </data>
+  <data name="SportnFritid_Text" xml:space="preserve">
+    <value>Sport &amp;amp; Fritid</value>
+  </data>
+  <data name="Subject_Text" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Support_Email" xml:space="preserve">
+    <value>support@videoburst.com</value>
+  </data>
+  <data name="Sweden_Timezone_Text" xml:space="preserve">
+    <value>Sweden</value>
+  </data>
+  <data name="Template_Content_Text" xml:space="preserve">
+    <value>9 Text, 8 Images, 1 Audio track</value>
+  </data>
+  <data name="Template_Text" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="Terms_N_Conditions_Text" xml:space="preserve">
+    <value>Terms and Conditions</value>
+  </data>
+  <data name="ThankYou_Text_1" xml:space="preserve">
+    <value>Thank You</value>
+  </data>
+  <data name="ThankYou_Text_2" xml:space="preserve">
+    <value>Your message has been successfully sent. We will contact you very soon!</value>
+  </data>
+  <data name="ThumbNail_Size_Text" xml:space="preserve">
+    <value>Custom (1920x1080)</value>
+  </data>
+  <data name="Thumbnail_Text" xml:space="preserve">
+    <value>Thumbnail</value>
+  </data>
+  <data name="Timeline_Text" xml:space="preserve">
+    <value>Timeline</value>
+  </data>
+  <data name="TimeZone_Text" xml:space="preserve">
+    <value>TIMEZONE:</value>
+  </data>
+  <data name="TOS_Text" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="To_Text" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Update_Password" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="Update_Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Upgrade_Account_Text" xml:space="preserve">
+    <value>Upgrade Account to:</value>
+  </data>
+  <data name="Upgrade_Text" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+  <data name="URL_Text" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="UTC_Timezone_Text" xml:space="preserve">
+    <value>UTC</value>
+  </data>
+  <data name="Videos_Remaining_Text" xml:space="preserve">
+    <value>videos remaining</value>
+  </data>
+  <data name="Video_Creation_Failed_Message" xml:space="preserve">
+    <value>Video Creation Failed</value>
+  </data>
+  <data name="Video_Deletion_Failure_Message" xml:space="preserve">
+    <value>Unable to delete this video, please try after sometime</value>
+  </data>
+  <data name="Video_Deletion_Success_Message" xml:space="preserve">
+    <value>Video has been deleted successfully</value>
+  </data>
+  <data name="Video_ProcessingText1" xml:space="preserve">
+    <value>Your video is processing and will be ready for sharing in a few minutes.</value>
+  </data>
+  <data name="Video_ProcessingText2" xml:space="preserve">
+    <value>In the meantime be sure to check out some of our quick tips on the right.</value>
+  </data>
+  <data name="Video_Settings_Text" xml:space="preserve">
+    <value>Video Settings</value>
+  </data>
+  <data name="Video_Title_Length_Text" xml:space="preserve">
+    <value>My Video Title Longer Length</value>
+  </data>
+  <data name="Video_Title_Max_Characters_Text" xml:space="preserve">
+    <value>(max 30 characters)</value>
+  </data>
+  <data name="Video_Title_Text" xml:space="preserve">
+    <value>Click here to change the video title.</value>
+  </data>
+  <data name="Views_Filter" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="Welcome_Text" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="Yes_Agree_Text" xml:space="preserve">
+    <value>Yes, I agree to the</value>
+  </data>
+  <data name="Zero_Video_Remaining_Text" xml:space="preserve">
+    <value>0 video remaining</value>
+  </data>
+  <data name="Title_Updation_Success_Message" xml:space="preserve">
+    <value>Video title has been updated successfully</value>
+  </data>
+</root>

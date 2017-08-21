@@ -1,0 +1,62 @@
+﻿@model VideoBurstWeb.Models.TimelinePlayerModel
+           <div class="dispvideoPic" style='@Html.Raw("width:100%;height:" + @Model.height + "px !important;")'>
+    <div id="tplayer_@Model.guid" class="chooseimgPlaceholder"></div>
+</div>
+<div class="actionIcon text-left">
+    <div class="btn-group">
+        <button type="button" class="btn border-flat btn-black rightborder" onclick="play('tplayer_@Model.guid', @Model.starttime, @Model.endtime);" aria-label="Left Align"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+        <button type="button" class="btn border-flat btn-black rightborder" onclick="jwplayer('tplayer_@Model.guid').pause();" aria-label="Center Align"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+        @*<button type="button" class="btn border-flat btn-black rightborder" onclick="jwplayer('tplayer_@Model.guid').stop();" aria-label="Right Align"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>*@
+    </div>
+</div>
+<input id='@Html.Raw("div" + @Model.guid)' type="hidden" value="0" />
+<script type="text/javascript">
+    jwplayer('tplayer_@Model.guid').setup({
+        file:'@Html.Raw(@Model.url)',
+        id: '@Model.guid',
+        height: '100%', @*@Model.height,*@
+        width: '100%', @*@Model.width,*@
+        controls: 'false',
+        autostart: 'false',
+        primary: 'html5',
+        icons: 'true',
+        mute: true,
+        image: '@Html.Raw(@Model.thumburl)'
+        @*events: {
+            onReady: function (event) {
+                var time = @Model.starttime;
+                if(parseInt(time)>0)
+                {
+                    time = time -1;
+                }
+                console.log(jwplayer('tplayer_@Model.guid').getPosition())
+                if(jwplayer('tplayer_@Model.guid').getPosition() == 0 && parseInt(@Model.starttime) > 0){
+                    jwplayer('tplayer_@Model.guid').seek(time);
+                }
+            }
+        }*@
+    });
+
+    @*jwplayer('tplayer_@Model.guid').onTime(function(event)
+    {
+        var time = @Model.starttime;
+        if (event.position <= time) {
+            console.log(event.position)
+            jwplayer('tplayer_@Model.guid').pause();
+            jwplayer('tplayer_@Model.guid').setMute(false);
+            //$(divid).val("1")
+        }
+    });*@
+
+    //function play(divid, starttime, endtime ) {
+    //    debugger;
+    //    var startpostion = 5;
+    //    var endpostion = 19;
+    //    jwplayer(divid).play().seek(starttime).onTime(function (event) {
+    //        if (event.position > endtime) {
+    //            jwplayer().stop();
+    //        }
+    //    });
+    //}
+
+</script>

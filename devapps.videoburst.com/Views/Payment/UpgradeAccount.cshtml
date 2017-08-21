@@ -1,0 +1,220 @@
+﻿@model  VideoBurstAPI.Entities.Product
+
+@{
+    ViewBag.Title = "Upgrade";
+    ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+<style>
+    .colactive {
+        background-color: #d8f2ff;
+    }
+</style>
+
+@using (Html.BeginForm("Upgrade3", "Payment", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <div class="col-sm-9 rightbarInner generalinnerdiv">
+
+        <div class="row">
+
+            <!--============Upgrade content start here==========-->
+            <div class="col-sm-12 marginbottom paddingBottom">
+                <p>
+                    @if (HttpContext.Current.Request.UrlReferrer != null && !HttpContext.Current.Request.UrlReferrer.ToString().ToLower().Contains("/upgradeconfirm"))
+                    {
+                        <a href="@HttpContext.Current.Request.UrlReferrer.ToString()" class="btn btn-black" type="button">
+                            <span aria-hidden="true" class="glyphicon glyphicon-arrow-left">
+                            </span> Back
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@ViewBag.DomainUrl/payment/upgradeAccount" class="btn btn-black" type="button">
+                            <span aria-hidden="true" class="glyphicon glyphicon-arrow-left">
+                            </span> Back
+                        </a>
+                    }
+                </p>
+                <div class="row">
+                    <!--============Plan Div Start here=====-->
+                    <div class="col-sm-9">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-color">
+
+                                <thead>
+                                    <tr class="plantitle">
+                                        <th class="col1"><h2 class="whiteText accountplan">Account Plans</h2></th>
+                                        <th class="col2"><h2><a href="#" class="tabplan active" id="idPro">@Model.Title -  <strong>@Model.ProdPrice.Price @ViewBag.Symbol</strong>/month <br /><span class="small blueText">excl. VAT </span></a></h2></th>
+                                        <th class="col3"><h2><a href="#" class="tabplan" id="idEnterprise">Enterprise - <strong>Offer</strong></a></h2></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Monthly fee</td>
+                                        <td class="procol colactive">@Model.ProdPrice.Price @ViewBag.Symbol</td>
+                                        <td class="entcol">Offer</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Users</td>
+                                        <td class="procol colactive">@Model.Users</td>
+                                        <td class="entcol">Choosable</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Videos</td>
+                                        <td class="procol colactive">@Model.Videos</td>
+                                        <td class="entcol">Choosable</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Custom Templates</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Your own logo</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Choose your own color</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Choose your music</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Video Quality</td>
+                                        <td class="procol colactive">Full HD 1080p</td>
+                                        <td class="entcol">Full HD 1080p</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Licensed music</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Download video</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Clickable link in video</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Cloud based streaming</td>
+                                        <td class="procol colactive">5000 views</td>
+                                        <td class="entcol">Choosable</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Custom thumbnail</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Support for integration</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">User can create campaigns (Fan Engagement)</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Support</td>
+                                        <td class="procol colactive">Email</td>
+                                        <td class="entcol">Premium</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Number of templates</td>
+                                        <td class="procol colactive">All</td>
+                                        <td class="entcol">All</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Extra users</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol">99 @ViewBag.Symbol/month</td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">VideoBurst Player app</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    <tr class="tablerow">
+                                        <td class="plancol">Boost Campaign (Ads)</td>
+                                        <td class="procol colactive"><span class="icon-delete">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>
+                                    @*<tr class="tablerow">
+                                        <td class="plancol">Image bank (MostPhotos)</td>
+                                        <td class="procol colactive"><span class="icon-success">&nbsp;</span></td>
+                                        <td class="entcol"><span class="icon-success">&nbsp;</span></td>
+                                    </tr>*@
+                                    <tr class="tablerow">
+                                        <td class="plancol"></td>
+                                        @*<td class="procol colactive"><button class="btn btn-Blue">Buy Now</button></td>*@
+
+                                        <td class="procol colactive">
+                                            @if (ViewBag.CompanyLevel == 0)
+                                            {
+                                                @Html.ActionLink("Buy Now", "Upgrade3", "Payment", new { level = ViewBag.Plus }, new { @class = "btn btn-Blue", onclick = "StartProcessing(true,'Please wait...')" });
+                                            }
+                                        </td>
+                                        <td class="entcol">
+                                            <a href="@ViewBag.DomainUrl/Dashboard/Upgrade" class="btn btn-black">Contact Us</a>
+                                            @*<button class="btn btn-black">Contact Us</button>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--============Plan Div end here=====-->
+                    <!--============Basic Plan Div Start here=====-->
+                    <div class="col-sm-3"> 
+                        <p>&nbsp;</p>
+                        <p>
+                            @*<button class="btn btnred btn-lg text-uppercase btn-block">Buy Pro Now</button>*@
+                            @if (ViewBag.CompanyLevel == 0)
+                            {
+                                @Html.ActionLink("Buy Plus Now", "Upgrade3", "Payment", new { level = ViewBag.Plus }, new { @class = "btn btnred btn-lg text-uppercase btn-block", onclick = "StartProcessing(true,'Please wait...')" })
+                            }
+                            else
+                            {
+                                <a href="@ViewBag.DomainUrl/Dashboard/Upgrade" class="btn btnred btn-lg text-uppercase btn-block">Get Enterprise Now</a>
+
+                                @*@Html.ActionLink("Get Enterprise Now", "", "", null, new { @class = "btn btnred btn-lg text-uppercase btn-block", onclick = "javascript:void(0)" })*@
+                            }
+                        </p>
+                    </div>
+                    <!--============Basic Plan Div end here=====-->
+                </div>
+            </div>
+
+            <!--============Upgrade content end here==========-->
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if(@ViewBag.CompanyLevel == 10)
+        {
+            $('#idPro').removeClass().addClass('tabplan');
+            $('#idEnterprise').addClass('active');
+            $("tr td:nth-child(2)").removeClass().addClass('procol');
+            $("tr td:nth-child(3)").addClass("colactive")
+        }
+    });
+</script>
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

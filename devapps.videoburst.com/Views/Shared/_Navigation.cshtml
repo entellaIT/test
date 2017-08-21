@@ -1,0 +1,27 @@
+﻿
+<nav class="navbar navbar-inverse navbar-fixed-top headerBg">
+    <div class="container-fluid lessPaddingL">
+        <div class="topLeft">
+            <a class="navbar-brand logo-brand" href='@Url.Content("~/Dashboard")'>
+                <img src='@Url.Content("~/Content/themes/fastout/images/logo.png")' alt="" /></a>
+        </div>
+        <div class="colR">
+            <div class="row">
+                <button type="button" class="navbar-toggle collapsed iconButton" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar toggleIcon"></span>
+                    <span class="icon-bar toggleIcon"></span>
+                    <span class="icon-bar toggleIcon"></span>
+                </button>
+                <div class="col-sm-4 minWidth mobHeading">
+                    <h1 class="topHeading">@ViewBag.Heading</h1>
+                    <span class="savingindicator" id="spanSavingText"></span>
+                </div>
+                <div class="col-sm-8 searchDiv" style="text-align: right;">
+                    <span class="glyphicon glyphicon-search searchIcon">&nbsp;</span>
+                </div>
+                @Html.Partial("_LoginPartial", new VideoBurstWeb.Models.VBUserProfile())
+            </div>
+        </div>
+    </div>
+</nav>

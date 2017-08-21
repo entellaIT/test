@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Subscription Response";
+    ViewBag.heading = "Subscription Response";
+   // Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    if ((NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance != null) && !String.IsNullOrEmpty(Convert.ToString(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.email).Trim()))
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutPro.cshtml";
+    }
+}
+
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+
+    <div class="row">
+        <!--============Upgrade Content start here==========-->
+        <div class="col-sm-12 marginbottom mobmarginTopBottom">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    @if (@Model != null)
+                    {
+                        <h3>   @Html.Raw(ViewBag.Message)</h3>
+                        <p>&nbsp;</p> 
+                        <p>
+                            <strong>Your payment details are listed below.</strong>
+                        </p>
+                        @*<p>Profile Id: @Model.ProfileId</p>*@
+                        @*<p>Profile Status: @Model.state</p>*@
+                        
+                        <p>Product Name: VideoBurst @Model.ProductName</p>
+                        <p>Created Date:  @string.Format("{0:yyyy-MM-dd}",Model.Created)  </p>
+                        if (Model.StatusId == 4)
+                        {
+                            <p>
+                                Payment Status: @Model.PaymentStatus
+                            </p>
+                        }
+                        else if(Model.StatusId == 7)
+                        {
+                            <p>
+                                Payment Status: Payment Processed
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                Status: @Model.PaymentStatus
+                            </p>
+                        }
+
+                        <p>Payment Reference ID: @Model.Identifier</p>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

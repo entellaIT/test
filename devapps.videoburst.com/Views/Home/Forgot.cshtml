@@ -1,0 +1,28 @@
+﻿@model VideoBurstWeb.Models.LoginSignupModel
+@{
+    ViewBag.Title = "Videoburst - Forgot Password";
+    Layout = "~/Views/Shared/_AnonymousLayout.cshtml";
+}
+@using (Html.BeginForm("Forgot", "Home", new { ReturnUrl = ViewBag.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6 signupForm rightRounded  single">
+        <h4 class=" signupsubhead text-left">
+            @Resources.AuthenticationTranslations.Forgot_PasswordRecovery
+        </h4>
+        <div class="form-group">
+            <p style="text-align:left;">
+                @Resources.AuthenticationTranslations.Forgot_PasswordRecoveryMsg
+            </p>
+
+            <p>
+                @Html.TextBoxFor(m => m.email, new { value = ViewBag.Email, id = "txtRecoveryEmail", placeholder = @Resources.AuthenticationTranslations.EmailAddressText, @class = "form-control input-lg", data_validate_url = @Url.Action("IsUserRegistered") })
+            </p>
+
+
+            <p>
+                <button type="submit" class="btn btn-lg btnRed btn-block" id="btnRecoveryChangePwd">@Resources.AuthenticationTranslations.Forgot_PasswordRecoveryButton</button>
+            </p>
+        </div>
+    </div>
+}

@@ -1,0 +1,12 @@
+/* Background on inner page */
+.wrapper { background-image:url(../img/pattern_bg.png);}
+
+/* Navigation color */
+.m-create-template .pager li > a, .m-create-template  .pager li > span{ background-color:transparent;}
+
+/* Nav color */
+.navbar-primary {background-color: #6A3D6D;}
+.navbar-expanded { background-color:#B898BA;}
+
+/* Button color */
+.m-create-template .btn-primary {background-color:#ea0068 !important;}

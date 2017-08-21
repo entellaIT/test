@@ -1,0 +1,48 @@
+﻿@model VideoBurstWeb.Models.UserBillingModel
+<div class="whitebg">
+
+    <div class="paddingboth">
+        <hr>
+        <ul class="list-unstyled planlist">
+            <li><strong class="blueText text-bold">✓</strong> Monthly fee:<span class="pull-right"> @CurrencySymbol(Model.Currency)@Model.TotalAmountMonth</span>  </li>
+            <li><strong>✓</strong> Users: <span class="pull-right">@Model.LevelUsers</span></li>
+            <li><strong>✓</strong> Videos: <span class="pull-right">@Model.LevelVideos</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Custom templates: <span class="pull-right">No </span></li>
+            <li><strong class="blueText text-bold">✓</strong> Your own logo: <span class="pull-right">No </span></li>
+            <li><strong class="blueText text-bold">✓</strong> Choose your own colors: <span class="pull-right">No</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Choose your own music: <span class="pull-right">Yes</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Video quality<br>&nbsp;&nbsp;&nbsp;Full HD 1080p: <span class="pull-right">Full HD</span> </li>
+            <li><strong class="blueText text-bold">✓</strong> Licensed music: <span class="pull-right">Yes</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Download video: <span class="pull-right">Yes</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Clickable links in video,<br>&nbsp;&nbsp;&nbsp;&nbsp;1 link per template: <span class="pull-right">Yes</span></li>
+            <li><strong class="text-bold">✓</strong> Cloud based <br />&nbsp;&nbsp;&nbsp;streaming: <span class="pull-right">5000 Views</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Custom thumbnail:  <span class="pull-right">Yes</span> </li>
+            <li><strong class="blueText text-bold">✓</strong> Support for integration: <span class="pull-right">No</span></li>
+            <li><strong class="blueText text-bold">✓</strong>End user can create<br />&nbsp;&nbsp;&nbsp;templates and campaigns<br>&nbsp;&nbsp;&nbsp;(Fan Engagement):<span class="pull-right">No</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Support: <span class="pull-right">Email</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Number of templates: <span class="pull-right">All</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Extra users<br />&nbsp;&nbsp;&nbsp;(no support) :  <span class="pull-right">99 KR/Month</span> </li>
+            <li><strong class="blueText text-bold">✓</strong> VideoBurst Player app: <span class="pull-right">No</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Boost Campaign (Ads): <span class="pull-right">Yes</span></li>
+            <li><strong class="blueText text-bold">✓</strong> Image bank (MostPhotos): <span class="pull-right">Yes </span></li>
+        </ul>
+
+        <p>&nbsp;</p>
+
+    </div>
+</div>
+
+@functions{
+    public string CurrencySymbol(string currency)
+    {
+        string symbol = "$";
+        if (currency.ToLower().Equals("usd"))
+            symbol = "$";
+        else if (currency.ToLower().Equals("sek"))
+            symbol = "kr";
+        else
+            symbol = "$";
+
+        return symbol;
+    }
+}

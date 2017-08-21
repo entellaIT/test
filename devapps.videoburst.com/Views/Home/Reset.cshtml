@@ -1,0 +1,26 @@
+﻿@model VideoBurstWeb.Models.LoginSignupModel
+
+@{
+    ViewBag.Title = "Videoburst - Set new Password";
+    Layout = "~/Views/Shared/_AnonymousLayout.cshtml";
+}
+@using (Html.BeginForm("Reset", "Home", new { ReturnUrl = ViewBag.ReturnUrl, e = ViewBag.Email, c = ViewBag.ResetCode }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6 signupForm single">
+        <h4 class="signupsubHead  text-left">@Resources.AuthenticationTranslations.Register_CreateAccountTitle</h4>
+        <div class="form-group">
+            <p>
+                @Html.PasswordFor(m => m.pwd, new { id = "txtNewPassword", placeholder = @Resources.AuthenticationTranslations.Register_PasswordLabel, @class = "form-control input-lg" })
+            </p>
+            <p>
+                @Html.PasswordFor(m => m.oldpwd, new { id = "txtConfNewPassword", placeholder = @Resources.AuthenticationTranslations.Register_ConfirmPasswordLabel, @class = "form-control input-lg" })
+            </p>
+
+            <p class='text-left'>Disclaimer: password need to be 6 chars minimum.</p>
+            <p>
+                <button type="submit" class="btn btn-lg btnRed btn-block" id="btnChangePwd">@Resources.AuthenticationTranslations.Forgot_PasswordRecoveryButton</button>
+            </p>
+        </div>
+    </div>
+}

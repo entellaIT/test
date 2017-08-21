@@ -1,0 +1,181 @@
+﻿@*@model VideoBurstWeb.Models.OptionsModel*@
+ 
+@{ 
+    
+    ViewBag.GACode = System.Configuration.ConfigurationManager.AppSettings["GACode"] != null ? System.Configuration.ConfigurationManager.AppSettings["GACode"] : "UA-59804226-1";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        var WebsiteRootPath = '@Url.Content("~/")';
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href='@Url.Content("~/images/favicon.ico")'>
+
+    <title>@ViewBag.Title</title>
+
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Content/themes/fastout/css/bootstrap")
+    @*<link href="~/Content/themes/fastout/css/bootstrap.css" rel="stylesheet">*@
+    
+    <!-- Custom styles for this template -->
+    @Styles.Render("~/Content/themes/fastout/css/dashboard")
+    @Styles.Render("~/Content/themes/fastout/css/custom")
+    @Styles.Render("~/Content/themes/fastout/css/timeline")
+    @Styles.Render("~/Content/themes/fastout/css/owl.carousel")
+    @Styles.Render("~/Content/themes/fastout/css/owl.theme")
+
+    @RenderSection("styles", required: false)
+
+
+
+    @*
+        <link href="~/Content/themes/fastout/css/dashboard.css" rel="stylesheet">
+    <link href="~/Content/themes/fastout/css/custom.css" rel="stylesheet">
+    <link href="~/Content/themes/fastout/css/timeline.css" rel="stylesheet">
+    <link href="~/Content/themes/fastout/css/owl.carousel.css" rel="stylesheet">
+    <link href="~/Content/themes/fastout/css/owl.theme.css" rel="stylesheet">
+    *@
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    @*<script type="text/javascript" src='@Url.Content("~/Content/themes/fastout/js/ie-emulation-modes-warning.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie-emulation-modes-warning.js"))
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @*<script src='@Url.Content("~/Scripts/jquery-2.1.1.min.js")'></script>
+    <script src='@Url.Content("~/Content/themes/fastout/js/bootstrap.min.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-2.1.1.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/bootstrap.min.js"))
+
+
+</head>
+<body>
+    @RenderSection("scriptstopbody", required: false)
+    <!-- Top Navigation -->
+    @Html.Partial("_Navigation")
+
+    <div class="container-fluid">
+        <div class="row">
+            @Html.Partial("_Options", new VideoBurstWeb.Models.OptionsModel())
+
+            @RenderBody()
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("_Copyright")
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
+    @*<script src='@Url.Content("~/Scripts/generic.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/generic.js"))
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    @*<script src='@Url.Content("~/Content/themes/fastout/js/vendor/holder.min.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/holder.min.js"))
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    @*<script src='@Url.Content("~/Content/js/ie10-viewport-bug-workaround.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie10-viewport-bug-workaround.js"))
+    <!-- Placed at the end of the document so the pages load faster -->
+    @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>*@
+
+    <!-- FlexSlider -->
+    @*<script src='@Url.Content("~/Content/themes/fastout/js/owl.carousel.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/owl.carousel.js"))
+
+    @*<script src='@Url.Content("~/Scripts/videoburst.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/videoburst.js"))
+    <script>
+        $(document).ready(function () {
+            $("#owl-demo").owlCarousel({
+                autoPlay: 3000,
+                items: 4,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [979, 3]
+            });
+
+        });
+    </script>
+
+    <!-- Optional FlexSlider Additions -->
+    @*<script src='@Url.Content("~/Content/themes/fastout/js/jquery.easing.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))
+    @RenderSection("scriptsbottombody", required: false)
+    @RenderSection("scriptsbottombody2", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            var WebsiteRootPath = '@Url.Content("~/")';
+            var isOptimized = '@System.Web.Configuration.WebConfigurationManager.AppSettings["IsOptimized"]';
+
+            var url;
+            if (isOptimized == 'true') {
+                url = WebsiteRootPath + "api/VideoBurstAPI/GetRemainingPublishVideoCountNew/";
+            }
+            else {
+                url = WebsiteRootPath + "api/VideoBurstAPI/GetRemainingPublishVideoCount/";
+            }
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data > 0) {
+                        var htmlString = "<strong class='blueText'>" + data + " videos</strong> remaining";
+                        $('.leftText').html(htmlString);
+                    }
+                    if (data <= 0) {
+                        var htmlString = "<strong class='blueText'> 0 video</strong> remaining";
+                        $('.leftText').html(htmlString);
+                    }
+
+                    localStorage.setItem("videoCount", data);
+
+                },
+                error: function () {
+                   // alertBox("Some error has occured.");
+                }
+
+
+            });
+            
+            @if (@TempData.ContainsKey("alertmessage") && !String.IsNullOrEmpty(Convert.ToString(@TempData["alertmessage"])))
+            {
+                @Html.Raw("alertBox('" + @TempData["alertmessage"] + "');")
+            }
+             @if (@TempData.ContainsKey("confirmmessage") && !String.IsNullOrEmpty(Convert.ToString(@TempData["confirmmessage"])))
+            {
+                @Html.Raw(@TempData["confirmmessage"])
+            }
+        });
+    </script>
+    @Html.Partial("_PopupsPartial")
+    <script type="text/javascript">
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', '@ViewBag.GACode', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</body>
+</html>

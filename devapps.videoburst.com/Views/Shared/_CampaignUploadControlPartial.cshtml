@@ -1,0 +1,120 @@
+﻿@model VideoBurstWeb.Models.CampaignUploadControlModel
+
+@*<div>
+    <p class="extra-gap"><a class="btn btn-lg btn-primary" href="#" role="button">Ladda upp bild <span class="glyphicon glyphicon-cloud-upload"></span></a></p>
+</div>*@
+
+@*<div class="create-img-holder">
+    <img src='@Url.Content("~/Content/themes/glossybox/img/video_img.jpg")' class="create-video-img box-shadow" alt="">
+    <span class="trash-icon-holder "><span class="glyphicon glyphicon-trash"></span></span>
+</div>*@
+
+
+<div class='create-img-holder prev-hold-shade @Model.cssclass' data-teguid='@Model.data_teguid'
+     data-type='@Model.data_type' data-width='@Model.data_width' data-default-img='@if(!String.IsNullOrEmpty(@Model.previewurl)){   @Url.Content(@Model.previewurl) }'
+     data-height='@Model.data_height'>
+    @if (@Model.data_type == "video")
+    {
+        <input class="@Model.cssnormalclass" type="file" accept='video/mp4'
+               style="display: block; position: absolute; left: 0px; top: 0px; max-width: 100% !important; max-height: 100% !important; font-size: 100pt; opacity: 0; z-index: 10; overflow: hidden;" />
+    }
+    else
+    {
+        <input class="@Model.cssnormalclass" type="file" accept='@Model.data_type/*'
+               style="display: block; position: absolute; left: 0px; top: 0px; max-width: 0% !important; max-height: 0% !important; font-size: 100pt; opacity: 0; z-index: 10; overflow: hidden; " />
+    }
+
+    <div class="create-preview-holder">
+
+        <div class="preview-img-box pre-box-1 add-box-shadow">
+            @if (ViewBag.CampaignCountryISO == "no")
+            { <img alt="" class="prev-img" src='@Url.Content("~/Content/themes/glossybox_no/img/prev_img2.png")' /> }
+            else
+            { <img alt="" class="prev-img" src='@Url.Content("~/Content/themes/glossybox_sw/img/prev_img2.png")' /> }
+            <div class="preview-img-title"></div>
+        </div>
+
+        <div class="preview-img-box pre-box-2 add-box-shadow">
+            @*<img alt="" class="prev-img" src="assets/img/prev_img1.png">*@
+            @if (!String.IsNullOrEmpty(@Model.previewurl))
+            {  @Html.Raw(" <img src=\"" + @Url.Content(@Model.previewurl + "\" class=\"img-create-campaign prev-img\" alt=\"\"> "))}
+            <div class="preview-img-title"></div>
+        </div>
+
+        <div class="preview-img-box pre-box-3 add-box-shadow">
+            @if (ViewBag.CampaignCountryISO == "no")
+            { <img alt="" class="prev-img" src='@Url.Content("~/Content/themes/glossybox_no/img/prev_img3.png")' /> }
+            else
+            { <img alt="" class="prev-img" src='@Url.Content("~/Content/themes/glossybox_sw/img/prev_img3.png")' /> }
+            <div class="preview-img-title"></div>
+        </div>
+
+    </div>
+
+    @*<img src='@Url.Content("~/Content/themes/glossybox/img/video_img.jpg")' class="create-video-img box-shadow" alt="">*@
+    @*<p class="extra-gap"><a role="button" href="create.html" class="btn btn-lg btn-primary">Ladda upp bild <span class="glyphicon glyphicon-cloud-upload"></span></a></p>*@
+
+    <div class="btn-upload-center" id="btnCampUpload">
+        <a class="btn btn-lg btn-primary" href="javascript:void(0)" onclick="choosefile(this)" role="button">
+            @if (ViewBag.CampaignCountryISO == "no")
+            { @Html.Raw("Last opp bilde") }
+            else
+            { @Html.Raw("Ladda upp bild")  }
+            <span class="glyphicon glyphicon-cloud-upload"></span>
+        </a>
+    </div>
+
+
+
+    <div class="btn-group btn-icon-right" id="btnGroupCampUpload" style="display:none;">
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Left Align" id="save" onclick="choosefile(this)"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Center Align" id="edit" onclick="editimage(this)" style="display: block;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Right Align" id="delete" onclick="_delete(this)" style="display: block;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+    </div>
+
+    @*<div class="btn-group">
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Left Align" id="save" onclick="choosefile(this)"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Center Align" id="edit" onclick="editimage(this)" style="display: @Model.displayedit;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Right Align" id="delete" onclick="_delete(this)" style="display: @Model.displaydelete;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+        </div>*@
+    @*<span class="trash-icon-holder" id="delete" onclick="_delete(this)" style="z-index: 12; display @Model.displaydelete ;"><span class="glyphicon glyphicon-trash"></span></span>*@
+    @*<span class="cloud-icon-holder" id="save" onclick="choosefile(this)" style="z-index: 12; display @Model.displaydelete ;"><span class="glyphicon glyphicon-cloud-upload"></span></span>*@
+
+    <input type="hidden" id="@Model.hiddeninputid" name="@Model.hiddeninputid" value='@Model.hiddeninputvalue' />
+
+    @*<input type="text" id='txtDef_@Model.hiddeninputid' name='txtDef_@Model.hiddeninputid' value='@Model.previewurl' class="uploadDefaultValue" style="display:none;" />*@
+
+    @if (@Model.data_type == "video" && !String.IsNullOrEmpty(@Model.hiddeninputvalue))
+    {
+        <div data-playerheight='@Model.player_height' data-playerwidth='@Model.player_width' title="Click here to play the video" class="videoplayer"
+             style='position: relative; top: 0px; left: 0px; background-color: transparent; z-index: 101; display: @if (@Model.data_type == "video")  {@Html.Raw("block")}else{@Html.Raw("none")}'
+             id="videoplayer">
+            <div class="playdiv" id='@Html.Raw("vplayer" + @Model.data_teguid)' style="text-align: center; vertical-align: middle;">
+            </div>
+            <script type="text/javascript">
+                var vidUrl = decodeURIComponent('@Html.Raw(@Model.hiddeninputvalue.Replace("&amp;","&"))');
+                if (vidUrl.indexOf("urlhandle.ashx") > 0)
+                    vidUrl = vidUrl.substring(vidUrl.indexOf("urlhandle.ashx") + 17);
+                //console.log('vidUrl:' + vidUrl);
+                jwplayer('@Html.Raw("vplayer" + @Model.data_teguid)').setup({
+                    file: vidUrl,
+                    width: '@Model.player_width',
+                    height: '@Model.player_height'
+                });
+            </script>
+        </div>
+    }
+</div>
+
+<div class="actionIcon"  id="preview">
+    
+        @*<div class="btn-group">
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Left Align" id="save" onclick="choosefile(this)"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Center Align" id="edit" onclick="editimage(this)" style="display: @Model.displayedit;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Right Align" id="delete1" onclick="_delete(this)" style="display: @Model.displaydelete;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+        </div>*@
+     
+</div>
+@Html.HiddenFor(m => m.data_teguid, new { id = @Model.data_teguid })
+
+

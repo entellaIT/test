@@ -1,0 +1,43 @@
+﻿@*@Model VideoBurstWeb.Models.OptionsModel*@
+<div class="col-sm-3 col-md-2 sidebar leftBar" id="navbar">
+    <div class="row leftButton">
+        <p class="leftnavPadding padding-topbottom">
+            @Html.ActionLink("Create Video", "Pick-Template", "Templates", routeValues: null, htmlAttributes: new { @class = "btn btn-primary btn-lg btn-red" })
+        </p>
+    </div>
+    <ul class="nav nav-sidebar leftnavBar"><div class="mobmenu"></div>
+        <li><a href='@Url.Content("~/Dashboard")'><strong class="icons home">&nbsp;</strong>Home</a></li>
+        <li><a href='@Url.Content("~/Templates")'><strong class="icons templates">&nbsp;</strong> Templates</a></li>
+        <li><a href='@Url.Content("~/Videos")'><strong class="icons videos">&nbsp;</strong> My Videos</a></li> 
+        <li id="AutoGeneratelistItem"><a href='@Url.Content("~/AutoGenerateVideo")'><strong class="icons videos">&nbsp;</strong>Autogenerate Video</a></li>
+        @{if (@Model.ViewCampaignStats)
+		{
+    	<li id="ViewCampaignStats"><a href='@Url.Content("~/CampaignStats")'><strong class="icons videos">&nbsp;</strong>Campaigns</a></li>
+		}}
+        <li><a href='@Url.Content("~/Account/Settings")'><strong class="icons settings">&nbsp;</strong> Settings</a></li>
+        <li><a href='@Url.Content("~/Content/Help")'><strong class="icons help">&nbsp;</strong>Help</a></li>
+        <li class="signout"><a href='@Url.Content("~/Home/LogOff")'><strong class="icons signouticon">&nbsp;</strong>Log Off</a></li>
+
+    </ul>
+</div>
+<script type="text/javascript">
+    $(function () {
+        setNavigation();
+    });
+
+    function setNavigation() {
+        var path = window.location.pathname;
+        path = path.replace(/\/$/, "");
+        path = decodeURIComponent(path);
+
+        $(".nav a").each(function () {
+            var href = $(this).attr('href');
+            if (href != null) {
+                if (path.substring(0, href.length) === href) {
+                    $(this).closest('li').addClass('active');
+                }
+            }
+        });
+    }
+</script>
+

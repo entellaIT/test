@@ -1,0 +1,87 @@
+﻿<!--  ===========Popup HTML start Here=======   -->
+@*
+<button type="button" class="btn btn-primary btn-lg btn-Blue" data-toggle="modal" data-target="#myModal">
+    Alert Popup
+</button>
+*@
+
+<!-- Modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog popup-dialog" role="document">
+        <div class="modal-content popupContent">
+            <!--<div class="modal-header popupHeader">
+            <button type="button" class="close closeIcon" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>-->
+            <div class="modal-body popupBody">
+                <p class="messageText text-left" id="pAlertModalText"></p>
+            </div>
+            <div class="modal-footer popupFooter">
+                <button type="button" class="btn btnRed" data-dismiss="modal" id="btnAlertModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*
+<button type="button" class="btn btn-primary btn-lg btn-Blue" data-toggle="modal" data-target="#myModal1">
+    Video Popup
+</button>
+*@
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog popup-dialog" role="document">
+        <div class="modal-content popupContent">
+            <!--<div class="modal-header popupHeader">
+            <button type="button" class="close closeIcon" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>-->
+            <div class="modal-body popupBody">
+                <h2 id="h2ConfirmModalHeader">Confirm</h2>
+                <p id="pConfirmModalText"></p>
+            </div>
+            <div class="modal-footer popupFooter">
+                <button type="button" class="btn btn-lg btn-outerRed btn-lgouter whiteText leftFloat" id="btnConfirmModalCancel">No</button>
+                <button type="button" class="btn btn-lg btnRed" id="btnConfirmModalOk">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  ===========Popup HTML End Here=======   -->
+
+
+<div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="processingpopup" role="document">
+        @*<img src='@Url.Content("~/images/ajax-loader-white.gif")'>
+        <label id="lblProcessingPopMessage"></label>*@
+        <span class="btn btn-transparent"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> <span id="lblProcessingPopMessage">Loading...</span></span>
+    </div>
+</div>
+
+<!-- Modal VideoTitle-->
+<div class="modal fade" id="alertVideoTitle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog popup-dialog" role="document">
+        <div class="modal-content popupContent"> 
+            <div class="modal-body popupBody">
+                <p class="messageText text-left" id="pAlertVideoTitleText">Please enter the title.</p>
+                <input type="text" class="form-control input-lg" placeholder="Enter the title here" name="txtVideoTitle" id="txtVideoTitle"  />
+            </div>
+            <div class="modal-footer popupFooter">
+                <button type="button" class="btn btnRed" data-dismiss="modal" id="btnAlertVideoTitleOk">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal VideoTitle-->
+@*<div class="modal fade" id="previewVideoDiv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog popup-dialog" role="document">
+        <div class="modal-content popupContent">
+            <div class="modal-body popupBody">
+                <div id="JobPreviewVideoDiv">
+                    test
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@

@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Publish Video";
+    ViewBag.Heading = "Publish Video";
+}
+
+<div class="col-sm-9 rightbarInner">
+    <div class="row borderBottom">
+        <ul class="nav nav-tabs tabingNav" role="tablist">
+            <li role="presentation"><a href="create-video-step1.html" aria-controls="home" role="tab" data-toggle="tab"><span class="badge">1</span><span class="textLink">Pick a template</span></a></li>
+            <li role="presentation"><a href="create-video-step2.html" aria-controls="profile" role="tab" data-toggle="tab"><span class="badge">2</span><span class="textLink">Create a video</span></a></li>
+            <li role="presentation" class="active"><a href="#home" aria-controls="messages" role="tab" data-toggle="tab"><span class="badge">3</span><span class="textLink">Publish</span></a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <!--============video detail content start here==========-->
+        <div class="col-sm-9 blog-main">
+            <div class="row" style="position: relative;">
+
+                <p class="text-muted">Processing Video <span class="blueText">23%</span></p>
+                <div class="progress videoProgress">
+                    <div class="progress-bar vp-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 23%;">
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row">
+                <h1 class="redText videoHeading">My Video Title Longer Length</h1>
+                <div class="col-sm-12 lessPaddingL videobtnGroup">
+                    <img src='@Url.Content("~/Content/themes/fastout/images/profilepic.png")' alt="" class="img-circle profilePicSize">
+                    <span class="videodetailText">Created by <strong>Saul Goodman</strong><br>
+                        on <strong>Friday, June 12, 2015 at 9:39 AM</strong></span>
+                </div>
+                <!-- <div class="col-sm-6 textalignRight lessPaddingL videobtnGroup">
+                            <div class="btn-group" role="group" aria-label="Large button group">
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-download-alt  iconSpaceright" aria-hidden="true"></span>Download <span class="glyphicon glyphicon-menu-down iconSpaceleft" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-wrench iconSpaceright" aria-hidden="false"></span> Edit</button>
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-trash iconSpaceright" aria-hidden="true"></span> Delete</button>
+                            </div>                
+                    </div>-->
+            </div>
+        </div>
+        <!--============video detail content end here==========-->
+
+        <!--============video detail right bar start here==========-->
+        <div class="col-sm-3 textrightBar">
+            <div class="blog-sidebar sidebarEdit">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">Quick tips for publishing</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Choose thumbnail carefully</strong><br>
+                            The first thing people will see is your thumbnail. Make sure it is appealing and captures the essence of your video well.
+                        </span>
+                    </div>
+
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">2</span> <span class="groupText">
+                            <strong class="blueText">Share your video in all social media channels</strong><br>
+                            Take advantage of the power of social media by making sure that your video is shared on all your social media sites.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">3</span> <span class="groupText">
+                            <strong class="blueText">Attach your video to sms and mail messages</strong><br>
+                            Video is a really powerful way to communicate new offers. Add it to your sms and mail messages to really showcase your products.
+
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">4</span> <span class="groupText">
+                            <strong class="blueText">Make your video a direct link to your website by adding a “Link in video url”</strong><br>
+                            Make it easy for your customers to reach your site. By adding a direct link right in the video, you guarantee easy access.
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============video detail right bar start here==========-->
+    </div>
+</div>

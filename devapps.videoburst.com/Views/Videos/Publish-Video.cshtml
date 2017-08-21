@@ -1,0 +1,191 @@
+﻿@{
+    ViewBag.Title = "Publish Video";
+    ViewBag.Heading = "Publish Video";
+}
+<div class="col-sm-9 rightbarInner">
+    <div class="row borderBottom">
+        <ul class="nav nav-tabs tabingNav" role="tablist">
+            <li class="PlayMe" id="MJ_d05beb93-8d9d-40ec-bc56-571be237b2de" role="presentation"><a href="create-video-step1.html" aria-controls="home" role="tab" data-toggle="tab"><span class="badge">1</span><span class="textLink">Pick a template</span></a></li>
+            <li role="presentation"><a href="create-video-step2.html" aria-controls="profile" role="tab" data-toggle="tab"><span class="badge">2</span><span class="textLink">Create a video</span></a></li>
+            <li role="presentation" class="active"><a href="#home" aria-controls="messages" role="tab" data-toggle="tab"><span class="badge">3</span><span class="textLink">Publish</span></a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <!--============video detail content start here==========-->
+        <div class="col-sm-9 blog-main">
+            <div class="row" style="position: relative;">
+                <div id="vplayer" style="width: 100%;">
+                </div>
+                @*<span class="timeDiv">@ViewBag.videoDuration</span>*@
+            </div>
+
+            <div class="row">
+                <h1 class="redText videoHeading">@ViewBag.videoTitle</h1>
+                <div class="col-sm-12 lessPaddingL videobtnGroup">
+                    <img src='@Url.Content("~/Content/themes/fastout/images/profilepic.png")' alt="" class="img-circle profilePicSize">
+                    <span class="videodetailText">Created by <strong>@ViewBag.createdBy</strong><br>
+                        on <strong>@ViewBag.CreatedDate</strong></span>
+                </div>
+                <!-- <div class="col-sm-6 textalignRight lessPaddingL videobtnGroup">
+                            <div class="btn-group" role="group" aria-label="Large button group">
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-download-alt  iconSpaceright" aria-hidden="true"></span>Download <span class="glyphicon glyphicon-menu-down iconSpaceleft" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-wrench iconSpaceright" aria-hidden="false"></span> Edit</button>
+                            <button type="button" class="btn btn-default btn-black"><span class="glyphicon glyphicon-trash iconSpaceright" aria-hidden="true"></span> Delete</button>
+                            </div>                
+                    </div>-->
+            </div>
+
+
+            <div class="row borderTop">
+                <div class="col-sm-9">
+
+                    <div class="row">
+                        <h5 class="sliderHeading">Choose thumbnail</h5>
+
+                        <div id="owl-demo" class="owl-carousel owl-theme">
+                            @if(ViewBag.thumbnails!=null)
+                            {
+                           foreach(var thumbnail in ViewBag.thumbnails)
+                            {
+                            <div class="item">
+                                <img src="@Url.Content(thumbnail.url.dsignedurl)" alt="">
+                            </div>
+                            }
+                           }
+                      
+                        </div>
+                        <div class="customNavigation">
+                            <a class="btn prev"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
+                            <a class="btn next"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-3 mobPaddingL">
+
+                    <div class="row" style="margin-left: 0">
+                        <h5 class="sliderHeading">Custom (1920x1080)</h5>
+                        <span class="chooseFiletop">
+                            <img src='@Url.Content("~/Content/themes/fastout/images/choose-file-icon.png")'></span>
+                        @*
+                        <button type="button" class="btn btn-lg btn-black mainWidth border-flat"><span class="downloadIcon"></span>Choose File</button>*@
+                        <div class="actionIcon">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Left Align"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+                                <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Center Align"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
+                                <button type="button" class="btn btn-default border-flat btn-black rightborder" aria-label="Right Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row borderTop">
+                <p class="textalignRight">
+                    @*<span class="defaultText">You have <span class="redText">1</span> video remaining &nbsp;&nbsp;&nbsp;<a href="#" class="redText">Upgrade</a>&nbsp;&nbsp;&nbsp;</span>*@
+                    <button type="button" class="btn btn-md btn-Blue">Edit Video</button>
+                   
+                    <button type="button" class="btn btn-md btnRed" id="btnPublish">Publish Video</button>
+                       @* @Html.ActionLink("Publish Video", "Publish", "Videos", routeValues: null, htmlAttributes: new { @class = "btn btn-md btnRed" })*@
+                </p>
+            </div>
+
+
+
+        </div>
+        <!--============video detail content end here==========-->
+
+
+
+
+        <!--============video detail right bar start here==========-->
+        <div class="col-sm-3 textrightBar">
+            <div class="blog-sidebar sidebarEdit">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">Quick tips for publishing</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Choose thumbnail carefully</strong><br>
+                            The first thing people will see is your thumbnail. Make sure it is appealing and captures the essence of your video well.
+                        </span>
+                    </div>
+
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">2</span> <span class="groupText">
+                            <strong class="blueText">Share your video in all social media channels</strong><br>
+                            Take advantage of the power of social media by making sure that your video is shared on all your social media sites.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">3</span> <span class="groupText">
+                            <strong class="blueText">Attach your video to sms and mail messages</strong><br>
+                            Video is a really powerful way to communicate new offers. Add it to your sms and mail messages to really showcase your products.
+
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">4</span> <span class="groupText">
+                            <strong class="blueText">Make your video a direct link to your website by adding a “Link in video url”</strong><br>
+                            Make it easy for your customers to reach your site. By adding a direct link right in the video, you guarantee easy access.
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============video detail right bar start here==========-->
+    </div>
+</div>
+@section scriptsbottombody{
+ 
+@if (System.Web.Configuration.WebConfigurationManager.AppSettings["jwplayerurl"] !=null){
+    <script type="text/javascript" src='@System.Web.Configuration.WebConfigurationManager.AppSettings["jwplayerurl"]'></script>
+}
+else{   
+    <script type="text/javascript" src="https://jwpsrv.com/library/TrFk4vXxEeODYiIACtqXBA.js"></script>
+}
+@*<script src="~/Content/themes/fastout/js/owl.carousel.js"></script>*@
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/owl.carousel.js"))
+<script type="text/javascript">
+    $(function () {
+        $('#btnPublish').click(function () {
+            var url = "/Videos/Publish";
+           $.post(url,function (data) {
+                if (data != '') {
+                    alertBox(data);
+                }
+                
+            });
+
+        });
+        var playerInstance = jwplayer("vplayer");
+        playerInstance.setup(@Html.Raw(@ViewBag.jwPlayerSetup));
+        
+        $("#owl-demo").owlCarousel({
+            autoPlay: 3000,
+            items : 4,
+            itemsDesktop : [1199,3],
+            itemsDesktopSmall : [979,3]
+        });
+
+        var owl = $("#owl-demo");
+     
+        owl.owlCarousel();
+     
+        // Custom Navigation Events
+        $(".next").click(function(){
+            owl.trigger('owl.next');
+        })
+        $(".prev").click(function(){
+            owl.trigger('owl.prev');
+        })
+    });
+    
+</script>
+
+}

@@ -1,0 +1,269 @@
+﻿@{
+    ViewBag.Title = "Help";
+    ViewBag.Heading = "Help";
+}
+
+<style type="text/css">
+    .carousel-inner > .item {
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
+    }
+
+    .carousel-control.right, .carousel-control.left {
+        background: none;
+        top: 50%;
+        margin-top: -50px;
+        margin-right: 0px;
+    }
+
+        .carousel-control.right:hover, .carousel-control.left:hover {
+            background: none;
+        }
+
+    .carousel-control.left {
+        margin-left: 0px;
+    }
+
+    #_imagesCarousel {
+        margin-top: 15px;
+    }
+
+    .own-carousel > .item, .own-carousel > .active, .own-carousel > .next, .own-carousel > .prev {
+        display: normal !important;
+        float: none;
+    }
+
+    .paddingCarousel {
+        padding: 10px;
+    }
+</style>
+
+@{
+    string domain = System.Configuration.ConfigurationManager.AppSettings["DomainUrl"];
+    string videoUrl = domain + "/loop-videos/help.mp4";
+    string[] filePaths = Directory.GetFiles(Server.MapPath("~/Images/Tutorial")).Select(path => Path.GetFileName(path)).ToArray();
+    int counter = 0;
+    string imgSrc = string.Empty;
+} 
+<div class="col-sm-9 rightBar helpBar">
+    <div class="row">
+        <div class="col-sm-7">
+            <ul class="nav nav-tabs tabing">
+                <li id="liFaq" role="presentation" class="active"><a id="lnkFaq" href="javascript:void(0)">@Resources.ApplicationTranslations.Faq_Text</a></li>
+                @*<li id="liModal" role="presentation"><a id="lnkModal" href="javascript:void(0)">@Resources.ApplicationTranslations.Image_Tutorial</a></li>*@
+            </ul>
+        </div>
+        <div class="col-sm-5 text-right helpSearch">
+            @*<input type="text" class="form-control searchInput" placeholder="Search..."><a href="#" class="glyphicon glyphicon-search searchIcon">&nbsp;</a>*@
+        </div>
+    </div>
+    <div class="row placeholders mainContent topMargin customPad">
+        <div class="content" id="_faqDiv">
+            <div class="col-sm-6 text-left videoMainContent">
+                <div class="row detailrightText helpText lead" style="border-top: 0;">
+                    <span class="badge badgeNumber">1</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_1</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_2 <a href="mailto:support@videoburst.com">@Resources.ApplicationTranslations.Support_Email</a>
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber">2</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_3</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_4 <a href="mailto:sales@videoburst.com">@Resources.ApplicationTranslations.Sales_Email</a> @Resources.ApplicationTranslations.Help_Text_5
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber lead">3</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_6</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_7 <a href="mailto:sales@videoburst.com">@Resources.ApplicationTranslations.Sales_Email</a> @Resources.ApplicationTranslations.Help_Text_5
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber">4</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_8</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_9 <a href="mailto:support@videoburst.com">@Resources.ApplicationTranslations.Support_Email</a> @Resources.ApplicationTranslations.Help_Text_10
+                    </span>
+                </div>
+
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber">5</span> <span class="groupText">
+                        <strong class="blueText">
+                            @Resources.ApplicationTranslations.Help_Text_11
+                        </strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_12
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber lead">6</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_13</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_14 <a href="mailto:sales@videoburst.com">@Resources.ApplicationTranslations.Sales_Email</a> @Resources.ApplicationTranslations.Help_Text_15
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber">7</span> <span class="groupText">
+                        <strong class="blueText">@Resources.ApplicationTranslations.Help_Text_16</strong><br>
+                        @Resources.ApplicationTranslations.Help_Text_17 <a href="mailto:support@videoburst.com">@Resources.ApplicationTranslations.Support_Email</a>
+                    </span>
+                </div>
+                <div class="row detailrightText helpText  lead">
+                    <span class="badge badgeNumber">8</span> <span class="groupText">
+                        <strong class="blueText">Need help with creating a video?</strong><br> If you need help with creating a video you can watch our tutorial.</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-sm-6 text-left paddingBottom">
+                <h2>Create video quick tutorial</h2>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="tutorial_video_11" class="video-js vjs-default-skin embed-responsive-item vjs-big-play-centered"
+                           controls preload="auto" data-setup="{}">
+                        @*<source src="https://d1cjbl87sw1nq.cloudfront.net/upload//68AB312B492C2469577B01084597A7FB.mp4?Expires=1775630493&Signature=G7wHZ0yKgp8JWgR2VdRbX67Th3mR~cAc6xrUsY42bp56cgeLzqCXE3iryCUYthYRsertwbTiIZi59WujzXkq1WQvE0HbAO6KU~qxGsIZ4aOOE0W3BjBXSHzn4in1d~9hXAnZf~iH2K5qhk2yD-3Fd9~XtdX4W6eBSS-gZDeq~1Za2PpvIwQCvJ3nrim5SgRqR1opT3M8QHhhgscjdvTqObvo84OTshCh7RYnN3P45SF76HtlrvvVu5CYF1vsXIFrp4M0nJQLxLND6YEEELQrbNDZMuOX3rIOoZnRZQYa54tUAvz6VcvHHsGZo3rkTwlI9ydwK82AW0Dpvg9hmjyZ8g__&Key-Pair-Id=APKAIJSITFZP2VPYW5LA" type="video/mp4" />*@
+                        <source src="@videoUrl" type="video/mp4" />
+                    </video>
+                </div>
+            </div>
+            <div id="_imgTutorialDiv" class="col-sm-6 text-left paddingBottom"> 
+                   
+
+                <div id="_imagesCarousel" class="carousel slide embed-responsive embed-responsive-16by9" data-ride="carousel" data-interval="false">
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner own-carousel" role="listbox">
+                        @foreach (var item in filePaths)
+                        {
+                            imgSrc = domain + "/Images/Tutorial/" + filePaths[counter];
+
+                            <div class="@(counter == 0 ? "item active" : "item")">
+                                <img src="@Url.Content(imgSrc)" id="_image" onclick="openModalPopupCarousel()" />
+                            </div>
+
+                            counter++;
+                        }
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#_imagesCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#_imagesCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
+
+                  
+            </div>
+        </div>
+
+        
+
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                        <div id="myImagesCarouselPop" class="carousel slide" data-ride="carousel" data-interval="false">
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    counter = 0;
+                                }
+                                @foreach (var item in filePaths)
+                                {
+                                    imgSrc = domain + "/Images/Tutorial/" + filePaths[counter];
+
+                                    <div class="@(counter == 0 ? "item active" : "item")">
+                                        <img src="@Url.Content(imgSrc)" />
+                                    </div>
+
+                                    counter++;
+                                }
+                            </div>
+
+                            <!-- Left and right controls -->
+                            <a class="left carousel-control" href="#myImagesCarouselPop" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myImagesCarouselPop" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div class="pull-left">
+                        </div>
+                        <div class="pull-right">
+                            <input type="submit" class="btn btn-success btn-red roundCorner bigButton" value="Close" data-dismiss="modal" aria-hidden="true" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section styles {
+    <link href="//vjs.zencdn.net/5.0/video-js.min.css" rel="stylesheet">
+}
+
+@section scriptsbottombody{
+    <script src="//vjs.zencdn.net/5.0/video.js"></script>
+
+    <script type="text/javascript">
+        //$('link[rel=stylesheet]').remove();
+
+        $(document).ready(function () {
+
+            var myUserId = '@(NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.id)';
+            var mediaId = 8616;
+            var myPlayer = videojs("#tutorial_video_11");
+            myPlayer.on('play', function () {
+                //console.log('myUserId:' + myUserId);
+                AddCustomViewLog(mediaId, myUserId);
+            }, false);
+
+
+        });
+
+        function openModalPopupCarousel() {
+            $('#myModal').modal('show');
+            $('.carousel').carousel(0);
+            $('#_imagesCarousel').carousel('pause');
+        }
+
+        function AddCustomViewLog(mediaId, myUserId) {
+            var MethodUrl = WebsiteRootPath + "api/VideoBurstAPI/AddCustomViewLog?mediaId=" + mediaId + "&lUserId=" + myUserId;
+            $.getJSON(MethodUrl).done(function (data) {
+                if (Object.keys(data).length > 0) {
+                    // On success, 'data'
+                }
+            });
+        }
+
+        //$('#lnkFaq').click(function () {
+        //    $('#_faqDiv').show();
+        //    $('#_imgTutorialDiv').hide();
+        //    $('#liModal').removeClass('active');
+        //    $('#liFaq').removeClass('active').addClass('active');
+        //    $('.helpSearch').show();
+        //});
+
+        //$('#liModal').click(function () {
+        //    $('#_faqDiv').hide();
+        //    $('#_imgTutorialDiv').show();
+        //    $('#liFaq').removeClass('active');
+        //    $('#liModal').removeClass('active').addClass('active');
+        //    $('.helpSearch').hide();
+        //    $('.carousel').carousel(0);
+        //});
+
+
+
+    </script>
+}

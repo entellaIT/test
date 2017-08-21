@@ -1,0 +1,60 @@
+﻿@model VideoBurstAPI.Entities.RenderTemplates
+
+@{
+    ViewBag.Title = "Add";
+}
+
+<h2>AddRenderTemplate</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>RenderTemplates</legend>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.title)
+            @Html.ValidationMessageFor(model => model.title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.duration)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model=>model.duration)
+            @*@Html.EditorFor(model => model.duration)*@
+            @Html.ValidationMessageFor(model => model.duration)
+        </div>
+
+        <div class="editor-label">
+            @*@Html.LabelFor(model => model.link)*@
+            <label>Preview Link</label>
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.link)
+            @Html.ValidationMessageFor(model => model.link)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.package)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.package)
+            @Html.ValidationMessageFor(model => model.package)
+        </div>
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

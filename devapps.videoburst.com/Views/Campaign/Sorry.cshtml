@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_LayoutGlossyBox.cshtml";
+}
+
+@section styles {
+
+    @if (ViewBag.CampaignCountryISO == "no")
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-theme-inner.css")) 
+    }
+    else
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-theme-inner.css"))
+    } 
+}
+<div class="create-section text-center"> 
+    <div class="create-content">
+        <span class="glyphicon glyphicon-ok-sign thanks-icon" aria-hidden="true"></span>
+            <h2>@Resources.ApplicationTranslations.ThankYou_Text_1 </h2>
+            <p class="lead">You will get a copy of your film very soon! </p>
+       
+    </div>
+</div>
+ 
+@section scriptsbottombody {
+<script type="text/javascript">
+    var campaignid = 2;
+    var pagename = 'Campaign Created';
+    $(document).ready(function () {
+
+        AddCampaignStats(campaignid, pagename );
+    });
+     
+
+</script>
+    }

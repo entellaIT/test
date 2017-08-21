@@ -1,0 +1,282 @@
+﻿@model VideoBurstWeb.Models.UserBillingModel
+
+@{
+    ViewBag.Title = "Confirm Order";
+    ViewBag.heading = "Order Details";
+    Layout = "~/Views/Shared/_LayoutPro.cshtml";
+}
+
+<style>
+    .iconPaypal1 {
+        background-image: url("../Images/paypal-buttons-au.png") !important;
+        background-repeat: no-repeat;
+        border: 1px solid #ccc;
+        height: 53px;
+         
+        width: 260px;
+    }
+    /*.iconPaypal1:hover { 
+        opacity: 1; 
+    }*/
+</style>
+@using (Html.BeginForm("UpgradeProConfirm", "Payment", FormMethod.Post, new { myModel = Model }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-sm-9 rightbarInner generalinnerdiv">
+
+        <div class="row">
+            <!--============Upgrade Content start here==========-->
+            <div class="col-sm-12 marginbottom mobmarginTopBottom">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p>
+                            @if (HttpContext.Current.Request.UrlReferrer != null && !HttpContext.Current.Request.UrlReferrer.ToString().ToLower().Contains("/UpgradePro"))
+                            {
+                                <a href="@HttpContext.Current.Request.UrlReferrer.ToString()" class="btn btn-black" type="button">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-left">
+                                    </span> Back
+                                </a>
+                            }
+                            else
+                            { 
+                                string path = ViewBag.DomainUrl + "payment/UpgradePro?level=" + ViewBag.AccessLevel;
+                                <a href='@path' class="btn btn-black" type="button">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-left">
+                                    </span> Back
+                                </a> 
+                            }
+                        </p>
+                    </div>
+
+                    <div class="col-sm-6 mobileMargin">
+                        <div class="whitebg padding-upgrade box-shadow boxborder-radius">
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    <div class="blue-bg border-radiustopL border-radiustopR padding-topbottom">
+                                        <h3 class="whiteText text-center" style="margin-top:8px;">VideoBurst @Model.AccessLevel</h3> 
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="white-bgborder border-radiusbotL border-radiusbotR"> 
+                                        <p class="padding-upgrade border-bottomlight">
+                                            Get more from your videos with custom  
+                                            templates and commercial music. <br>
+                                            Subscription includes reseller license.
+                                        </p>
+                                        <h3 class="blueText text-center paddingBottom">
+                                            <span class="letter-space text-uppercase">
+                                                @Model.PayTypeInterval:
+                                            </span>
+                                            <span>
+                                                @string.Format("{0:f2} {1}", Model.TotalAmount, ViewBag.Symbol)
+                                            </span>
+                                        </h3>
+
+                                        @*<h3 class="text-center paddingBottom"><span class="letter-space text-uppercase">@Model.PayType: @Model.Amount</span></h3>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="whitebg padding-upgrade box-shadow boxborder-radius">
+
+                            <p class="lead">Dear <strong>@String.Format("{0} {1}", Model.FirstName, Model.LastName)</strong>, <br />Please check your Billing Summary</p>
+                            <div class="form-horizontal">
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Email:</label>
+                                    <div class="col-sm-7 col-xs-7">
+                                        @Model.Email
+                                    </div>
+                                </div>
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Billing Address:</label>
+                                    <div class="col-sm-7 col-xs-7"> 
+                                        @Model.CompanyName, <br />
+                                        @Model.Address, <br />
+                                        @Model.City,<br />                                      
+                                        @Model.PostalCode
+                                    </div>
+                                </div>
+
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Country:</label>
+                                    <div class="col-sm-7 col-xs-7">
+                                        @Model.Country
+                                    </div>
+                                </div>
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Your Plan:</label>
+
+                                    <div class="col-sm-7 col-xs-7">
+                                        @String.Format("{0} / {1}", Model.AccessLevel, Model.PayTypeInterval)
+                                    </div>
+                                </div>
+
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Price:</label>
+                                    <div class="col-sm-7 col-xs-7">@String.Format("{0} {1}", Model.Amount, ViewBag.Symbol) </div>
+                                </div>
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Vat:</label>
+                                    <div class="col-sm-7 col-xs-7">@String.Format("{0:f2} {1}", Model.Vat, ViewBag.Symbol) </div>
+                                </div>
+
+                                @if (Model.Discount > 0)
+                                {
+                                    <div class="form-group removebottomMargin">
+                                        <label class="col-sm-5 col-xs-5">Discount:</label>
+                                        <div class="col-sm-7 col-xs-7">@String.Format("{0:f2} {1}", Model.Discount, ViewBag.Symbol) </div>
+                                    </div>
+                                }
+                                <div class="form-group removebottomMargin">
+                                    <label class="col-sm-5 col-xs-5">Total Amount:</label>
+                                    <div class="col-sm-7 col-xs-7">
+                                        @string.Format("{0:f2} {1}", Model.TotalAmount, ViewBag.Symbol )
+                                    </div>
+                                </div>
+
+                                <p>&nbsp;</p>
+                                <p class="text-right">
+                                    @*<button type="button" class="btn btn-Blue btn-paypal"><strong>PayPal</strong></button>*@
+                                    <input type="submit" value="" name="payment" class="iconPaypal1" />
+                                </p>
+
+                                @Html.HiddenFor(m => m.AccessLevelId)
+                                @Html.HiddenFor(m => m.AccessLevel)
+                                @Html.HiddenFor(m => m.Amount)
+                                @Html.HiddenFor(m => m.Vat)
+                                @Html.HiddenFor(m => m.Email)
+                                @Html.HiddenFor(m => m.Address)
+                                @Html.HiddenFor(m => m.Currency)
+                                @Html.HiddenFor(m => m.FirstName)
+                                @Html.HiddenFor(m => m.LastName)
+                                @Html.HiddenFor(m => m.PayType)
+                                @Html.HiddenFor(m => m.Discount)
+                                @Html.HiddenFor(m => m.CompanyName)
+                                @Html.HiddenFor(m => m.Country)
+                                @Html.HiddenFor(m => m.PostalCode)
+                                @Html.HiddenFor(m => m.City)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+            <!--============Upgrade content end here==========-->
+            <!--============video detail right bar start here==========-->
+            <!--<div class="col-sm-3 textrightBar mobtextrightBar" style="display:none">
+                <div class="blog-sidebar rightsideBar tipsHeight">
+                    <div class="sidebar-module sidebar-module-inset">
+                        <h4 class="rightHeading">Quick tips </h4>
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <!--============video detail right bar start here==========-->
+        </div>
+    </div>
+}
+<p style="height: 5px !important;"></p>
+@*<div class="col-sm-12 " id="1233">
+    <div class="border-bottomlight">
+        <form action="https://sandbox.paypal.com/cgi-bin/webscr" method="post">
+
+            <!-- Identify your business so that you can collect the payments. -->
+            <input type="hidden" name="business" value="parminder.ruhal-facilitator@gmail.com">
+
+            <!-- Specify a Subscribe button. -->
+            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+            <!-- Identify the subscription. -->
+            <input type="hidden" name="item_name" value="Pro Account Local">
+            <input type="hidden" name="item_number" value="ProTest123">
+
+            <!-- Set the terms of the regular subscription. -->
+            <input type="hidden" name="currency_code" value="SEK">
+            <input type="hidden" name="a3" value="1.50">
+            <input type="hidden" name="p3" value="2">
+            <input type="hidden" name="t3" value="D">
+
+            <input type="hidden" name="custom" value="1541">
+            <input type="hidden" name="invoice" value="p215345">
+            <input type="hidden" name="item_number" value="20">
+            <input type="hidden" name="return" value="http://local.videoburstmvc.com/Payment/ReturnPro">
+            <input type="hidden" name="cancel_return" value="http://local.videoburstmvc.com/Payment/ReturnPro">
+            <input type="hidden" name="notify_url" value="http://local.videoburstmvc.com/Paypal/ipn.ashx">
+            <input type="hidden" value="2" name="rm">
+
+            <!-- Filling Out FORMs Automatically for Buyers-->
+            <input type="hidden" name="first_name" value="John">
+            <input type="hidden" name="last_name" value="Doe">
+            <input type="hidden" name="address1" value="9 Elm Street">
+            <input type="hidden" name="address2" value="Apt 5">
+            <input type="hidden" name="city" value="Berwyn">
+            <input type="hidden" name="state" value="PA">
+            <input type="hidden" name="zip" value="19312">
+            <input type="hidden" name="night_phone_a" value="610">
+            <input type="hidden" name="night_phone_b" value="555">
+            <input type="hidden" name="night_phone_c" value="1234">
+            <input type="hidden" name="email" value="jdoe@zyzzyu.com">
+
+            <!-- Set recurring payments until canceled. -->
+            <input type="hidden" name="src" value="1">
+
+            <!-- PayPal reattempts failed recurring payments. -->
+            <input type="hidden" name="sra" value="1">
+
+            <!-- Display the payment button. -->
+            <input type="image" name="submit"
+                   src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_subscribe_113x26.png"
+                   alt="Subscribe">
+            <img alt="" width="1" height="1"
+                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
+        </form>
+    </div>
+</div>*@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#form1").click(function (event) {
+
+            if (confirm("Are you sure, you want to purchase the selected Plan?"))
+                return true;
+            else {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+    });
+
+    $('input[type = submit]').click(function () {
+        StartProcessing("Please don''t refresh the page...");
+    });
+</script>

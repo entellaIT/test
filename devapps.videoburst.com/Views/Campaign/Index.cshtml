@@ -1,0 +1,82 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_DashboardGlossyBox.cshtml";
+
+}
+
+@section styles {
+    @*@Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_" + ViewBag.CampaignCountryISO + "/css/style-planet.css"))*@
+    @if (ViewBag.CampaignCountryISO == "no")
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_no/css/style-theme.css"))
+    }
+    else
+    {
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/bootstrap.min.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-narrow.css"))
+        @Html.IncludeVersionedCss(@Url.Content("~/Content/themes/glossybox_sw/css/style-theme.css"))
+    }
+}
+@if (ViewBag.CampaignCountryISO == "no")
+{
+    <div class="logo"><img src='@Url.Content("~/Content/themes/glossybox_no/img/logo.png")' alt="logo"></div>
+}
+else
+{
+    <div class="logo"><img src='@Url.Content("~/Content/themes/glossybox_sw/img/logo_planet.png")' alt="logo"></div>
+}
+<div class="splash-content">
+    <h1>
+    
+    @if (ViewBag.CampaignCountryISO == "no")
+        { @Html.Raw("Lag din video med tre enkle klikk") }else
+    { @Html.Raw("Skapa en video med tre enkla klick")  }
+    
+    </h1>
+    <p class="lead">@if (ViewBag.CampaignCountryISO == "no")
+{ @Html.Raw("Del med deg av dine sommerminner med en video") }
+else
+{ @Html.Raw("Sprid positivitet och berätta för dina vänner att du tycker om dem!")  }</p>
+    <p class="bg-text">
+        @if (ViewBag.CampaignCountryISO == "no")
+        {
+            @*<button type="button" class="btn btn-lg btnRed" id="btnCreateVideo">@Resources.ApplicationTranslations.Continue_Text</button>*@
+            @Html.ActionLink("Lag din video", "Create/no/847ca150-0224-e611-a307-958b0802fb0d", "Campaign", routeValues: null, htmlAttributes: new { @class = "btn btn-lg btn-primary" })
+        }
+        else
+        { @*<button type="button" class="btn btn-lg btnRed" id="btnCreateVideo">@Resources.ApplicationTranslations.Continue_Text</button>*@
+            @Html.ActionLink("Skapa video", "Create/sw/a4d93a62-0724-e611-a307-958b0802fb0d", "Campaign", routeValues: null, htmlAttributes: new { @class = "btn btn-lg btn-primary" })}
+    </p>
+    @if (ViewBag.CampaignCountryISO == "no")
+    { @Html.Raw("<h3>Del ditt beste sommerminne <br /> Vinn opplevelser til en verdi av 5000 kroner</h3>") } 
+    <p>
+    @if (ViewBag.CampaignCountryISO == "no")
+{ @Html.Raw("Del dine beste sommerminner med en video. Ikke glem å bruk hashtaggen #MinGlossySommer på Instagram for å delta i konkurransen der årets beste sommerbilde vinner et gavekort på tickmaster.no til en verdi av 5000 kroner. Vinneren kåres den 18 juli.") }
+else
+{ @Html.Raw("<br /><br />Skapa en video och berätta för dina nära och kära att du tycker om dem! Postar du videon på Instagram och hashtaggar #KärleksfulltInternet är du med och sprider positivitet och har chans att vinna en nöjesweekend för dig och upp till 3 vänner, värde ca 8.000 kronor!")  }
+     </p>
+</div>
+
+@section scriptsbottombody {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var campaignid = 2;
+            var pagename = 'Views';
+            if ('@ViewBag.CampaignCountryISO' == "no")
+            {
+                campaignid = 3;
+            }
+            
+            AddCampaignStats(campaignid, pagename);
+        });
+
+    </script>
+}

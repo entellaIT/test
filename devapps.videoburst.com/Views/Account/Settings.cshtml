@@ -1,0 +1,241 @@
+﻿@model VideoBurstAPI.Entities.UserProfile
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Heading = "Settings";
+}
+
+@section styles {
+    @*<link href='@Url.Content("~/Scripts/Crop/cropper.css")' rel="stylesheet" />*@
+    @Html.IncludeVersionedCss(@Url.Content("~/Scripts/Crop/cropper.css"))
+    <style>
+        .ui-front {
+            z-index: 105 !important;
+        }
+
+        .thumbcheckbox {
+            /*z-index: 10;*/
+        }
+
+        .ui-datepicker-div {
+            z-index: 120 !important;
+        }
+
+        .thumbRow .thumb {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        .croppopup {
+            z-index: 5001 !important;
+        }
+
+        .dropZone {
+            border: 2px dotted #0B85A1;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            /*padding: 10px 10px 10px 10px;
+            margin-bottom: 10px;*/
+            /*font-size: 200%;*/
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .progressBar {
+            width: 85%;
+            height: 100%;
+            text-align: center;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+            background: #e5e5f0;
+        }
+
+            .progressBar div {
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+                width: 0;
+                background-color: #0ba1b5 !important;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+
+        .statusbar {
+            height: 20px;
+            width: 70%;
+            padding: 0px;
+            vertical-align: top;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: inline-block;
+            background: none;
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            z-index: 101;
+        }
+
+        .filename {
+            display: inline-block;
+            vertical-align: top;
+            width: 250px;
+        }
+
+        .filesize {
+            display: inline-block;
+            vertical-align: top;
+            color: #30693D;
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .abort {
+            /*background-color: #A8352F;*/
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            display: inline-block;
+            color: #f00;
+            cursor: pointer;
+            vertical-align: top;
+            /*float:right;*/
+            line-height: 22px;
+            margin-left: 2px;
+            width: 10%;
+        }
+
+        img.ColorPicker_Caller {
+            padding: 6.9px !important;
+        }
+
+        .editThumb {
+            left: 26px;
+        }
+    </style>
+
+}
+@using (Html.BeginForm("Settings", "Account"))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-sm-9 rightBar">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs tabing">
+                    <li role="presentation">@Html.ActionLink("Change Password", "ChangePassword", "Account", routeValues: null, htmlAttributes: null)</li>
+                    <li role="presentation" class="active"><a>User Settings</a></li>
+                    <li role="presentation">@Html.ActionLink("Payment History", "history", "Payment", routeValues: null, htmlAttributes: null)</li>
+                    @if (NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.IsCompanyAdmin)
+                    {
+                        <li role="presentation">@Html.ActionLink("Administration", "Administration", "CompanyInvitation", routeValues: null, htmlAttributes: null)</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="row padding-topbottom paddingLeftsetting">
+
+            <div class="col-sm-4">
+                <p class="text-left"><strong>Profile Picture</strong> (300x451)</p>
+                <div class="fixwidthDiv">
+                    @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(true, "image", Guid.NewGuid().ToString(), 300, 451, 300, 300, (!String.IsNullOrEmpty(Model.picture)) ? Model.picture : "", "picture"))
+                </div>
+            </div>
+            @*<div class="col-sm-4 text-center">
+                    <p class="text-left"><strong>@Resources.ApplicationTranslations.Profile_Picture_Text</strong> (300x451)</p>
+                    <div class="placeholder imgBg removebottomMargin">
+                        <div title="Click here to select or drop an image here." id="divImageFile" class='dropZone' data-type='image' data-width='300' data-height='451'
+                             style='background-image: url("@if (!String.IsNullOrEmpty(@ViewBag.thumburl)) { @Url.Content(@ViewBag.thumburl) } else {@Url.Content("~/images/img-default.png")}");background-repeat: no-repeat; background-position :center center; width: 200px !important; height:300px !important; background-size: 100%; overflow:hidden; position: relative;'>
+                        </div>
+                        <input class="btn btn-lg btn-black mainWidth border-flat" type="file" accept='image/*'
+                               id="fileInput" />
+                    </div>
+                    <div class="btn-group settingBtn">
+                        <button type="button" id="ancEdit" class="btn btn-default border-flat btn-black" aria-label="Center Align" onclick="edit(this)"
+                                style='@if(@ViewBag.panelVisible) { @Html.Raw("display:block;")  } else {  @Html.Raw("display:none;")  }'>
+                            <span class=" glyphicon glyphicon-wrench" aria-hidden="true">
+                            </span>&nbsp;&nbsp;Edit
+                        </button>
+
+                        <button type="button" id="anchDelete" class="btn btn-default border-flat btn-black" aria-label="Right Align" style='@if(@ViewBag.panelVisible) { @Html.Raw("display:block;")  } else {  @Html.Raw("display:none;")  }' onclick="_delete(this)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;&nbsp;@Resources.ApplicationTranslations.Delete_Text</button>
+                    </div>
+                    <input type="hidden" id="hdUserImageUrl" value="@Model.picture" name="picture" />
+                </div>*@
+
+            <div class="col-sm-5">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">* @Resources.ApplicationTranslations.Name_Text</label>
+                        @if (@TempData.ContainsKey("FbName") && !String.IsNullOrEmpty(Convert.ToString(@TempData["FbName"])))
+                        {
+                            <input type="text" class="form-control" id="txtName" placeholder="" value="@ViewContext.Controller.TempData["FbName"]" name="name">
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" id="txtName" placeholder="" value="@Model.name" name="name">
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">* @Resources.ApplicationTranslations.Phone_Number_Text</label>
+                        <input type="text" class="form-control" id="txtMobile" placeholder="" value="@Model.mobile" name="mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">@Resources.ApplicationTranslations.TimeZone_Text</label>
+                        <select class="form-control" id="ddlTimezone" name="utcoffset">
+                            <option value="0">@Resources.ApplicationTranslations.UTC_Timezone_Text</option>
+                            <option value="1" selected="selected">@Resources.ApplicationTranslations.Sweden_Timezone_Text</option>
+                            <option value="5.5">@Resources.ApplicationTranslations.India_Timezone_Text</option>
+                        </select>
+                    </div>
+                    <p>
+                        <button type="button" id="btnUpdateSettings" class="btn btn-default btn-Blue" onclick="VUP(this)">@Resources.ApplicationTranslations.Settings_Update_Text</button>
+                    </p>
+                </form>
+            </div>
+            <div class="col-sm-3">&nbsp;</div>
+        </div>
+    </div>
+}
+@Html.Partial("_CropPopupPartial")
+
+@section scriptsbottombody {
+    <script type="text/javascript">
+        function VUP(event) {
+
+            var result = false;
+            if ($('#txtName').val().trim() == '') {
+                alertBox('@Resources.ApplicationTranslations.Name_Error');
+            }
+            else if ($('#txtMobile').val().trim() == '') {
+                alertBox('@Resources.ApplicationTranslations.CellPhone_Error');
+            }
+            else if ($('#txtMobile').val().trim() != '' && !isvalidPhone($('#txtMobile').val().trim())) {
+                alertBox('@Resources.ApplicationTranslations.CellPhone_Error1');
+            }
+            else {
+                result = true;
+            }
+
+            if (result) {
+                $('form').submit();
+            }
+
+        }
+        $(document).ready(function () {
+            if ($("#ddlTimezone option[value='@Model.utcoffset']").length > 0)
+                $('#ddlTimezone option[value="@Model.utcoffset"]').prop('selected', true);
+
+        });
+    </script>
+    @*<script src='@Url.Content("~/Scripts/UploadControl.js")' type="text/javascript"></script>
+        <script src='@Url.Content("~/Scripts/Crop/cropper.js")'></script>*@
+
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/UploadControl.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/Crop/cropper.js"))
+    @*<script src='@Url.Content("~/Scripts/settings.js")' type="text/javascript"></script>*@
+}

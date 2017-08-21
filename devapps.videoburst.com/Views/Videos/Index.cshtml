@@ -1,0 +1,202 @@
+﻿@{
+    ViewBag.Title = "Videos";
+    ViewBag.Heading = "Videos";
+}
+
+<input id="hdnRootPath" type="hidden" value='@Url.Content("~/images/thumbnail_vb_icon.png")' />
+
+<div class="col-sm-9 rightBar">
+    <div class="row">
+        <div class="col-sm-7">
+            <ul class="nav nav-tabs tabing">
+                <li id="liVPublished" role="presentation"><a id="lnkVPublished" href="javascript:void(0)">@Resources.ApplicationTranslations.Published_Text</a></li>
+                <li id="liVDrafts" role="presentation"><a id="lnkVDrafts" href="javascript:void(0)">@Resources.ApplicationTranslations.Drafts_Text</a></li>
+                @if ((Convert.ToInt64(System.Configuration.ConfigurationManager.AppSettings["StatsForCompany"]) == NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.companyid)
+    || NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.companyid == 1)
+                {
+                    <li id="liVCampaigns" role="presentation"><a id="lnkVCampaigns" href="javascript:void(0)">Campaigns</a></li>
+                }
+                @*<li id="liVFApproval" role="presentation"><a id="lnkVFApproval" href="javascript:void(0)">For approval</a> <span id="spnVFApproval" class="badge activebadge badgetop">3</span></li>
+                *@
+            </ul>
+        </div>
+        <div class="col-sm-5 mainSearch">
+            <input id="txtVSearch" type="text" class="form-control searchInput" placeholder="Search..."><a id="lnkVSearch" href="javascript:void(0)" class="glyphicon glyphicon-search searchIcon">&nbsp;</a>
+        </div>
+    </div>
+
+    <div class="row placeholders mainContent topMarginTemp">
+        <div class="content">
+            <div class="row filterAlign" id="collapseExample">
+                <div id="divTotalVideoInfo" class="col-sm-3 tempCount tempCount1"><span class="blueText">&nbsp;</span> &nbsp;</div>
+                <div class="col-sm-9 sorting rightText">
+                    <button type="button" class="btn dropdown-toggle btn-Blue sortingDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Resources.ApplicationTranslations.Sorting_By_Text&nbsp;<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a id="lnkVByDate" href="javascript:void(0)">@Resources.ApplicationTranslations.By_Date_Text</a></li>
+                        <li><a id="lnkVByViews" href="javascript:void(0)">@Resources.ApplicationTranslations.By_Views_Text</a></li>
+                        <li><a id="lnkVByName" href="javascript:void(0)">@Resources.ApplicationTranslations.By_Name_Text</a></li>
+                        <li><a id="lnkVByDuration" href="javascript:void(0)">@Resources.ApplicationTranslations.By_Duration_Text</a></li>
+                        <li><a id="lnkVDoneByMe" href="javascript:void(0)">@Resources.ApplicationTranslations.Done_By_Me</a></li>
+                    </ul>
+                    <span class="filterDiv">
+                        @Resources.ApplicationTranslations.Sort_By_Filter
+                        <a id="lnkVDate" href="javascript:void(0)" class="filters active">@Resources.ApplicationTranslations.Date_Filter</a>
+                        <a id="lnkVViews" href="javascript:void(0)" class="filters">@Resources.ApplicationTranslations.Views_Filter</a>
+                        <a id="lnkVName" href="javascript:void(0)" class="filters">@Resources.ApplicationTranslations.Name_Filter</a>
+                        <a id="lnkVDuration" href="javascript:void(0)" class="filters">@Resources.ApplicationTranslations.Duration_Filter</a>
+                        <a id="lnkVDoneByMe" href="javascript:void(0)" class="filters">@Resources.ApplicationTranslations.Done_By_Me</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div id="divVideoLists" class="row leftAlign">
+            </div>
+        </div>
+    </div>
+    <input id="hdnPageNo" type="hidden" />
+    <input id="hdnPageSize" type="hidden" />
+    <input id="hdnSortColumn" type="hidden" />
+    <input id="hdnSortOrder" type="hidden" />
+    <input id="hdnOwnership" type="hidden" />
+    <input id="hdnVideoType" type="hidden" />
+    <input id="hdnOptimized" type="hidden" value='@System.Configuration.ConfigurationManager.AppSettings["IsOptimized"].ToString()' />
+</div>
+
+@section scriptsbottombody{
+    @*<script type="text/javascript" src='@Url.Content("~/Scripts/templates.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/templates.js"))
+
+    <script type="text/javascript">
+        //var vVideoThumbUrl = application.viewbag.appSettings["DefaultVideoThumbUrl"];
+        var vVideoThumbUrl = "https://d1cjbl87sw1nq.cloudfront.net/upload/7DBDE1903497F13D6E5EB64BE2318880.png?Expires=1744893142&amp;Signature=Xry3rkntWXwGM7uiBS3fXEAKPID4fZfBeMIMMEAZMmuKmp2w~OYfgVCaS3uPR4VbAXhSH-sw-~7680rG~VhSI4Hf32jiPjJNL7lBhznz1t4yZdbJzhyXq-vPIEqwbArQ0rsKAMhTeeodimTt6xRzpFeDHUy4STW2pMgutUR0c01Cg-6hX2tSm04ih6-xFWXC4CG0AjQ4xQ4j1ADAxWQ9SEaKosTaZG5pZCG-wXMeDjrDlLjfiEmUcoV4HvcmAGtrticjCQesfja-lg7k20ILrbroSCiNMX1REQT5AawOaTgUpQHsLJtOHxP8IypRIe3sDjOIdRdAh5rNhT57s6S62Q__&amp;Key-Pair-Id=APKAIJSITFZP2VPYW5LA";
+
+        $(document).ready(function () {
+            var vPageSize = 18;
+            var vOwnership = 2;
+            var vVideoType = parseInt('@ViewBag.JobStatus');
+            fnResetVideoOptions(vVideoType);
+            var vSortColumn = '@ViewBag.SortColumn';
+            var vSortOrder = '@ViewBag.SortOrder';
+
+            var vPgNumber = parseInt('@ViewBag.vPgNumber');
+            var vPgScrollToPos = parseInt('@ViewBag.vPgScrollTo');
+
+            StartProcessing(true, "Please wait...");
+            //if (vPgNumber == 0) {
+            //    fnBindVideos(vOwnership, vVideoType, 0, vPageSize, vSortColumn, vSortOrder);
+            //    $("#hdnPageNo").val(0);
+            //    $("#hdnPageSize").val(vPageSize);
+            //} else {
+            var tempPageSize = (vPgNumber * vPageSize) + vPageSize;
+            fnBindVideos(vOwnership, vVideoType, 0, tempPageSize, vSortColumn, vSortOrder);
+
+            setTimeout(function () {
+                $("#hdnPageNo").val(vPgNumber);
+                $("#hdnPageSize").val(vPageSize);
+                $('html, body').animate({ scrollTop: vPgScrollToPos - 200 }, 500);
+            }, 2000);
+
+
+            //}
+
+
+        });
+
+        $(document).on('click', '#lnkVPlay img.playButton', function (event) {
+            if ($(this).attr("id") != null) {
+                event.preventDefault();
+                var vJobGUId = $(this).attr('id');
+                var vSortColumn = $("#hdnSortColumn").val();
+                var vSortByColumn = 0;
+                if (vSortColumn.trim().toLowerCase() == "created")
+                    vSortByColumn = 1;
+                if (vSortColumn.trim().toLowerCase() == "totalviews")
+                    vSortByColumn = 2;
+                if (vSortColumn.trim().toLowerCase() == "title")
+                    vSortByColumn = 3;
+                if (vSortColumn.trim().toLowerCase() == "duration")
+                    vSortByColumn = 4;
+
+                var vSortOrder = $("#hdnSortOrder").val() == "DESC" ? 2 : 1;
+
+                // window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId + "~" + vSortByColumn + "~" + vSortOrder;
+                StartProcessing(true, "Please wait...");
+                fnGetJobStatus(vJobGUId, vSortByColumn, vSortOrder);
+
+            }
+        });
+
+        $(window).scroll(function () {
+            //alert($(document).height() + '  ' + $(window).scrollTop() + '  ' + $(window).height() +'  '+ (($(document).height()) - ($(window).scrollTop() + $(window).height())));
+
+            var vScrollPosition = $(document).height() - ($(window).scrollTop() + $(window).height());
+
+            if ((vScrollPosition % 25) == 0 && vScrollPosition <= 200)  //user scrolled to bottom of the page?
+            {
+                var vPageSize = $("#hdnPageSize").val();
+                var vOwnership = parseInt($("#hdnOwnership").val());
+                var vVideoType = parseInt($("#hdnVideoType").val());
+                var vPageNo = parseInt($("#hdnPageNo").val()) + 1;
+                var vSortColumn = $("#hdnSortColumn").val();
+                var vSortOrder = $("#hdnSortOrder").val();// == "DESC" ? "ASC" : "DESC";
+
+                fnBindVideos(vOwnership, vVideoType, vPageNo, vPageSize, vSortColumn, vSortOrder);
+            }
+        });
+
+        function fnShowVideoDetail(vJobGUId) {
+            var vSortColumn = $("#hdnSortColumn").val();
+
+            var vSortByColumn = 0;
+            if (vSortColumn.trim().toLowerCase() == "created")
+                vSortByColumn = 1;
+            if (vSortColumn.trim().toLowerCase() == "totalviews")
+                vSortByColumn = 2;
+            if (vSortColumn.trim().toLowerCase() == "title")
+                vSortByColumn = 3;
+            if (vSortColumn.trim().toLowerCase() == "duration")
+                vSortByColumn = 4;
+            StartProcessing(true, "Please wait...");
+            var vSortOrder = $("#hdnSortOrder").val() == "DESC" ? 2 : 1;
+            fnGetJobStatus(vJobGUId, vSortByColumn, vSortOrder);
+
+        }
+
+        function fnGetJobStatus(vJobGUId, vSortByColumn, vSortOrder) {
+            var vPgNumber = $("#hdnPageNo").val();
+            var url = WebsiteRootPath + "api/VideoBurstAPI/GetJStatus/" + vJobGUId;
+            var vPgScrollTo = Math.round($('#' + vJobGUId).offset().top);
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != 'undefined') {
+                        if (data <= 1000) {
+                            window.location.href = '@Url.Content("~/Videos/Edit/")' + vJobGUId;
+                        }
+                        else {
+                            window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId + "~" + vSortByColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollTo;
+                        }
+                    } else {
+                        window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId + "~" + vSortByColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollTo;
+                    }
+                },
+                error: function () {
+                    window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId + "~" + vSortByColumn + "~" + vSortOrder + "~" + vPgNumber + "~" + vPgScrollTo;
+                }
+            });
+
+        }
+
+        function fnCopyVideo(vJobGUId) {
+            StartProcessing(true, "Please wait...");
+            window.location.href = '@Url.Content("~/Videos/Duplicate/")' + vJobGUId + "/true";
+        }
+    </script>
+}
+

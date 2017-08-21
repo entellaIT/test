@@ -1,0 +1,24 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Welcome to Videoburst";
+    Layout = "~/Views/Shared/_LayoutGlossyBox.cshtml";
+}
+
+<div class="create-section text-center"> 
+    <div class="create-content">
+        <p class="lead"> Vi är nästan klara. Skriv in din email adress så skickar vi dig en kopia av din film snarast! </p>
+        <form class="form-validate">
+            <div class="custom-form">
+                <div class="input-group">
+                    <label class="sr-only" for="">Email</label>
+                    <div class="input-group-addon"> <span class="glyphicon glyphicon-envelope"></span> </div>
+                    <input class="form-control" type="email" placeholder="dinemail@mail.com" required>
+                </div>
+                <p class="extra-gap">
+                    @Html.ActionLink("Skapa video", "ThankYou", "Campaign", routeValues: null, htmlAttributes: new { @class = "btn btn-lg btn-primary" })
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+ 

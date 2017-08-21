@@ -1,0 +1,87 @@
+﻿@model  IEnumerable<VideoBurstAPI.Entities.UserPaymentHistory>
+@{
+    ViewBag.Title = "Payment History";
+    ViewBag.heading = "User Payment History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-sm-9 rightBar">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs tabing">
+                <li role="presentation">@Html.ActionLink("Change Password", "ChangePassword", "Account", routeValues: null, htmlAttributes: null)</li>
+                <li role="presentation">@Html.ActionLink("User Settings", "Settings", "Account", routeValues: null, htmlAttributes: null)</li>
+                <li role="presentation" class="active"><a>Payment History</a></li>
+                @if (NSS.Authentication.BL.SingletonLoggedInUser.IUserInstance.IsCompanyAdmin)
+                {
+                    <li role="presentation">@Html.ActionLink("Administration", "Administration", "CompanyInvitation", routeValues: null, htmlAttributes: null)</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row padding-topbottom paddingLeftsetting table-responsive">
+        <h5 class="planHeading black-text">
+            @if (@ViewBag.CompanyName != null)
+            {
+                <b>Company: </b> @ViewBag.CompanyName
+            }
+        </h5>
+        <table class="table">
+
+            <tr>
+                <th>Package</th>
+                <th>Time Period</th>
+                <th>Subscription Date</th>
+                <th>Renewal Date</th>
+                <th>Price</th>
+                <th>Vat</th>
+                @*<th>Discount</th>*@
+                <th>Total </th>
+                @*<th>Type</th>*@
+                <th>Profile</th>
+                <th>Payment</th>
+            </tr>
+
+            @foreach (var upy in Model)
+            {
+                <tr>
+                    <td class="left">@upy.Package</td>
+                    <td class="left">@upy.TimePeriod</td>
+                    <td class="left">
+                        @(upy.ProfileStatus.ToLower() == "cancelled" ? "" : string.Format("{0:yyyy-MM-dd}", upy.SubscriptionStartDate))
+                    </td>
+                    <td class="left">
+                        @(upy.ProfileStatus.ToLower() == "cancelled" ? "" : string.Format("{0:yyyy-MM-dd}", upy.RenewalDate))
+
+                    <td class="left">@upy.PaidAmount @CurrencySymbol(upy.Currency)</td>
+
+                    <td class="left">@upy.PaidVat @CurrencySymbol(upy.Currency)</td>
+                    @*<td class="left">@upy.PaidDiscount @CurrencySymbol(upy.Currency)</td>*@
+                    <td class="left">
+                        @upy.TotalAmount @CurrencySymbol(upy.Currency)
+                    </td>
+                    @*<td class="left">@upy.PaymentType</td>*@
+                    @*<td class="left">@(upy.IsActive ? "Yes" : "No") </td>*@
+                    <td class="left">@upy.ProfileStatus</td>
+                    <td class="left">@upy.PaymentStatus</td>
+                </tr>
+            }
+
+            @functions{
+                public string CurrencySymbol(string currency)
+                {
+                    string symbol = "$";
+                    if (currency.ToLower().Equals("usd"))
+                        symbol = "$";
+                    else if (currency.ToLower().Equals("sek"))
+                        symbol = "kr";
+                    else
+                        symbol = "kr";
+
+                    return symbol;
+                }
+            }
+        </table>
+    </div>
+
+    <p style="height: 5px !important;"></p>
+</div>

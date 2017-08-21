@@ -1,0 +1,450 @@
+﻿@model VideoBurstAPI.Entities.UpgradeUserModel
+
+@{
+    ViewBag.Title = "Upgrade";
+    ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-2.1.1.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.unobtrusive.js"))
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/bootstrap.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/holder.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie10-viewport-bug-workaround.js"))
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    <!-- FlexSlider -->
+    @*<script src="js/owl.carousel.js"></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/owl.carousel.js"))
+    <style>
+        .ui-front {
+            z-index: 105 !important;
+        }
+
+        .thumbcheckbox {
+            /*z-index: 10;*/
+        }
+
+        .ui-datepicker-div {
+            z-index: 120 !important;
+        }
+
+        .thumbRow .thumb {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        .croppopup {
+            z-index: 5001 !important;
+        }
+
+        .dropZone {
+            border: 2px dotted #0B85A1;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            /*padding: 10px 10px 10px 10px;
+                margin-bottom: 10px;*/
+            font-size: 200%;
+            background-repeat: no-repeat;
+        }
+
+        .progressBar {
+            width: 85%;
+            height: 100%;
+            text-align: center;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+            background: #e5e5f0;
+        }
+
+            .progressBar div {
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+                width: 0;
+                background-color: #0ba1b5 !important;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+
+        .statusbar {
+            height: 20px;
+            width: 70%;
+            padding: 0px;
+            vertical-align: top;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: inline-block;
+            background: none;
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            z-index: 101;
+        }
+
+        .filename {
+            display: inline-block;
+            vertical-align: top;
+            width: 250px;
+        }
+
+        .filesize {
+            display: inline-block;
+            vertical-align: top;
+            color: #30693D;
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .abort {
+            /*background-color: #A8352F;*/
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            display: inline-block;
+            color: #f00;
+            cursor: pointer;
+            vertical-align: top;
+            /*float:right;*/
+            line-height: 22px;
+            margin-left: 2px;
+            width: 10%;
+        }
+
+        img.ColorPicker_Caller {
+            padding: 6.9px !important;
+        }
+
+        .editThumb {
+            left: 26px;
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+    </style>
+
+}
+@using (Html.BeginForm("Upgrade3", "Payment", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <!--=============Right Side HTML Start here============== -->
+
+    <div class="col-sm-9 rightbarInner generalinnerdiv">
+
+        <div class="row">
+            <!--============Upgrade Content start here==========-->
+            <div class="col-sm-9 rightbarInner generalinnerdiv">
+
+                <div class="row">
+                    <!--============Upgrade Content start here==========-->
+                    <div class="col-sm-9 marginbottom mobmarginTopBottom">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p>
+                                    <a href="upgrade3.html" class="btn btn-black" type="button"><span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span> Back</a>
+                                </p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="whitebg padding-upgrade box-shadow boxborder-radius">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4>Summary</h4>
+                                            <div class=" blue-bg border-radiustopL border-radiustopR padding-topbottom">
+                                                <h3 class="whiteText text-center" style="margin-bottom:3px;">Videoburst Enterprise</h3>
+                                                <p class="small text-center whiteText">
+                                                    renews on March 18, 2017<br>
+                                                    Don't worry, you can cancel anytime before it renews.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="white-bgborder border-radiusbotL border-radiusbotR">
+
+                                                <p class="padding-upgrade border-bottomlight">
+                                                    Get more from your videos with custom <br>
+                                                    templates and commercial music. <br>
+                                                    Subscription includes reseller license.
+                                                </p>
+                                                <h3 class="border-bottomlight blueText text-center paddingBottom">
+                                                    <span class="letter-space text-uppercase">Yearly: $ 1,000</span><br>
+                                                    <span class="small blueText">($83/mo billed annually)</span>
+                                                </h3>
+
+                                                <h3 class="text-center paddingBottom"><span class="letter-space text-uppercase">Monthly: $120</span></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="whitebg padding-upgrade marginTop box-shadow boxborder-radius">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4>Subscription information</h4>
+                                            <div class=" blue-bg border-radiustopL border-radiustopR padding-topbottom">
+                                                <h3 class="whiteText text-center">Videoburst Enterprise</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="white-bgborder border-radiusbotL border-radiusbotR">
+                                                <ul class="marginTop marginbottom listmarginleft">
+                                                    <li>Things</li>
+                                                    <li>Stuff</li>
+                                                    <li>Money</li>
+                                                    <li>Eternal love</li>
+                                                    <li>Bling bling</li>
+                                                    <li>The iron throne</li>
+                                                    <li>A free hot dog</li>
+                                                    <li>Unlimited pizza</li>
+                                                    <li>The white house</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-7">
+                                <div class="whitebg box-shadow boxborder-radius">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="padding-upgrade">
+                                                <h4>Billing Details</h4>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-xs-6">
+                                                            <p>
+                                                                First Name<br>
+                                                                <input name="" type="text" class="form-control">
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-sm-6 col-xs-6">
+                                                            <p>
+                                                                Last Name<br>
+                                                                <input name="" type="text" class="form-control">
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="col-sm-12">
+                                                            <p>
+                                                                Country<br>
+                                                                <select name="" class="form-control">
+                                                                    <option>Select Country</option>
+                                                                    <option>India</option>
+                                                                    <option>Sweden</option>
+                                                                </select>
+                                                            </p>
+                                                            <p>
+                                                                Address<br>
+                                                                <input name="" type="text" class="form-control">
+                                                            </p>
+                                                            <p>
+                                                                Postal Code<br>
+                                                                <input name="" type="text" class="form-control">
+                                                            </p>
+                                                            <p>
+                                                                City<br>
+                                                                <input name="" type="text" class="form-control">
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12">
+                                            <div class="border-bottomlight">
+                                                <div class="padding-upgrade paddingtopless">
+                                                    <h4>Invoice Details</h4>
+                                                    <form>
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-xs-6">
+                                                                <p>
+                                                                    First Name<br>
+                                                                    <input name="" type="text" class="form-control">
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-sm-6 col-xs-6">
+                                                                <p>
+                                                                    Last Name<br>
+                                                                    <input name="" type="text" class="form-control">
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-sm-12">
+                                                                <p>
+                                                                    Country<br>
+                                                                    <select name="" class="form-control">
+                                                                        <option>Select Country</option>
+                                                                        <option>India</option>
+                                                                        <option>Sweden</option>
+                                                                    </select>
+                                                                </p>
+                                                                <p>
+                                                                    Address<br>
+                                                                    <input name="" type="text" class="form-control">
+                                                                </p>
+                                                                <p>
+                                                                    Postal Code<br>
+                                                                    <input name="" type="text" class="form-control">
+                                                                </p>
+                                                                <p>
+                                                                    City<br>
+                                                                    <input name="" type="text" class="form-control">
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12">
+                                            <div class="padding-upgrade">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-xs-6 text-uppercase"><strong>Total : $1,000</strong></div>
+                                                    <div class="col-sm-6 col-xs-6 text-right"><button type="button" class="btn btnred text-uppercase"><strong>Purchase</strong></button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============Upgrade content end here==========-->
+                    <!--============video detail right bar start here==========-->
+                    <div class="col-sm-3 textrightBar mobtextrightBar">
+                        <div class="blog-sidebar rightsideBar tipsHeight">
+                            <div class="sidebar-module sidebar-module-inset">
+                                <h4 class="rightHeading">Quick tips for publishing</h4>
+                                <div class="row detailrightText">
+                                    <span class="badge badgeNumber">1</span> <span class="groupText">
+                                        <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </span>
+                                </div>
+
+                                <div class="row detailrightText">
+                                    <span class="badge badgeNumber">1</span> <span class="groupText">
+                                        <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </span>
+                                </div>
+
+                                <div class="row detailrightText">
+                                    <span class="badge badgeNumber">1</span> <span class="groupText">
+                                        <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </span>
+                                </div>
+
+                                <div class="row detailrightText">
+                                    <span class="badge badgeNumber">1</span> <span class="groupText">
+                                        <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============video detail right bar start here==========-->
+                </div>
+            </div>
+            <!--============Upgrade content end here==========-->
+            <!--============video detail right bar start here==========-->
+            <div class="col-sm-3 textrightBar mobtextrightBar">
+                <div class="blog-sidebar rightsideBar tipsHeight">
+                    <div class="sidebar-module sidebar-module-inset">
+                        <h4 class="rightHeading">Quick tips for publishing</h4>
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+
+                        <div class="row detailrightText">
+                            <span class="badge badgeNumber">1</span> <span class="groupText">
+                                <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--============video detail right bar start here==========-->
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#owl-demo").owlCarousel({
+            autoPlay: false,
+            items: 4,
+            itemsDesktop: [1199, 3],
+            itemsDesktopSmall: [979, 3]
+        });
+
+    });
+
+    $(document).ready(function () {
+
+        var owl = $("#owl-demo");
+
+        owl.owlCarousel();
+
+        // Custom Navigation Events
+        $(".next").click(function () {
+            owl.trigger('owl.next');
+        })
+        $(".prev").click(function () {
+            owl.trigger('owl.prev');
+        })
+
+        $("#searchmob").click(function () {
+
+            //$('.mobSearch').slideToggle('fast');
+
+            if ($(".mobSearch").is(":hidden")) {
+                $('.mobSearch').show();
+            }
+            else {
+                $('.mobSearch').hide();
+            }
+
+        });
+
+    });
+</script>
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

@@ -1,0 +1,668 @@
+﻿@model VideoBurstWeb.Models.BindVideoModel
+
+@{
+    ViewBag.Title = "Create Video";
+    ViewBag.Heading = "Create Video";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scriptstopbody
+{
+    <script type="text/javascript" src='@if (@System.Configuration.ConfigurationManager.AppSettings["jwplayerurl"] != null) { @Url.Content(@System.Configuration.ConfigurationManager.AppSettings["jwplayerurl"]) } else { @Url.Content("https://jwpsrv.com/library/TrFk4vXxEeODYiIACtqXBA.js")}'></script>
+}
+@section styles {
+    <link href='@Url.Content("~/Scripts/Crop/cropper.css")' rel="stylesheet" />
+
+    <style>
+        /*.jwplayer {
+            position:absolute;
+        }*/
+        .ui-front {
+            z-index: 105 !important;
+        }
+
+        .thumbcheckbox {
+            /*z-index: 10;*/
+        }
+
+        .ui-datepicker-div {
+            z-index: 120 !important;
+        }
+
+        .thumbRow .thumb {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        .croppopup {
+            z-index: 5001 !important;
+        }
+
+        .dropZone {
+            border: 2px dotted #0B85A1;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            /*padding: 10px 10px 10px 10px;
+            margin-bottom: 10px;*/
+            /*font-size: 200%;*/
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .progressBar {
+            width: 85%;
+            height: 100%;
+            text-align: center;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+            background: #e5e5f0;
+        }
+
+            .progressBar div {
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+                width: 0;
+                background-color: #0ba1b5 !important;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+            }
+
+        .statusbar {
+            height: 20px;
+            width: 70%;
+            padding: 0px;
+            vertical-align: top;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: inline-block;
+            background: none;
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            z-index: 101;
+        }
+
+        .filename {
+            display: inline-block;
+            vertical-align: top;
+            width: 250px;
+        }
+
+        .filesize {
+            display: inline-block;
+            vertical-align: top;
+            color: #30693D;
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .abort {
+            /*background-color: #A8352F;*/
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            display: inline-block;
+            color: #f00;
+            cursor: pointer;
+            vertical-align: top;
+            /*float:right;*/
+            line-height: 22px;
+            margin-left: 2px;
+            width: 10%;
+        }
+
+        img.ColorPicker_Caller {
+            padding: 6.9px !important;
+        }
+
+        .editThumb {
+            left: 26px;
+        }
+    </style>
+
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <!-- =================Right column start here============ -->
+    <div class="col-sm-9 rightBar">
+        <div class="row borderBottom tabingRow">
+            <ul class="nav nav-tabs tabingNav" role="tablist">
+
+                <li role="presentation" class="visited"><span class="badge">1</span><span class="textLink">@Resources.ApplicationTranslations.Pick_Template_Text</span></li>
+                <li role="presentation" class="active"><span class="badge">2</span><span class="textLink">@Resources.ApplicationTranslations.CreateVideo_Text</span></li>
+                <li role="presentation"><span class="badge">3</span><span class="textLink">@Resources.ApplicationTranslations.Publish_Text</span></li>
+
+                @*<li role="presentation"><a href="javascript:void(0);" aria-controls="home" role="tab" data-toggle="tab"><span class="badge">1</span><span class="textLink">Pick a template</span></a></li>
+                    <li role="presentation" class="active"><a href="javascript:void(0);" aria-controls="profile" role="tab" data-toggle="tab"><span class="badge">2</span><span class="textLink">Create a video</span></a></li>
+                    <li role="presentation"><a href="javascript:void(0);" aria-controls="messages" role="tab" data-toggle="tab"><span class="badge">3</span><span class="textLink">Publish</span></a></li>*@
+            </ul>
+
+            <!--<a href="#" class="tabingText redText"> <span class="linkText activeText">Pick a template</span></a> <a href="#" class="tabingText greenText"><span class="badge activebadge">2</span> <span class="linkText activeText">Create a video</span></a> <a href="#" class="tabingText greenText"><span class="badge defaultbadge">3</span> <span class="linkText defaultText">Publish</span></a>-->
+        </div>
+        @if (Model != null)
+        {
+            int i = 0;
+            <div class="row paddingLeft videoContent videoMainContent">
+
+                @*   <div class="col-sm-6 videoDetail">
+                        <h1 class="redText videoHeading lesstopMargin borderBottom">@Resources.ApplicationTranslations.Video_Title_Length_Text</h1>
+                        <p class="textNormal"><label class="col-sm-2 lessPaddingL">@Resources.ApplicationTranslations.Template_Text</label><strong>@Resources.ApplicationTranslations.SportnFritid_Text</strong></p>
+                        <p class="textNormal"><label class="col-sm-2 lessPaddingL">@Resources.ApplicationTranslations.Content_Text</label> <strong class="blueText">@Resources.ApplicationTranslations.Template_Content_Text</strong></p>
+
+                    </div>*@
+                <div class="col-sm-3 fullWidth fullimgWidth">
+                    <div class="placeholder placeholderPic">
+                        <div id="@Model.divPlayer.ID">
+                            <img src='@if(!String.IsNullOrEmpty(Model.imgPreview.Url)){@Url.Content(Model.imgPreview.Url)}' class="img-responsive" alt='@Model.imgPreview.AlternateText' title='@Model.imgPreview.ToolTip' id='@Model.imgPreview.ID'>
+                            <a href="#" title='@Model.ancPlayButton.ToolTip'><img id='@Model.ancPlayButton.ID' src='@Url.Content("~/images/btn-play.png")' class="img-responsive  playButton" alt=""></a>
+                            <span class="timeDiv">@Model.litTemplateDuration.Text</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 paddingLeft videoDetailR">
+
+                    <h1 class="redText videoHeading lesstopMargin borderBottom">
+                        <span id="spanTitle" title="Click here to change the video title.">@Resources.ApplicationTranslations.Video_Title_Text</span>
+                        <input type="text" class="form-control input-lg" placeholder="Enter the video title here" name="txtTitle" id="txtTitle" style="display:none;" />
+                    </h1>
+                    <p class="textNormal"><label class="col-sm-2 lessPaddingL">@Resources.ApplicationTranslations.Template_Text</label> <strong>@Model.litTemplateTitle.Text</strong></p>
+                    <p class="textNormal"><label class="col-sm-2 lessPaddingL">@Resources.ApplicationTranslations.Content_Text</label> <strong class="blueText">@Model.litNoOfTexts.Text Text, @Model.litNoOfImages.Text Images, @Model.litNoOfAudios.Text Audio track</strong></p>
+
+
+                </div>
+
+                @if (Model.settingselement != null)
+                {
+
+                    <div class="col-sm-12  padding-R text-right">
+                        <button class="btn btn-lg btn-Blue fullimgWidth" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            @Resources.ApplicationTranslations.Video_Settings_Text <span class="glyphicon glyphicon-menu-down smallFont iconRight" aria-hidden="true"></span>
+                        </button>
+
+                        <!-- ====================Video Setting Dropdown data start here===============    -->
+                        <div class="dropdown-menu videoSettingDD" id="collapseExample">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">@Resources.ApplicationTranslations.Link_In_Video_Url_Text<strong></strong> @Resources.ApplicationTranslations.Video_Title_Max_Characters_Text</label>
+                                        <input type="text" class="form-control" id="txtClickUrl" name="txtClickUrl" placeholder="www.videoburst.com" title="Go to this web site when your video is clicked on">
+                                    </div>
+                                </div>
+                                @if (@Model.CreateForUserRequired)
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">@Resources.ApplicationTranslations.Create_For_User_Text</label>
+
+                                            <p>
+                                                <select class="form-control" id="ddlCompanyUsers" name="ddlCompanyUsers"></select>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                }
+                                @if (@Model.pPreVideo.Visible || @Model.pPostVideo.Visible)
+                                {
+                                    if (@Model.pPreVideo.Visible)
+                                    {
+                                        <div class="col-lg-6">
+                                            <div class="fixwidthDiv">
+                                                <p>@Resources.ApplicationTranslations.PreVideo_Text</p>
+                                                @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(true, "video", Guid.NewGuid().ToString(), 1280, 720, 250, 250, Model.hdPreVideoUrl.Value, Model.hdPreVideoUrl.ID))
+                                            </div>
+                                        </div>
+                                    }
+                                    if (@Model.pPostVideo.Visible)
+                                    {
+                                        <div class="col-lg-6">
+                                            <div class="fixwidthDiv">
+                                                <p>@Resources.ApplicationTranslations.PostVideo_Text</p>
+                                                @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(true, "video", Guid.NewGuid().ToString(), 1280, 720, 250, 250, Model.hdPostVideoUrl.Value, Model.hdPostVideoUrl.ID))
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                }
+
+                            </div>
+                            <div class="row marginTop">
+                                <div class="col-sm-6">
+                                    @foreach (VideoBurstAPI.Entities.TemplateElements stelement in Model.settingselement.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == true))
+                                    {
+                                        <div class="form-group">
+                                            <div class="fixwidthDiv">
+
+                                                <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@stelement.guid' />
+                                                <h5 class="sliderHeading">
+                                                    <strong>
+                                                        @if (stelement.mode == 1)
+                                                        {
+                                                            @Html.Raw("*")
+                                                        }
+                                                        @stelement.title
+                                                    </strong>
+
+                                                    @if (stelement.rendertemplateelement.elementtype.tag == "image")
+                                                    {
+                                                        @Html.Raw("(" + stelement.rendertemplateelement.width + "x" + stelement.rendertemplateelement.height + ")")
+                                                    }
+                                                </h5>
+                                                @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(i, "", Model.oPU, stelement, null))
+                                            </div>
+                                        </div>
+                                                    i = i + 1;
+
+                                    }
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    @foreach (VideoBurstAPI.Entities.TemplateElements stelement in Model.settingselement.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == false))
+                                    {
+                                        <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@stelement.guid' />
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">
+                                                <strong>
+                                                    @if (stelement.mode == 1)
+                                                    {
+                                                        @Html.Raw("*")
+                                                    }
+                                                    @stelement.title
+                                                </strong>
+
+                                                @if (!Model.oPU.IsPickerType(stelement.guid.ToString()))
+                                                {
+                                                    @Html.Raw("(max " + (!String.IsNullOrEmpty(Convert.ToString(stelement.rendertemplateelement.maxlength)) ? stelement.rendertemplateelement.maxlength : 30) + " chars)")
+                                                }
+
+                                            </label>
+
+
+                                            @if (!Model.oPU.IsPickerType(stelement.guid.ToString()))
+                                            {
+                                                if (stelement.rendertemplateelement.maxlength > 35)
+                                                {
+                                                    <textarea class='form-control @if(stelement.mode==1){@Html.Raw("required")}'
+                                                              placeholder="@stelement.title"
+                                                              maxlength='@if(stelement.rendertemplateelement.maxlength!=null && stelement.rendertemplateelement.maxlength>0){@Html.Raw(stelement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                              minlength='@if(stelement.rendertemplateelement.minlength!=null && stelement.rendertemplateelement.minlength>0){@Html.Raw(stelement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                              data-max='@if(stelement.rendertemplateelement.maxlength!=null && stelement.rendertemplateelement.maxlength>0){@Html.Raw(stelement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                              title='@stelement.defaultvalue'
+                                                              data-teguid='@stelement.guid'
+                                                              id="items[@i].txtValue"
+                                                              onkeypress="if(event.keyCode==13){return false;}"
+                                                              name="items[@i].txtValue">@if (!String.IsNullOrEmpty(@stelement.defaultvalue)){@Html.Raw(@stelement.defaultvalue.Trim())}</textarea>
+                                                }
+                                                else
+                                                {
+                                                    <input type="text"
+                                                           class='form-control @if(stelement.mode==1){@Html.Raw("required")}'
+                                                           placeholder="@stelement.title"
+                                                           maxlength='@if(stelement.rendertemplateelement.maxlength!=null && stelement.rendertemplateelement.maxlength>0){@Html.Raw(stelement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                           minlength='@if(stelement.rendertemplateelement.minlength!=null && stelement.rendertemplateelement.minlength>0){@Html.Raw(stelement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                           data-max='@if(stelement.rendertemplateelement.maxlength!=null && stelement.rendertemplateelement.maxlength>0){@Html.Raw(stelement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                           title='@stelement.defaultvalue'
+                                                           value='@stelement.defaultvalue'
+                                                           data-teguid='@stelement.guid'
+                                                           id="items[@i].txtValue"
+                                                           name="items[@i].txtValue" />
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                <input class="form-control @if (stelement.mode==1){@Html.Raw("required")} color{hash:true}" id="items[@i].divColorPicker" name="items[@i].divColorPicker" title="Click to change color" value="@stelement.defaultvalue" onchange='OnColorPicked(this)'
+                                                         />
+
+                                            }
+
+                                        </div>
+                                            i = i + 1;
+                                    }
+                                </div>
+                                
+                            </div>
+
+                                    <input type="button" id="btnDone" value="Done" class="btn btn-md btnRed pull-right" data-toggle="collapse" data-target="#collapseExample"/>
+                               
+                        </div>
+                          
+                        <!-- ====================Video Setting Dropdown data end here===============    -->
+                    </div>
+                }
+               
+            </div>
+
+        <!-- =================Timeline content start here============ -->
+            <div class="row mainContent topMargin">
+
+
+                <div class="content videoContent timelinecontentDiv">
+
+                    <div class="stepTimeline">
+                        @*active
+                            complete
+                            error
+                            last*@
+
+                        <ul id="accordion">
+                            <li class="first"><h3 class="blueText">@Resources.ApplicationTranslations.Timeline_Text</h3></li>
+                            @if (Model != null && Model.elements != null && Model.elements.Count > 0)
+                            {
+
+                                foreach (VideoBurstWeb.Models.RepeaterTemplateElements element in Model.elements)
+                                {
+
+                                    <li id='@Html.Raw("liBox" + element.index)' class='@if (element.index == (Model.elements.Count - 1)) { @Html.Raw("class='last'")} @*@if (element.index == 0) { @Html.Raw("class='active'")} else { @Html.Raw("default") }*@'>
+                                        <div class="timelinePic placeholder">
+                                            @*<img src='@Url.Content("~/images/pic1.png")' class="img-responsive" alt="Generic placeholder thumbnail">
+                                                <a href="#"><img src='@Url.Content("~/images/btn-play.png")' class="img-responsive playButton timelinePlay" alt=""></a>*@
+                                            @Html.Partial("_TimelinePlayerPartial", new VideoBurstWeb.Models.TimelinePlayerModel { guid = Guid.NewGuid(), endtime = element.stoptime, starttime = element.starttime, height = 107, width = 190, url = @Model.template.link, thumburl = (element.liTemplateElements.Count(x => Model.oPU.IsFileType(x.guid.ToString()) == true && x.rendertemplateelement.elementtype.tag == Convert.ToString(VideoBurstAPI.Entities.ElementTypesTags.image)) > 0 ? Model.oPU.RectifyUrl(element.liTemplateElements.OrderBy(x => x.ingroupsortorder).FirstOrDefault(x => Model.oPU.IsFileType(x.guid.ToString()) == true && x.rendertemplateelement.elementtype.tag == Convert.ToString(VideoBurstAPI.Entities.ElementTypesTags.image)).defaultvalue, true, 480, 270) : "") })
+                                            <span class="timeDiv">@element.starttime</span>
+
+
+
+                                        </div>
+                                        <div class="badge"> </div>
+                                        <div class="timetl">
+                                            @if ((!String.IsNullOrEmpty(Convert.ToString(element.starttime)) && !String.IsNullOrEmpty(Convert.ToString(element.stoptime))))
+                                            {@Html.Raw(element.starttime + "-" + element.stoptime)}
+                                            else
+                                            {@Html.Raw(" ")}
+                                        </div>
+                                        <div class="righttl">
+                                            <a onclick="makeactive(this)"
+                                               role="button"
+                                               data-toggle="collapse"
+                                               data-target='@Html.Raw("#collapse" + @element.index)'
+                                               data-parent="#accordion"
+                                               @*href='@Html.Raw("#collapse" + @element.index)'*@
+                                               aria-expanded='false' @*'@if (@element.index > 0) { @Html.Raw("false")  } else{ @Html.Raw("true") }'*@
+                                               aria-controls='@Html.Raw("collapse" + @element.index)' id='@Html.Raw("heading" + @element.index)'>
+
+                                                <h4 class="stepsheading">
+                                                    <small class="timemob blueText">00:00</small>
+                                                    @if (!String.IsNullOrEmpty(Convert.ToString(element.groupname)))
+                                                    {
+                                                        @Html.Raw(element.groupname)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw("Group " + element.groupid)
+                                                    }
+                                                    <span class="glyphicon glyphicon-menu-down smallFont" aria-hidden="true" style="float:right;"></span>
+
+                                                </h4>
+                                            </a>
+                                            @*<div id='@Html.Raw("collapse" + @element.index)' class="panel-collapse collapse @if (@element.index == 0)
+                                                { @Html.Raw("in")  } tlPadding" role="tabpanel" data-remove='@Html.Raw("liBox" + element.index)' aria-labelledby='@Html.Raw("heading" + @element.index)'>*@
+                                            <div id='@Html.Raw("collapse" + @element.index)' class="panel-collapse collapse tlPadding" role="tabpanel" data-remove='@Html.Raw("liBox" + element.index)' aria-labelledby='@Html.Raw("heading" + @element.index)'>
+
+                                                @if (element.liTemplateElements != null && element.liTemplateElements.Count > 0)
+                                                {
+
+                                                    <div class="row">
+                                                        @foreach (VideoBurstAPI.Entities.TemplateElements telement in element.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == true))
+                                                        {
+                                                            <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@telement.guid' />
+                                                            <div class="col-sm-3 imageDiv tlpartimg">
+                                                                <p class="small">
+                                                                    <strong>
+                                                                        @if (telement.mode == 1)
+                                                                        {
+                                                                            @Html.Raw("*")
+                                                                        }
+                                                                        @telement.title
+                                                                    </strong>
+
+                                                                    @if (telement.rendertemplateelement.elementtype.tag == "image")
+                                                                    {
+                                                                        @Html.Raw("(" + telement.rendertemplateelement.width + "x" + telement.rendertemplateelement.height + ")")
+                                                                    }
+                                                                </p>
+                                                                @Html.Partial("_UploadControlPartial", new VideoBurstWeb.Models.UploadControlModel(i, "", Model.oPU, telement, null))
+                                                            </div>
+                                                                    i = i + 1;
+                                                        }
+                                                        <div class='col-sm-6 imageDiv paddingLeft respadding1'>
+                                                            @foreach (VideoBurstAPI.Entities.TemplateElements telement in element.liTemplateElements.Where(x => Model.oPU.IsFileType(x.guid.ToString()) == false))
+                                                            {
+                                                                <input type="hidden" id="items[@i].hdTemplateElementGuid" name="items[@i].hdTemplateElementGuid" value='@telement.guid' />
+                                                                <div class="form-group">
+                                                                    <label for="exampleInputEmail1" class="small">
+                                                                        <strong>
+                                                                            @if (telement.mode == 1)
+                                                                            {
+                                                                                @Html.Raw("*")
+                                                                            }
+                                                                            @telement.title
+                                                                        </strong>
+
+                                                                        @if (!Model.oPU.IsPickerType(telement.guid.ToString()))
+                                                                        {
+                                                                            @Html.Raw("(max " + (!String.IsNullOrEmpty(Convert.ToString(telement.rendertemplateelement.maxlength)) ? telement.rendertemplateelement.maxlength : 30) + " chars)")
+                                                                        }
+
+                                                                    </label>
+
+
+                                                                    @if (!Model.oPU.IsPickerType(telement.guid.ToString()))
+                                                                    {
+                                                                        if (telement.rendertemplateelement.maxlength > 35)
+                                                                        {
+                                                                            <textarea class='form-control @if(telement.mode==1){@Html.Raw("required")}'
+                                                                                      placeholder="@telement.title"
+                                                                                      maxlength='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                                                      minlength='@if(telement.rendertemplateelement.minlength!=null && telement.rendertemplateelement.minlength>0){@Html.Raw(telement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                                                      data-max='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                                                      title='@telement.defaultvalue'
+                                                                                      data-teguid='@telement.guid'
+                                                                                      id="items[@i].txtValue"
+                                                                                      onkeypress="if(event.keyCode==13){return false;}"
+                                                                                      name="items[@i].txtValue">@if (!String.IsNullOrEmpty(@telement.defaultvalue)){@Html.Raw(@telement.defaultvalue.Trim())}</textarea>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input type="text"
+                                                                                   class='form-control @if(telement.mode==1){@Html.Raw("required")}'
+                                                                                   placeholder="@telement.title"
+                                                                                   maxlength='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                                                   minlength='@if(telement.rendertemplateelement.minlength!=null && telement.rendertemplateelement.minlength>0){@Html.Raw(telement.rendertemplateelement.minlength)}else{@Html.Raw(0)}'
+                                                                                   data-max='@if(telement.rendertemplateelement.maxlength!=null && telement.rendertemplateelement.maxlength>0){@Html.Raw(telement.rendertemplateelement.maxlength)}else{@Html.Raw(30)}'
+                                                                                   title='@telement.defaultvalue'
+                                                                                   value='@telement.defaultvalue'
+                                                                                   data-teguid='@telement.guid'
+                                                                                   id="items[@i].txtValue"
+                                                                                   name="items[@i].txtValue" />
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        <input class="form-control @if (telement.mode==1){@Html.Raw("required")} color{hash:true}" id="items[@i].divColorPicker" name="items[@i].divColorPicker" title="Click to change color" value="@telement.defaultvalue" onchange='OnColorPicked(this)'
+                                                                                 />
+
+                                                                    }
+
+                                                                </div>
+                                                                    i = i + 1;
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                    if (element.index < Model.elements.Count - 1)
+                                                    {
+                                                        <div class="row">
+                                                            <p class="text-right"><a href="javascript:void(0)" class="btn btn-Blue fullWidt" rel="NextButton" id='@Html.Raw("aNext_" + element.index)' onclick="NextSection(this)">@Resources.ApplicationTranslations.Next_Section_Text <span class="glyphicon glyphicon-menu-right" aria-hidden="true" style="font-size:12px;"></span></a></p>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        <p class="text-right padding-topbottom">
+            <input name="chkTandC" id="chkTandC" type="checkbox" value=""> @Resources.ApplicationTranslations.Yes_Agree_Text <a href="~/termsofservices.html" class="redText" target="_blank"> @Resources.ApplicationTranslations.TOS_Text</a>
+            <button type="button" class="btn btn-lg btnRed" id="btnCreateVideo">@Resources.ApplicationTranslations.Continue_Text</button>
+        </p>
+        <p>&nbsp;</p>
+
+
+        <!-- =================end of timeline Content============ -->
+
+
+    </div>
+     <!-- =================Right column end here============ -->
+
+}
+@Html.Partial("_CropPopupPartial")
+
+@section scriptsbottombody {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#btnDone').on('click',function(){
+            //    e.preventDefault();
+            //    return false;
+            
+            //});
+
+            // Another way to bind the event
+            $(window).bind('beforeunload', function () {
+                if (unsaved) {
+                    //return "You have made changes.";
+                    return "";
+                }
+            });
+            $('#spanTitle').on('click', function () {
+                $(this).hide();
+                $('#txtTitle').show();
+                $('#txtTitle').focus();
+                if ($(this).text() != $(this).attr('title'))
+                    $('#txtTitle').val($(this).text());
+
+            });
+            $('#txtTitle').on('blur, focusout', function () {
+                $(this).hide();
+                $('#spanTitle').show();
+                if ($(this).val().trim() != '')
+                    $('#spanTitle').text($(this).val());
+                else
+                    $('#spanTitle').text($('#spanTitle').attr('title'));
+            });
+
+            @*jwplayer('@Model.divPlayer.ID').setup({
+                file: '@Html.Raw(@Model.template.link.Replace("&amp;","&"))',
+                image: '@if(!String.IsNullOrEmpty(@Model.template.previewimage)){ @Html.Raw(@Model.template.previewimage.Replace("&amp;","&")) } else	{ @Html.Raw("")	}',
+                width: 364,
+                height: 205,
+                primary: 'html5',
+                autostart: false,
+                controls: 'hide',
+                events: {
+                    onSeek: function (event) {
+                        jwplayer('@Model.divPlayer.ID').pause(true);
+                    }
+                }
+            })*@
+
+            if ('@Model.CreateForUserRequired' == 'True') {
+
+                //companyusers
+                $.ajax({
+                    url: '@Url.Action("companyusers")',
+                    type: 'POST',
+                    cache: false,
+                    async: true,
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            var response = filterresponse(data);
+                            if (response.code == 1) {
+                                $("#ddlCompanyUsers").html('');
+                                $.each(response.data, function (key, user) {
+                                    $("#ddlCompanyUsers").append($("<option></option>").val(user.id).html(user.name));
+                                });
+                                //current user
+                                var cuid = null;
+                                $.ajax({
+                                    url: '@Url.Action("currentuser")',
+                                    type: 'POST',
+                                    cache: false,
+                                    async: true,
+                                    data: {},
+                                    dataType: "json",
+                                    success: function (data) {
+                                        if (data != null) {
+                                            var response = filterresponse(data);
+                                            if (response.code == 1) {
+                                                cuid = response.data;
+                                                if (cuid != null) {
+                                                    $('#ddlCompanyUsers option[value=' + cuid.id + ']').prop('selected', true);
+                                                }
+                                            }
+                                        }
+                                    },
+                                    error: function (data) {
+                                    }
+                                });
+
+                            }
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+            }
+
+            // Monitor dynamic inputs
+            $(document).on('change', ':input', function () { //triggers change in all input fields including text type
+                unsaved = true;
+            });
+
+
+
+
+        });
+        function play(divid, starttime, endtime) {
+            jwplayer(divid).play().seek(starttime).onTime(function (event) {
+                if (event.position > endtime) {
+                    jwplayer(divid).stop();
+                }
+            });
+        }
+    </script>
+    <script src='@Url.Content("~/Scripts/UploadControl.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/Crop/cropper.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/createvideo.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/jquery.swfobject.1-1-1.min.js")'></script>
+    @*http://jscolor.com/*@
+
+    <script src='@Url.Content("~/Scripts/jquery-ui.min.js")'></script>
+    <script src='@Url.Content("~/Scripts/jscolor/jscolor.js")' type="text/javascript"></script>
+
+}

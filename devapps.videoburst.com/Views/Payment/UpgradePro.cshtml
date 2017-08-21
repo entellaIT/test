@@ -1,0 +1,504 @@
+﻿@using System.Collections.Generic;
+@using System.Linq;
+@using VideoBurstAPI.Entities;
+@model VideoBurstWeb.Models.UserBillingModel
+
+@{
+    ViewBag.Title = "Upgrade";
+    ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_LayoutPro.cshtml";
+}
+
+<style>
+    .iconPaypal1 {
+        background-image: url("../Images/paypal-buttons-au.png") !important;
+        background-repeat: no-repeat;
+        border: 1px solid #ccc;
+        height: 53px;
+        width: 260px;
+    }
+
+    textarea {
+        resize: none;
+    }
+</style>
+@using (Html.BeginForm("UpgradePro", "Payment", FormMethod.Post))
+{
+    @*@Html.ValidationSummary(true)*@
+    @Html.AntiForgeryToken()
+
+    <!--=============Right Side HTML Start here============== -->
+    <div class="col-sm-9 rightbarInner generalinnerdiv">
+
+        <div class="row">
+            <!--============Upgrade Content start here==========-->
+            <div class="col-sm-12 marginbottom mobmarginTopBottom">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p>
+                            @if (HttpContext.Current.Request.UrlReferrer != null && !HttpContext.Current.Request.UrlReferrer.ToString().ToLower().Contains("/upgradeproconfirm"))
+                            {
+                                <a href="@HttpContext.Current.Request.UrlReferrer.ToString()" class="btn btn-black" type="button">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-left">
+                                    </span> Back
+                                </a>
+                            }
+                        </p>
+                    </div>
+                    <div class="col-sm-4 mobilebotMargin">
+                        <div class="whitebg padding-upgrade box-shadow boxborder-radius">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="margintopLess">Summary</h4>
+                                    <div class="blue-bg border-radiustopL border-radiustopR">
+                                        <h3 class="plan-Heading whiteText text-center">VideoBurst @Html.DisplayFor(m => m.AccessLevel)</h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="white-bgborder border-radiusbotL border-radiusbotR">
+
+                                        <p class="padding-upgrade border-bottomlight">
+                                            VideoBurst makes it easy to create great looking videos for commercials, education material, presentations, infographics, content & inbound marketing, instructional videos and a lot more.
+                                        </p>
+                                        <h2 class="blueText text-center">
+                                            <span class="letter-space">
+                                                <p id="sInterval" class="letter-space text-uppercase">
+                                                    <label>Monthly </label>
+                                                </p>
+                                                <label id="sAmount">790</label> <label id="sCurrency"> @ViewBag.Symbol</label>
+                                            </span>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="whitebg box-shadow boxborder-radius">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="padding-upgrade">
+                                        @if (ViewBag.error != null)
+                                        {
+                                            <span style="color:red">@ViewBag.error </span>
+                                        }
+                                        <h4 class="margintopLess">Billing Details</h4>
+                                        <form id="form1">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.First_Name *<br>
+                                                        @Html.TextBoxFor(m => m.FirstName, new { id = "txtFirstName", placeholder = @Resources.ApplicationTranslations.First_Name, @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.Name)
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Last_Name *<br>
+                                                        @Html.TextBoxFor(m => m.LastName, new { id = "txtLastName", placeholder = @Resources.ApplicationTranslations.Last_Name, @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.LastName)
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Email_Address *
+                                                        @Html.TextBoxFor(m => m.Email, new { id = "txtEmail", placeholder = @Resources.ApplicationTranslations.Email_Address, @class = "form-control has-formerror", data_validate_url = @Url.Action("../home/IsUserRegistered") })
+                                                        @Html.ValidationMessageFor(x => x.Email)
+                                                    </p>
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Company_Text *
+                                                        @Html.TextBoxFor(m => m.CompanyName, new { id = "txtCompanyName", placeholder = @Resources.ApplicationTranslations.Company_Text, @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.CompanyName)
+                                                    </p>
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Country_Text
+                                                        <select class="form-control" id="Country" placeholder="" name="utcoffset">
+                                                            <option value="1" selected="selected">@Resources.ApplicationTranslations.Sweden_Timezone_Text</option>
+                                                            <option value="5.5">@Resources.ApplicationTranslations.India_Timezone_Text</option>
+                                                        </select>
+                                                    </p>
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Address_Text *
+                                                        @Html.TextAreaFor(m => m.Address, new { @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.Address)
+                                                    </p>
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.Postal_Code_Text *
+                                                        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.PostalCode)
+                                                    </p>
+                                                    <p>
+                                                        @Resources.ApplicationTranslations.City_Text *
+                                                        @Html.TextBoxFor(m => m.City, new { @class = "form-control has-formerror" })
+                                                        @Html.ValidationMessageFor(x => x.City)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="padding-upgrade">
+                                        <div class="row">
+                                            <div class="col-sm-12 text-uppercase"><strong>Select Payment Option  </strong></div>
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <div class="col-sm-12  text-right">
+                                                    @Html.DropDownList("Key", ViewBag.Items as List<SelectListItem>, htmlAttributes: new { @class = "form-control", @onchange = "FillLabels()" })
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(m => m.AccessLevelId)
+                                            @Html.HiddenFor(m => m.AccessLevel)
+                                            @Html.HiddenFor(m => m.TotalAmountOneTime)
+                                            @Html.HiddenFor(m => m.TotalAmountMonth)
+                                            @Html.HiddenFor(m => m.TotalAmountQuaterly)
+                                            @Html.HiddenFor(m => m.TotalAmountHalfYearly)
+                                            @Html.HiddenFor(m => m.TotalAmountYear)
+                                            @Html.HiddenFor(m => m.Email)
+                                            @Html.HiddenFor(m => m.Amount)
+                                            @Html.HiddenFor(m => m.Discount)
+                                            @Html.HiddenFor(m => m.FirstName)
+                                            @Html.HiddenFor(m => m.LastName)
+                                            @Html.HiddenFor(m => m.Currency)
+                                            @Html.HiddenFor(m => m.Country)
+                                            <input type="hidden" id="hdnpackageId" value='@Html.DisplayTextFor(m => m.AccessLevelId)' />
+                                            <input type="hidden" id="hdnCurrency" value='@Html.DisplayTextFor(m => m.Currency)' />
+                                            <div class="col-sm-6 col-xs-6 text-right" id="divpurchase" style="display:none;">
+                                                <input id="_purchase" type="submit" value="Purchase" name="payment" class="btn btn-Blue btn-paypal" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 " id="divmain">
+                                    <div class="border-bottomlight">
+                                        <div class="padding-upgrade paddingtopless">
+                                            <div class="row">
+                                                <div class="text-center paddingtop45">
+                                                    @*<span class="iconPaypal">&nbsp;</span>*@
+                                                    <input type="submit" value="" name="btnPayment" id="btnPayment" class="iconPaypal1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 mobilebotMargin">
+                        <div class="whitebg padding-upgrade box-shadow boxborder-radius">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="margintopLess">Subscription information</h4>
+                                    <div class="blue-bg border-radiustopL border-radiustopR">
+                                        <h3 class="plan-Heading whiteText text-center">VideoBurst @Html.DisplayFor(m => m.AccessLevel)</h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="white-bgborder border-radiusbotL border-radiusbotR">
+                                        <div class="whitebg">
+                                            <div class="paddingboth">
+                                                <ul class="list-unstyled planlist">
+                                                    <li>Monthly fee:<span class="pull-right"> <label id="sAmount1" style="font-weight:normal">790</label><label id="sCurrency" style="font-weight:normal">@ViewBag.Symbol</label></span>  </li>
+                                                    <li>Users: <span class="pull-right">@Model.LevelUsers</span></li>
+                                                    <li>Videos: <span class="pull-right">@Model.LevelVideos</span></li>
+                                                    <li>Custom templates: <span class="pull-right">No </span></li>
+                                                    <li>Your own logo: <span class="pull-right">Yes </span></li>
+                                                    <li>Choose your own colors: <span class="pull-right">Yes</span></li>
+                                                    <li>Choose your music: <span class="pull-right">Yes</span></li>
+                                                    <li>Video Quality:<span class="pull-right">Full HD 1080p</span> </li>
+                                                    <li>Licensed music: <span class="pull-right">Yes</span></li>
+                                                    <li>Download video: <span class="pull-right">Yes</span></li>
+                                                    <li>Clickable link in video: <span class="pull-right">Yes</span></li>
+                                                    <li>Cloud based streaming: <span class="pull-right">5000 Views</span></li>
+                                                    <li>Custom thumbnail:  <span class="pull-right">Yes</span> </li>
+                                                    <li>Support for integration: <span class="pull-right">No</span></li>
+                                                    <li>User can create campaigns <br>(Fan Engagement):<span class="pull-right">No</span></li>
+                                                    <li>Support: <span class="pull-right">Email</span></li>
+                                                    <li>Number of templates: <span class="pull-right">All</span></li>
+                                                    <li>Extra users:<span class="pull-right">No</li>
+                                                    <li>VideoBurst Player app: <span class="pull-right">No</span></li>
+                                                    <li>Boost Campaign (Ads): <span class="pull-right">No</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--============Upgrade content end here==========-->
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        FillLabels();
+        if ($("#Country option[value='@Model.utcoffset']").length > 0)
+            $('#Country option[value="@Model.utcoffset"]').prop('selected', true);
+
+        //    $("#_p").hide();
+        var pue = false;
+        var pce = '';
+        //ProPayment starts
+        $("#btnPayment").click(function (event) {
+            UpdateCSS();
+            var email = $('#txtEmail').val();
+            var fnm = $('#txtFirstName').val();
+            var lnm = $('#txtLastName').val();
+            var cnm = $('#txtCompanyName').val();
+            var ads = $('#Address').val();
+            var pcd = $('#PostalCode').val();
+            var cty = $('#City').val();
+            var msg = '';
+            var focusid = '';
+            if (email == '' ) {
+                msg = 'Email required.';
+                focusid = '#txtEmail';
+                event.preventDefault();
+            }
+            else if (!validateEmail(email)) {
+                msg = 'Invalid Email.';
+                focusid = '#txtEmail';
+                event.preventDefault();
+            }
+            else if (fnm == '') {
+                msg = 'First name required.';
+                focusid = '#txtFirstName';
+                event.preventDefault();
+            }
+            else if (lnm == '') {
+                msg = 'Last name required.';
+                focusid = '#txtLastName';
+                event.preventDefault();
+            }
+            else if (cnm == '') {
+                msg = 'Company name required.';
+                focusid = '#txtCompanyName';
+                event.preventDefault();
+            }
+            else if (ads == '') {
+                msg = 'Address required.';
+                focusid = '#Address';
+                event.preventDefault();
+            }
+            else if (cty == '') {
+                msg = 'City required.';
+                focusid = '#City';
+                event.preventDefault();
+            }
+            else if (pue == null) {
+                msg = 'User Exists with this email. Please Login to upgrade the account.'; //Your request cannot be processed at this time. Please try later.
+                focusid = '#txtEmail';
+                event.preventDefault();
+            }
+            else if (pue == true) {
+                msg = 'User Exists with this email. Please Login to upgrade the account.';
+                focusid = '#txtEmail';
+                event.preventDefault();
+            }
+            if (msg != '') {
+                alertBox(msg);
+                if (focusid != '')
+                    $(focusid).focus();
+            }
+        });
+
+        // Email check starts
+        $("#txtEmail").blur(function (event) {
+            event.preventDefault();
+            var msg = '';
+            if ($(this).val().trim() != '' && validateEmail($(this).val().trim())) {
+                $("#txtEmail").removeClass("has-formerror");
+                if (pce == '' || pce != $(this).val().trim() || !pue) {
+                    pce = $(this).val().trim();
+                    var objData = new Object();
+                    objData.email = encodeURI($(this).val().trim());
+                    $.ajax({
+                        url: $(this).attr('data-validate-url'),
+                        type: 'POST',
+                        cache: false,
+                        data: objData,
+                        dataType: "json",
+                        success: function (data) {
+                            var response = filterresponse(data);
+                            if (response) {
+                                pue = true;
+                                msg = 'User Exists with this email. Please Login to upgrade the account.';
+                                console.log(msg);
+                            }
+                            else if (!response) {
+                                pue = false;
+                            }
+                            else {
+                                pue = null;
+                                try {
+                                    msg = response;
+                                }
+                                catch (ex1) {
+                                    msg = response;
+                                }
+                            }
+                            if (msg != '') {
+                                $($(this).attr('id')).focus();
+                                alertBox(msg);
+                            }
+                        },
+                        error: function (data) {
+                            var response = filterresponse(data);
+                            pue = null;
+                            try {
+                                msg = response;
+                            }
+                            catch (ex1) {
+                                msg = response;
+                            }
+                            if (msg != '') {
+                                $($(this).attr('id')).focus();
+                                alertBox(msg);
+                            }
+                        }
+                    });
+                }
+            }
+            else { $("#txtEmail").addClass("has-formerror"); }
+        });
+
+    });
+
+    function FillLabels() {
+        var urlPath = '@Url.Content("~/")' + 'payment/Intervals';
+        //var interval = $('#PayType').val();
+        //var interval = $("#Paytype option:selected").val()
+        var interval = $('#Key').val();
+        var packageId = $('#hdnpackageId').val();
+        var currency = $('#hdnCurrency').val();
+        StartProcessing(true, 'Please wait...');
+        $.ajax({
+            url: urlPath,
+            type: "GET",
+            dataType: "JSON",
+            data: { packageId: packageId, interval: interval, currency: currency },
+            success: function (data) {
+                if (data != null) {
+                    var response = filterresponse(data);
+
+                    $('#sInterval').text(response.IntervalName);
+                    $('#sCurrency').text(response.Currency);
+                    $('#sAmount').text(response.Price);
+                    $('#sAmount1').text(response.Price);
+                    StopProcessing();
+                }
+            }
+        });
+
+        UpdateCSS();
+
+    }
+    function showMe() {
+        $('#divmain').hide();
+        $('#divinvoice').show();
+        $('#divpurchase').show();
+    }
+
+    function DisplayProgressMessage(ctl, msg) {
+        console.log('button clicked.');
+        //$(ctl).prop("disabled", true).text(msg);
+        $(ctl).prop("disabled", true);
+        $(".submit-progress").removeClass("hidden");
+        return true;
+    }
+
+    //$('input[type = submit]').click(function () {
+    //    StartProcessing(true, 'Please wait...');
+    //});
+
+    function UpdateCSS() {
+        if ($("#txtFirstName").val() !== "") {
+            $("#txtFirstName").removeClass("has-formerror");
+        }
+
+        if ($("#txtLastName").val() !== "") {
+            $("#txtLastName").removeClass("has-formerror");
+            }
+
+        if ($("#Address").val() !== "") {
+            $("#Address").removeClass("has-formerror");
+            }
+
+        if ($("#PostalCode").val() !== "") {
+            $("#PostalCode").removeClass("has-formerror");
+            }
+
+        if ($("#City").val() !== "") {
+            $("#City").removeClass("has-formerror");
+            }
+
+    }
+
+    $("#txtCompanyName").blur(function () {
+        if ($("#txtCompanyName").val() !== "") {
+            $("#txtCompanyName").removeClass("has-formerror");
+        } else {
+            $("#txtCompanyName").addClass("has-formerror");
+        }
+    });
+
+    $("#txtFirstName").blur(function () {
+        if ($("#txtFirstName").val() !== "") {
+            $("#txtFirstName").removeClass("has-formerror");
+        } else {
+            $("#txtFirstName").addClass("has-formerror");
+        }
+    });
+
+    $("#txtLastName").blur(function () {
+        if ($("#txtLastName").val() !== "") {
+            $("#txtLastName").removeClass("has-formerror");
+        } else {
+            $("#txtLastName").addClass("has-formerror");
+        }
+    });
+ 
+    $("#LastName").blur(function() {
+             if ($("#LastName").val() !== "") {
+                 $("#LastName").removeClass("has-formerror");
+             } else {
+                     $("#LastName").addClass("has-formerror");
+             }
+        });
+
+    $("#Address").blur(function() {
+             if ($("#Address").val() !== "") {
+                 $("#Address").removeClass("has-formerror");
+             } else {
+                     $("#Address").addClass("has-formerror");
+             }
+        });
+
+    $("#PostalCode").blur(function() {
+             if ($("#PostalCode").val() !== "") {
+                 $("#PostalCode").removeClass("has-formerror");
+             } else {
+                     $("#PostalCode").addClass("has-formerror");
+             }
+        });
+
+    $("#City").blur(function() {
+             if ($("#City").val() !== "") {
+                 $("#City").removeClass("has-formerror");
+             } else {
+                     $("#City").addClass("has-formerror");
+             }
+        });
+</script>
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

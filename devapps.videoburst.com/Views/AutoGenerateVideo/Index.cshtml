@@ -1,0 +1,289 @@
+﻿@{
+    ViewBag.Title = "AutoGenerate Video";
+    ViewBag.Heading = "AutoGenerate Video";
+}
+
+
+
+
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+    <div class="row">
+        <div class="col-sm-9  mobmarginTopBottom">
+            @{if (ViewBag.CreateAutoGenerateVideo)
+            {
+
+                <div class="row">
+                    <div class="col-sm-7">
+
+                        @{
+                        if (ViewBag.Templates == null)
+                        {
+                            @Html.Raw("<span class='label label-danger'>@Resources.ApplicationTranslations.AutoGenerate_Error</span>")<br />
+                        }
+                        else
+                        {
+                            <p>
+                                Enter Link for Object ID<br>
+                                <input type="text" class="form-control" id="txtObjectId" placeholder="Enter Link or Object Id" name="objectId" />
+                            </p>
+                                    <p>
+                                        Choose From<br>
+                                        @Html.DropDownList("TemplateId", (IEnumerable<SelectListItem>)ViewBag.Templates, @Resources.ApplicationTranslations.SelectTemplate_Text, new { @class = "form-control" })
+                                    </p>
+                                    <p class="marginTop">
+                                        <input type="button" id="btnCreateVideo" class="btn btnred text-uppercase" />
+                                    </p>
+                        }
+                        }
+                    </div>
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div>
+                        Do you have lots of videos you want to be created automatically, following your set of rules? We can generate up to thousands of videos according to your set of parameters. Let us connect to your API and Database and VideoBurst will do the rest.
+                        <br />To enable this feature please contact us at sales@videoburst.com
+                    </div>
+                </div>
+            }
+            }
+        </div>
+
+
+        <div class="col-sm-3 textrightBar mobtextrightBar">
+            <div class="blog-sidebar rightsideBar">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">@Resources.ApplicationTranslations.Quick_Tips_Title</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_1</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_2
+                        </span>
+                    </div>
+
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">2</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_3</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_4
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">3</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_5</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_6
+
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">4</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_7</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_8
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scriptstopbody{
+    <script type="text/javascript">
+        var Id;
+        var size = 0;
+        //var videoProgress= localStorage.getItem("percentageStorage").toString();
+        //var extractedValue=videoProgress.split(":");
+        //if(parseInt(extractedValue[0])!=0)
+        //{
+        //    size= parseInt(extractedValue[0]);
+        //}
+
+        if (localStorage.getItem("percentageStorage") != null) {
+            var videoProgress = localStorage.getItem("percentageStorage").toString();
+            var extractedValue = videoProgress.split(":");
+            if (parseInt(extractedValue[0]) != 0) {
+                size = parseInt(extractedValue[0]);
+            }
+        }
+
+        $(function () {
+            var status = '@ViewBag.JobStatus';
+            if (status == "processing") {
+
+                Id = setInterval(GetJobStatus, 10000);
+            }
+            $('#btnCreateVideo').val('@Resources.ApplicationTranslations.Create_Video_Button_Text');
+            $('#btnCreateVideo').click(function () {
+                StartProcessing(true, "Creating Video. Please wait..");
+                var url = WebsiteRootPath + "AutoGenerateVideo/CreateVideo";
+                var objectId = $("#txtObjectId").val();
+                var templateId = $('#TemplateId').val();
+                $.post(url, { objectId: objectId, templateId: templateId }, function (data) {
+
+                    if (data != '') {
+                        var extractedValue = data.split(":");
+                        var extractedGuid = (extractedValue.length > 1) ? ((extractedValue[1] != null) ? extractedValue[1] : "") : "";
+                        if ((extractedValue[0] == "guid") && extractedGuid != '') {
+                            var vDetailVideoUrl = '@Url.Content("~/Videos/Detail/")' + extractedGuid;
+                            confirmBox("Job created successfully.", function () { StartProcessing(); document.location.href = vDetailVideoUrl }, null, "Job Created", "Ok");
+                        }
+                        else {
+                            if (data == "Insufficient images") {
+                                var vTemplatesUrl = '@Url.Content("~/Templates")';
+                                confirmBox("This object does not have enough images, make sure there are enough in the right format. This template only supports images in landscape mode. You can always create your template manually by clicking below",
+                                    function () { StartProcessing(); document.location.href = vTemplatesUrl }, null, "Insufficient images", "Create manually");
+                            } else {
+                                alertBox(data);
+                            }
+                        }
+                    }
+
+                    StopProcessing();
+
+                });
+
+            });
+        });
+        function GetJobStatus() {
+            var vJobGUId = '@TempData["VideoGUId"]';
+            var url = WebsiteRootPath + "api/VideoBurstAPI/GetJobStatus/" + vJobGUId;
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != 'undefined') {
+                        if (data <= 100000) {
+                            progress(data, vJobGUId);
+                            localStorage.setItem("percentageStorage", size);
+                        }
+                        if (data == 120000) {
+
+                            clearInterval(Id);
+                            size = 0;
+                            localStorage.setItem("percentageStorage", size);
+                            alertBox('@Resources.ApplicationTranslations.Video_Creation_Failed_Message');
+                            window.location.href = '@Url.Content("~/Videos/Index/drafts")';
+                        }
+
+                    }
+
+
+                },
+                error: function () {
+                    alertBox('@Resources.ApplicationTranslations.Error_Message');
+                }
+
+
+            });
+
+        }
+        function progress(status, jobGuid) {
+
+            var videoProgress = (localStorage.getItem("percentageStorage") != null) ? localStorage.getItem("percentageStorage").toString() : "";
+            var extractedValue = videoProgress.split(":");
+            var extractedGuid = (extractedValue.length > 1) ? ((extractedValue[1] != null) ? extractedValue[1] : "") : "";
+            //var percentageCompleted =parseInt(extractedValue[0]);
+
+            if (jobGuid == extractedGuid && (status >= 3000 && status <= 100000)) {
+                size = ((extractedValue[0] != null) ? parseInt(extractedValue[0]) : 0);
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+            }
+
+            if (jobGuid != extractedGuid && status <= 3000 && size < 5) {
+                size = 5;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status > 3000 && status < 6000) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 6000) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 7000 && size <= 20) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 7000 && (size > 20 && size < 50)) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 7000 && (size >= 50 && size <= 60)) {
+                size = 60;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+
+            if (status == 7010 && size < 70) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 8010 && size < 80) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 9010) {
+                size += 1;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width = size + "%";
+                $('#processingSpan').text(size + "%");
+
+            }
+            if (status == 100000) {
+                var vJobGUId = '@TempData["VideoGUId"]';
+                size = 100;
+                $('#innerProgressDiv').css('width', size + "%");
+                //document.getElementById("innerProgressDiv").style.width= size + "%";
+                $('#processingSpan').text("100%");
+                clearInterval(Id);
+                window.location.href = '@Url.Content("~/Videos/Detail/")' + vJobGUId;
+
+            }
+            if (size == 100) {
+                size = 0;
+
+            }
+            var videoProgress = size + ":" + jobGuid;
+            localStorage.setItem("percentageStorage", videoProgress);
+
+        }
+    </script>
+}
+

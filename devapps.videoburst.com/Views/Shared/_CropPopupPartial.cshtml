@@ -1,0 +1,33 @@
+﻿ 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+ 
+<div class="modal fade" id="croppopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content popupContent">
+            <div class="modal-body popupBody">
+                <h2 id="h2ConfirmModalHeader">@Resources.ApplicationTranslations.CropImage_Text</h2>
+                <div id="cropcontainer">
+                    <img class="cropper" src='@Url.Content("~/images/img-default.png")' />
+                </div>
+            </div>
+            <div class="modal-footer popupFooter">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-3">
+                        <button type="button" rel="croppopup-close" class="btn btn-lg btn-outerRed btn-lgouter whiteText leftFloat" id="btnConfirmModalCancel" title="Click here or press escape to close.">@Resources.ApplicationTranslations.Cancel_Text</button>
+                    </div>
+                    <div class="col-sm-3 col-xs-3 text-center">
+                        <button type="button" rel="croppopup-zoomin" class="btn btn-lg btn-outerRed whiteText lead btn-lgouter" id="btnZoomIn" title="Click here to zoom in."><span class="fa fa-search-plus"></span></button>
+                        <button type="button" rel="croppopup-zoomout" class="btn btn-lg btn-outerRed whiteText lead btn-lgouter" id="btnZoomOut" title="Click here to zoom out."><span class="fa fa-search-minus"></span></button>
+                    </div>
+                    <div class="col-sm-3 col-xs-3 text-center">
+                        <button type="button" rel="croppopup-anticlockwise" class="btn btn-lg btn-outerRed whiteText lead btn-lgouter" id="btnAntiClockWise" title="Click here to rotate 90 degree anti clockwise."><i class="fa fa-rotate-left"></i></button>
+                        <button type="button" rel="croppopup-clockwise" class="btn btn-lg btn-outerRed whiteText lead btn-lgouter" id="btnClockWise" title="Click here to rotate 90 degree clockwise."><i class="fa fa-rotate-right"></i></button>
+</div>
+                    <div class="col-sm-3 col-xs-3">
+                        <button type="button" rel="croppopup-done" class="btn btn-lg btnRed btn-lgouter" id="btnConfirmModalOk" title="Click here to crop the selected area.">@Resources.ApplicationTranslations.Done_Text</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

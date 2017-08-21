@@ -1,0 +1,123 @@
+﻿@model VideoBurstAPI.Entities.UpgradeUserModel
+
+@{
+    ViewBag.Title = "Upgrade";
+    ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-2.1.1.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.unobtrusive.js"))
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    @Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/bootstrap.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/holder.min.js"))
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie10-viewport-bug-workaround.js"))
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    <style>
+    </style>
+
+}
+
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+
+    <div class="row">
+        <!--============Upgrade Content start here==========-->
+        <div class="col-sm-9  mobmarginTopBottom">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="blue-bg border-radiustopL border-radiustopR">
+                                <h3 class="plan-Heading whiteText text-center">Account Plan: <strong>Basic </strong></h3>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="white-bgborder border-radiusbotL border-radiusbotR">
+                                <p>&nbsp;</p>
+                                <p class="padding-upgradeL">
+                                    As a Basic Plan subscriber, you have limited functionality and cannot access all the features of the system.  <br>
+                                    <strong>
+                                        Upgrade
+                                    </strong> to Pro to remove these limitations. 
+                                </p>
+
+                                <ul class="listmarginleft">
+                                    <li>Unlimited renders</li>
+                                    <li>Full HD</li>
+                                    <li>More Burst for your Video</li>
+                                    <li>Free Candy</li>
+                                    <li>A brand new Ferrari</li>
+                                    <li>Bread, lots of bread</li>
+                                    <li>One million dollars, Cash.</li>
+                                </ul>
+                                <p>&nbsp;</p>
+                                <p class="padding-upgradeL">
+                                    @Html.ActionLink("Buy Plus Now", "Upgrade3", "Payment", new { level = ViewBag.Plus }, new { @class = "btn btnred text-uppercase", onclick = "StartProcessing(true, 'Please wait...')" })
+                                    &nbsp;&nbsp;
+                                    @Html.ActionLink("Compare Plans", "Upgrade2", "Payment", null, new { @class = "btn btn-default text-uppercase upgradebtnmargin-Top" , onclick = "StartProcessing(true, 'Please wait...')" })
+                                </p>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-1"></div>
+                <div class="col-sm-4" style="display:none;">
+                    <h4>Redeem a promo code</h4>
+                    <p>
+                        If you have received a promotional code,
+                        you can redeem it here.
+                    </p>
+                    <p><input name="" type="text" class="form-control" placeholder="Enter code"></p>
+                    <p><button type="button" class="btn  btnred"><strong>Submit Code</strong></button></p>
+                </div>
+            </div>
+        </div>
+        <!--============Upgrade content end here==========-->
+        <!--============right bar start here==========-->
+        <div class="col-sm-3 textrightBar mobtextrightBar" style="display:none">
+            <div class="blog-sidebar rightsideBar">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">Quick tips</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">2</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">3</span> <span class="groupText">
+                            <strong class="blueText">Lorem ipsum dolor sit amet</strong><br>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============right bar end here==========-->
+    </div>
+</div>
+@*}*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

@@ -1,0 +1,35 @@
+﻿@model VideoBurstWeb.Models.LoginSignupModel
+
+@{
+    ViewBag.Title = "Videoburst - Register Step Next";
+    Layout = "~/Views/Shared/_AnonymousLayout.cshtml";
+}
+@using (Html.BeginForm("Send", "Home", new { ActionType = ViewBag.ActionType, email = ViewBag.Email, ActionCompleted = ViewBag.ActionCompleted }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6 signupForm single">
+        <h4 class="signupsubHead  text-left">@ViewBag.HeaderTitle</h4>
+        <div class="form-group">
+            <p class="leftAlign">
+                @Html.Raw(ViewBag.Message)
+            </p>
+            @if (ViewBag.EmailTextVisible)
+            {
+                <p>
+                    @Html.TextBoxFor(m => m.email, new { id = "txtEmail", placeholder = @Resources.AuthenticationTranslations.EmailAddressLabel, @class = "form-control input-lg" })
+                </p>
+            }
+            <p>
+                @if (ViewBag.SendEmailVisible)
+                {
+                    <button type="submit" class="btn btn-lg btnRed btn-block" id="btnSendEmail">Resend verification email</button>
+                }
+                else if (ViewBag.SendResetPasswordEmailVisible)
+                {
+                    <button type="submit" class="btn btn-lg btnRed btn-block" id="btnSendResetPasswordEmail">Resend password reset email</button>
+                }
+
+            </p>
+        </div>
+    </div>
+}

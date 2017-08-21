@@ -1,0 +1,350 @@
+﻿@model VideoBurstAPI.Entities.UpgradeUserModel
+ 
+@{
+    ViewBag.Title = "Upgrade";
+    ViewBag.heading = "Upgrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@
+
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery-2.1.1.min.js"))
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.js"))
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/jquery.validate.unobtrusive.js"))
+
+@*<link href='@Url.Content("~/Scripts/Crop/cropper.css")' rel="stylesheet" />*@
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+@*<script src="js/bootstrap.min.js"></script>*@
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+@*<script src="js/vendor/holder.min.js"></script>*@
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+@*<script src="js/ie10-viewport-bug-workaround.js"></script>*@
+
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/bootstrap.min.js"))
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/holder.min.js"))
+@Html.IncludeVersionedJs(@Url.Content("~/Scripts/ie10-viewport-bug-workaround.js"))
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+
+<!-- FlexSlider -->
+@*<script src="js/owl.carousel.js"></script>*@
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/owl.carousel.js"))
+<style>
+    .ui-front {
+        z-index: 105 !important;
+    }
+
+    .thumbcheckbox {
+        /*z-index: 10;*/
+    }
+
+    .ui-datepicker-div {
+        z-index: 120 !important;
+    }
+
+    .thumbRow .thumb {
+        height: auto !important;
+        max-height: 250px !important;
+    }
+
+    .croppopup {
+        z-index: 5001 !important;
+    }
+
+    .dropZone {
+        border: 2px dotted #0B85A1;
+        color: #92AAB0;
+        text-align: center;
+        vertical-align: middle;
+        /*padding: 10px 10px 10px 10px;
+            margin-bottom: 10px;*/
+        font-size: 200%;
+        background-repeat: no-repeat;
+    }
+
+    .progressBar {
+        width: 85%;
+        height: 100%;
+        text-align: center;
+        border-radius: 4px;
+        overflow: hidden;
+        display: inline-block;
+        margin: 0px;
+        vertical-align: top;
+        background: #e5e5f0;
+    }
+
+        .progressBar div {
+            height: 100%;
+            color: #fff;
+            text-align: center;
+            line-height: 21px; /* same as #progressBar height if we want text middle aligned */
+            width: 0;
+            background-color: #0ba1b5 !important;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+    .statusbar {
+        height: 20px;
+        width: 70%;
+        padding: 0px;
+        vertical-align: top;
+        font-size: 12px;
+        color: #fff;
+        overflow: hidden;
+        display: inline-block;
+        background: none;
+        position: absolute;
+        left: 15%;
+        top: 45%;
+        z-index: 101;
+    }
+
+    .filename {
+        display: inline-block;
+        vertical-align: top;
+        width: 250px;
+    }
+
+    .filesize {
+        display: inline-block;
+        vertical-align: top;
+        color: #30693D;
+        width: 100px;
+        margin-left: 10px;
+        margin-right: 5px;
+    }
+
+    .abort {
+        /*background-color: #A8352F;*/
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        display: inline-block;
+        color: #f00;
+        cursor: pointer;
+        vertical-align: top;
+        /*float:right;*/
+        line-height: 22px;
+        margin-left: 2px;
+        width: 10%;
+    }
+
+    img.ColorPicker_Caller {
+        padding: 6.9px !important;
+    }
+
+    .editThumb {
+        left: 26px;
+    }
+
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+}
+@using (Html.BeginForm("Upgrade", "Dashboard",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<!--=============Right Side HTML Start here============== -->
+<div class="col-sm-9 rightbarInner" style="padding-left: 0;">
+
+    <div class="row">
+        <!--============video detail content start here==========-->
+        <div class="col-sm-9 blog-main">
+            <div class="row">
+
+                <div class="col-sm-7">
+
+                    <form>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="">@Resources.ApplicationTranslations.First_Name *</label>
+                                    @Html.TextBox("First_Name", (string)ViewBag.FirstName, new { @class = "form-control" }) 
+                                     @Html.ValidationMessageFor(x => x.First_Name)
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="">@Resources.ApplicationTranslations.Last_Name *</label>
+                                    @Html.TextBox("Last_Name", (string)ViewBag.LastName, new { @class = "form-control" }) 
+                                     @Html.ValidationMessageFor(x => x.Last_Name)                                 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Phone_Number *</label>
+                            @Html.TextBox("Phone_Number", (string)ViewBag.phonenumber, new { @class = "form-control" }) 
+                                     @Html.ValidationMessageFor(x => x.Phone_Number)                           
+                        </div>
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Email_Address *</label>
+                            @Html.TextBox("Email" ,(string)ViewBag.emailaddress,new {@class="form-control"}) 
+                                     @Html.ValidationMessageFor(x => x.Email)
+                        </div>
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Company_Text *</label>
+                            @Html.TextBoxFor( m => m.Company,new {@class="form-control"}) 
+                                     @Html.ValidationMessageFor(x => x.Company)                       
+                        </div>
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Country_Text</label>
+                            <select class="form-control" id="Country" placeholder="" name="Country">
+                                <option value="0">@Resources.ApplicationTranslations.Select_Text</option>
+                                <option selected="selected" value="Sweden">@Resources.ApplicationTranslations.List_Country_Sweden</option>
+                                <option value="India">@Resources.ApplicationTranslations.List_Country_India</option>
+                                <option value="USA">@Resources.ApplicationTranslations.List_Country_USA</option>
+                                <option value="Canada">@Resources.ApplicationTranslations.List_Country_Canada</option>
+                                <option value="China">@Resources.ApplicationTranslations.List_Country_China</option>
+                                <option value="Brazil">@Resources.ApplicationTranslations.List_Country_Brazil</option>
+                                <option value="Australia">@Resources.ApplicationTranslations.List_Country_Australia</option>
+                                <option value="Germany">@Resources.ApplicationTranslations.List_Country_Germany</option>
+                                <option value="Spain">@Resources.ApplicationTranslations.List_Country_Spain</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Address_Text *</label>
+                            @Html.TextBoxFor( m => m.Address,new {@class="form-control"})                         
+                            @Html.ValidationMessageFor(x => x.Address)
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Postal_Code_Text *</label>
+                            @Html.TextBoxFor( m => m.Postal_Code,new {@class="form-control"})                           
+                            @Html.ValidationMessageFor(x => x.Postal_Code)
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.City_Text *</label>
+                            @Html.TextBoxFor( m => m.City,new {@class="form-control"})                            
+                            @Html.ValidationMessageFor(x => x.City)
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">@Resources.ApplicationTranslations.Comments_Text</label>
+                            @Html.TextAreaFor(m => m.Comments, 4, 70, new { @title = "Comment",@class="form-control" })                          
+                        </div>
+
+                        <div class="form-group" id="radioDiv">
+                            <label for="">@Resources.ApplicationTranslations.Upgrade_Account_Text</label>
+                                  
+                            @if (ViewBag.CompaniesLevels != null)
+                                {
+                                    foreach (var CompaniesLevel in ViewBag.CompaniesLevels)
+                                    { 
+                                        <input type="radio" value="@CompaniesLevel.level" name="UpgradeAccountValue" id="UpgradeAccountValue"><a target="_blank" href="http://www.videoburst.com/#pricing">@CompaniesLevel.title</a>                                    
+                                    }
+                                }                        
+
+  
+                        </div>
+                        <p>&nbsp;</p>
+                        <p>
+
+                            <button type="submit" class="btn btn-lg btnRed">@Resources.ApplicationTranslations.Apply_Button_Text</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!--============video detail content end here==========-->
+        <!--============video detail right bar start here==========-->
+        <div class="col-sm-3 textrightBar mobtextrightBar">
+            <div class="blog-sidebar rightsideBar">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4 class="rightHeading">@Resources.ApplicationTranslations.Quick_Tips_Title</h4>
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">1</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_1</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_2
+                        </span>
+                    </div>
+
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">2</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_3</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_4
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">3</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_5</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_6
+
+                        </span>
+                    </div>
+
+                    <div class="row detailrightText">
+                        <span class="badge badgeNumber">4</span> <span class="groupText">
+                            <strong class="blueText">@Resources.ApplicationTranslations.Quick_Tips_Text_7</strong><br>
+                            @Resources.ApplicationTranslations.Quick_Tips_Text_8
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============video detail right bar start here==========-->
+        <div class="col-sm-2">&nbsp;</div>
+    </div>
+
+</div>
+}
+
+ <script type="text/javascript">
+
+
+     $(document).ready(function () {
+         $("#owl-demo").owlCarousel({
+             autoPlay: false,
+             items: 4,
+             itemsDesktop: [1199, 3],
+             itemsDesktopSmall: [979, 3]
+         });
+
+     });
+
+
+     $(document).ready(function () {
+
+         var owl = $("#owl-demo");
+
+         owl.owlCarousel();
+
+         // Custom Navigation Events
+         $(".next").click(function () {
+             owl.trigger('owl.next');
+         })
+         $(".prev").click(function () {
+             owl.trigger('owl.prev');
+         })
+
+         $("#searchmob").click(function () {
+
+             //$('.mobSearch').slideToggle('fast');
+
+             if ($(".mobSearch").is(":hidden")) {
+                 $('.mobSearch').show();
+             }
+             else {
+                 $('.mobSearch').hide();
+             }
+
+         });
+
+     });
+ </script>
+@*<script src="js/jquery.easing.js"></script>*@
+@Html.IncludeVersionedJs(@Url.Content("~/Content/themes/fastout/js/jquery.easing.js"))

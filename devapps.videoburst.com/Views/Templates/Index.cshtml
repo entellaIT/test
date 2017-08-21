@@ -1,0 +1,285 @@
+﻿<div class="col-sm-9 rightBar">   
+    @{if (@ViewBag.IsCreateVideo == "yes")
+    {
+        <div class="row borderBottom tabingRow topMargin">
+            <ul class="nav nav-tabs tabingNav" role="tablist">
+                <li role="presentation" class="active"><span class="badge">1</span><span class="textLink">Pick a template</span></li>
+                <li role="presentation"><span class="badge">2</span><span class="textLink">Create a video</span></li>
+                <li role="presentation"><span class="badge">3</span><span class="textLink">Publish</span></li>
+            </ul>
+            <!--<a href="#" class="tabingText redText"> <span class="linkText activeText">Pick a template</span></a> <a href="#" class="tabingText greenText"><span class="badge activebadge">2</span> <span class="linkText activeText">Create a video</span></a> <a href="#" class="tabingText greenText"><span class="badge defaultbadge">3</span> <span class="linkText defaultText">Publish</span></a>-->
+        </div>
+    }}
+
+    <!-- ============= Tab 1 Data start here =========== ============================================= -->
+    
+            <div class="row">
+                <div class="col-sm-7">
+                    <ul class="nav nav-tabs tabing">
+                        <li id="liFavoriteTemplates" role="presentation"><a id="lnkFavoriteTemplates" href="javascript:void(0)">Favorites</a></li>
+                        <li id="liCustomTemplates" role="presentation"><a id="lnkCustomTemplates" href="javascript:void(0)">Custom</a></li>
+                        <li id="liLibraryTemplates" role="presentation"><a id="lnkLibraryTemplates" href="javascript:void(0)">Library</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-5 mainSearch">
+                    <input id="txtSearchTemplates" type="text" class="form-control searchInput" placeholder="Search..."><a id="lnkSearchTemplates" href="javascript:void(0)" class="glyphicon glyphicon-search searchIcon">&nbsp;</a>
+                </div>
+            </div>
+            <div class="row placeholders mainContent topMarginTemp" style="clear: both;">
+                <div class="content">
+                    <div id="divTotalRecords" class="col-sm-3 tempCount tempCount1"><span class="blueText">&nbsp;</span> &nbsp;</div>
+                    <div class="col-sm-9 sorting rightText  paddingRight">
+                        <button type="button" class="btn dropdown-toggle btn-Blue sortingDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sorting by&nbsp;<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a id="lnkSortByPopularity" href="javascript:void(0)">By Popularity</a></li>
+                            <li><a id="lnkSortByDate" href="javascript:void(0)">By Date</a></li>
+                            <li><a id="lnkSortByName" href="javascript:void(0)">By Name</a></li>
+                            <li><a id="lnkSortByDuration" href="javascript:void(0)">By Duration</a></li>
+                        </ul>
+                        <span class="filterDiv">Sort by <a id="lnkByPopularity" href="javascript:void(0)" class="filters">Popularity</a> <a id="lnkByDate" href="javascript:void(0)" class="filters active">Date</a> <a id="lnkByName" href="javascript:void(0)" class="filters">Name</a> <a id="lnkByDuration" href="javascript:void(0)" class="filters">Duration</a></span>
+                        <div class="btn-group dropup">
+                            <button class="btn dropdown-toggle btn-Blue" type="button" aria-expanded="false" aria-controls="collapseExample" id="hide">
+                                Hide Filters &nbsp;<span class="glyphicon glyphicon-menu-up smallFont" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="btn-group dropup">
+                            <button id="show" class="btn dropdown-toggle btn-Blue" type="button" aria-expanded="false" aria-controls="collapseExample" style="display: none;">
+                                Show Filters &nbsp;<span class="glyphicon glyphicon-menu-down smallFont" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div id="collapseExample" class="row leftAlign filterAlign">
+                        <div class="btn-group fullWidth">
+                            <button id="btnCategories" class="btn btn-lg dropdown-toggle btn-blueOuter fullWidth leftAlign" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Categories <span id="spnTCTitle" class="glyphicon glyphicon-menu-down smallFont" aria-hidden="true"></span>
+                            </button>
+                            <ul id="ulCategories" class="dropdown-menu generalDD" style="max-height: 300px; overflow: auto; ">
+                                <li id="0" onclick="fnBindCTemplates(0,'All Categories');"><a href="javascript:void(0)">All Categories</a></li>
+                            </ul>
+                            <input id="hdnCategory" type="hidden" value="0" />
+                        </div>
+
+                        <div class="btn-group fullWidth">
+                            <button id="btnDurations" class="btn btn-lg dropdown-toggle btn-blueOuter fullWidth leftAlign" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Duration <span class="glyphicon glyphicon-menu-down smallFont" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu generalDD">
+                                <li onclick="fnBindDTemplates(0,'All Durations');"><a href="javascript:void(0)">All Durations</a></li>
+                                <li onclick="fnBindDTemplates(15,'15 Seconds');"><a href="javascript:void(0)">15 Seconds</a></li>
+                                <li onclick="fnBindDTemplates(30,'30 Seconds');"><a href="javascript:void(0)">30 Seconds</a></li>
+                                <li onclick="fnBindDTemplates(45,'45 Seconds');"><a href="javascript:void(0)">45 Seconds</a></li>
+                                <li onclick="fnBindDTemplates(60,'60 Seconds');"><a href="javascript:void(0)">60 Seconds</a></li>
+                                <li onclick="fnBindDTemplates(900,'15 Minutes');"><a href="javascript:void(0)">15 Minutes</a></li>
+                                <li onclick="fnBindDTemplates(1800,'30 Minutes');"><a href="javascript:void(0)">30 Minutes</a></li>
+                                <li class="last" onclick="fnBindDTemplates(3600,'60 Minutes');"><a href="javascript:void(0)">60 Minutes</a></li>
+                            </ul>
+                            <input id="hdnDuration" type="hidden" value="0" />
+                        </div>
+                        <div class="btn-group fullWidth">
+                            <button id="btnFormat" class="btn btn-lg dropdown-toggle btn-blueOuter fullWidth leftAlign" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Format <span class="glyphicon glyphicon-menu-down smallFont" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu generalDD">
+                                <li onclick="fnBindDFormat(0,'All Format');"><a href="javascript:void(0)">All Format</a></li>
+                                <li onclick="fnBindDFormat(10,'Images');"><a href="javascript:void(0)">Images Only</a></li>
+                                <li onclick="fnBindDFormat(20,'Videos');"><a href="javascript:void(0)">Videos Only</a></li>
+                                <li class="last" onclick="fnBindDFormat(30, 'Images&Videos');"><a href="javascript:void(0)">Images & Videos</a></li>
+                            </ul>
+                            <input id="hdnFormat" type="hidden" value="0" />
+                        </div>
+                    </div>
+
+                    <div id="divTemplates" class="row leftAlign thumbnailrowPadding">
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog popup-dialog" role="document">
+                            <div class="modal-content popupContent">
+                                <div class="modal-header popupHeader">
+                                    <h4 class="whiteText text-left">Share</h4>
+                                </div>
+                                <div class="modal-body popupBody sharepopupBody">
+                                    <p>
+                                        <a id="lnkTFbShare" href="javascript:void(0)" class="socialMediaPlayer">
+                                            <img class="img-responsive" src='@Url.Content("~/Content/themes/fastout/images/fbIcon.png")' />
+                                        </a>
+                                        <a id="lnkTTwShare" href="javascript:void(0)" class="socialMediaPlayer">
+                                            <img class="img-responsive" src='@Url.Content("~/Content/themes/fastout/images/twitterIcon.png")' />
+                                        </a>
+                                        <a id="lnkTGoShare" href="javascript:void(0)" class="socialMediaPlayer">
+                                            <img class="img-responsive" src='@Url.Content("~/Content/themes/fastout/images/googleIcon.png")' />
+                                        </a>
+                                        <a id="lnkTEmailShare" href="javascript:void(0)" class="socialMediaPlayer" data-toggle="modal" data-target="#myModal1">
+                                            <img class="img-responsive" src='@Url.Content("~/Content/themes/fastout/images/mailIcon.png")' />
+                                        </a>
+                                        <button id="btnTEmbedCode" class="btn btn-default btn-lg btn-black embedBtn" type="button" data-target="#myModal2" data-toggle="modal"><span>&lt;</span><span>/&gt;</span> @Resources.ApplicationTranslations.Embed_Code_Text</button>
+                                    </p>
+                                </div>
+                                <div class="modal-footer popupFooter">
+                                    <button type="button" class="btn btnRed" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog popup-dialog" role="document">
+                    <div class="modal-content popupContent">
+                        <div class="modal-header popupHeader">
+                            <h4 class="whiteText text-left">Share via Email</h4>
+                        </div>
+                        <div class="modal-body popupBody">
+                            <div class="form-group text-left">
+                                <label for="exampleInputEmail1">To</label>
+                                <input id="txtTToEmail" type="text" class="form-control" placeholder="Enter a to email address" />
+                            </div>
+                            <div class="form-group text-left" style="display: none;">
+                                <label for="exampleInputEmail1">From</label>
+                                <input id="txtTFromEmail" type="text" class="form-control" value="@ViewBag.FromEmail" placeholder="Enter a from email address" />
+                            </div>
+                            <div class="form-group text-left">
+                                <label for="exampleInputEmail1">Subject</label>
+                                <input id="txtTEmailSubject" type="text" class="form-control" placeholder="Enter a subject" />
+                            </div>
+                            <div class="form-group text-left">
+                                <label for="exampleInputEmail1">Message</label>
+                                <textarea id="txtTEmailMessage" class="form-control" rows="3" title="Use [VIDEOURL] to put the URL in a specific section wherever you want." alt="Use [VIDEOURL] to put the URL in a specific section wherever you want.">Hi! Check out this cool video I made using VideoBurst!</textarea>
+                            </div>
+                            <div class="form-group text-left">
+                                <label for="exampleInputEmail1">URL</label>
+                                <input id="txtTShareUrl" type="text" class="form-control" placeholder="Enter your url to share" />
+                            </div>
+                        </div>
+                        <div class="modal-footer popupFooter">
+                            <button id="btnTEmailShare" type="submit" class="btn btn-md btnRed">Send</button>
+                            <button id="btnTShareCancel" type="submit" class="btn btn-md btn-outerRed" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog popup-dialog" role="document">
+                    <div class="modal-content popupContent">
+                        <div class="modal-body popupBody">
+                            <form>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Copy Embedded Code</label>
+                                    <textarea style="display: inline-block;" placeholder="&lt;/&gt;Embed Code" rows="4" class="form-control" readonly="readonly" id="txtTEmbedCode"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer popupFooter">
+                            <button type="submit" class="btn btn-md btn-outerRed" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal2 -->
+            <div class="modal fade bs-example-modal-lg" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content popupContent" style="position:relative;">
+                        <button type="button" class="close closePopup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div class="modal-body popupBody"> 
+                            <!-- 16:9 aspect ratio -->
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video id="tPreviewVideo" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" data-setup="{}"></video>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        
+</div>
+<!--======================Tabing 1 data end here================  -->
+<div>
+    <input id="hdnPageNo" type="hidden" />
+    <input id="hdnPageSize" type="hidden" />
+    <input id="hdnSortColumn" type="hidden" />
+    <input id="hdnSortOrder" type="hidden" />
+    <input id="hdnOwnership" type="hidden" />
+    <input id="hdnTwitterHandle" type="hidden" />
+    <input id="hdnOptimized" type="hidden" value='@System.Configuration.ConfigurationManager.AppSettings["IsOptimized"].ToString()' />
+</div>
+
+<div id="fb-root"></div>
+@section styles {
+    <link href="//vjs.zencdn.net/5.0/video-js.min.css" rel="stylesheet">
+}
+@section scriptsbottombody{
+    @*<script type="text/javascript" src='@Url.Content("~/Scripts/templates.js")'></script>*@
+    @Html.IncludeVersionedJs(@Url.Content("~/Scripts/templates.js"))
+    <script type="text/javascript" src='@ViewBag.JWPlayerUrl'></script>
+<script src="//vjs.zencdn.net/5.0/video.js"></script>
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var vPageSize = 18;
+        var userOwnership = 0;
+        var customecount;
+        // Hide filters by default.
+        $("#collapseExample, #hide").hide();
+        $("#show").show();
+        // fnGetCustomCount(true, 0, vPageSize, "created", "DESC");
+        fnBindTemplates(2, true, 0, vPageSize, "created", "DESC");
+
+        var vTwitterHandle = '@ViewBag.TwitterHandle';
+        // fnBindCategories();
+        fnBindCategories(2, false, 0, vPageSize, "created", "DESC");
+
+    });
+
+        $(document).on('click', '.btnCTempVideo', function () {
+            StartProcessing(true, "Please wait...");
+            var vTemplateId = $(this).attr('id');
+            var vTCreateVideoUrl = '@Url.Content("~/Videos/Create/")' + vTemplateId + "/true";
+            console.log('Call to: ' + vTCreateVideoUrl);
+            window.location.href = vTCreateVideoUrl;
+        });
+
+        $(document).on('click', '#hide', function() {
+            $("#collapseExample, #hide").hide();
+            $("#show").show();
+            $("#hdnCategory").val(0);
+            $("#btnCategories").html("All Categories<span aria-hidden=\"true\" class=\"glyphicon glyphicon-menu-down smallFont\" id=\"spnTCTitle\"></span>");
+            $("#hdnDuration").val(0);
+            $("#btnDurations").html("All Durations<span aria-hidden=\"true\" class=\"glyphicon glyphicon-menu-down smallFont\"></span>");
+        });
+
+        $(document).on('click', '#show', function() {
+            $("#collapseExample, #hide").show();
+            $("#showcollsapse, #show").hide();
+        });
+
+        $(window).scroll(function() {
+            //alert($(document).height() + '  ' + $(window).scrollTop() + '  ' + $(window).height() +'  '+ (($(document).height()) - ($(window).scrollTop() + $(window).height())));
+
+            var vScrollPosition = $(document).height() - ($(window).scrollTop() + $(window).height());
+
+            if ((vScrollPosition % 25) == 0 && vScrollPosition <= 200) //user scrolled to bottom of the page?
+            {
+                var vPageSize = $("#hdnPageSize").val();
+                var vOwnership = parseInt($("#hdnOwnership").val());
+                var vPageNo = parseInt($("#hdnPageNo").val()) + 1;
+                var vSortColumn = $("#hdnSortColumn").val();
+                var vSortOrder = $("#hdnSortOrder").val(); // == "DESC" ? "ASC" : "DESC";
+
+                fnBindTemplates(vOwnership, false, vPageNo, vPageSize, vSortColumn, vSortOrder);
+            }
+        });
+    </script>
+}

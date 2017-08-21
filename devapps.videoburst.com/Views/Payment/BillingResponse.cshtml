@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Billing Response";
+    ViewBag.heading = "Billing Response";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-sm-9 rightbarInner generalinnerdiv">
+
+    <div class="row">
+        <h2>Response</h2>
+
+        @if (@Model != null)
+            {
+            <h3>Thank You! your bill payment has been processed successfully.</h3>
+                <p>&nbsp;</p>
+                <h4>Your Bill Payment has been processed.</h4>
+                <p>&nbsp;</p>
+                <p><strong>Please find the below bill payment details for your future reference:</strong></p>
+                <p>Action Type: @Model.ActionType</p>
+                <p>Reference Id: @Model.AgreementId</p>
+                <p>Payment Type: @Model.PaymentType</p>
+                <p>Payment Status: @Model.PaymentStatus</p>
+                <p>Transaction Id: @Model.TransactionId</p>
+                <p>Transaction Type: @Model.TransactionType</p>
+                <p>Agreement Status: @Model.AgreementStatus</p>                 
+        }
+    </div>
+</div> 

@@ -1,0 +1,132 @@
+﻿@model  IEnumerable<VideoBurstAPI.Entities.CompanyInvite>
+@{
+    ViewBag.Title = "Administration";
+    ViewBag.heading = "Administration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .disable_a_href {
+        pointer-events: none;
+    }
+</style>
+
+<div class="col-sm-9 rightBar">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs tabing">
+                <li role="presentation">@Html.ActionLink("Change Password", "ChangePassword", "Account", routeValues: null, htmlAttributes: null)</li>
+                <li role="presentation">@Html.ActionLink("User Settings", "Settings", "Account", routeValues: null, htmlAttributes: null)</li>
+                <li role="presentation">@Html.ActionLink("Payment History", "history", "Payment", routeValues: null, htmlAttributes: null)</li>
+                <li role="presentation" class="active"><a>Administration</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row padding-topbottom paddingLeftsetting">
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <div class="form-group">
+                            <label for="lblEmail">Email</label>
+                            <input type="text" class="form-control" id="userEmail" placeholder="name@videoburst.com" autofocus @ViewBag.EnableInvite>
+                        </div>
+                        <p>
+                            <a id="a_invite" href="" class="btn btn-default btn-Blue">Send Invitation</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                   @if (Model != null && Model.Count() > 0)
+                   {
+                    <div class="col-sm-9">
+                       <h4 class="planHeading black-text">Invitations</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+
+                                    <th>Email</th>
+                                    <th>Invation Sent</th>
+                                    <th>Accpted</th>
+                                    <th>Date</th>
+                                </tr>
+
+                                @foreach (var companyInvite in Model)
+                                {
+                                    <tr>
+
+                                        <td class="left"> @companyInvite.UserEmail</td>
+                                        <td class="left"> Yes </td>
+                                        <td class="left"> @(companyInvite.IsInvitationAccepted.ToString() == "False" ? "No" : "Yes")   </td>
+                                        <td class="left"> @string.Format("{0:yyyy-MM-dd}", companyInvite.DateCreated)</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                   }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scriptsbottombody {
+    <script type="text/javascript">
+        $("#a_invite").on("click", function (e) {
+            var userEmail = $('#userEmail').val().trim();
+            var emailPattern = "/^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;";
+            //if(!emailPattern.test(userEmail))
+            //{
+            //    alertBox('Incorrect Email');
+            //    return false;
+            //}
+            //else
+            if (userEmail == '') {
+                alertBox('Email is required');
+                return false;
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ "Email": userEmail }),
+                    url: "@ViewBag.DomainUrl/Account/Invite",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        // debugger;
+                        if (response == "-101") {
+                            @Html.Raw("alertBox('Email already used to some other company, please use another email !');")
+                            $('#userEmail').val('');
+                        }
+                        else if (response == "-100") {
+                            @Html.Raw("alertBox('Some error occured. Please contact system administrator !');")
+
+                        }
+                        else if (response == "1") {
+                            $('#userEmail').val('');
+                            window.location.href = '@Url.Content("~/Account/Administration")';
+                            @Html.Raw("alertBox('Email sent successfully. Please follow the instructions to continue!');") // Check it, Why it does not work.
+                        }
+                    }, cache: false, async: false, crossDomain: true,
+                    error: function (err) {
+                        console.log('err:' + err);
+                    }
+                });
+
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var enableInvite = '@ViewBag.EnableInvite';
+            if (enableInvite == "disabled") {
+                $("#a_invite").addClass("disable_a_href");
+            }
+
+        });
+    </script>
+}
